@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1F1B24</color>
+    <color name="background">#121212</color>
+    <color name="operators_border">#C4CCC7</color>
+    <color name="colorOperatorRoleIcon">#FFFFFF</color>
+    <color name="colorDefaultText">#FFFFFF</color>
+    <color name="colorOperatorsCellBackground">#383838</color>
+</resources>

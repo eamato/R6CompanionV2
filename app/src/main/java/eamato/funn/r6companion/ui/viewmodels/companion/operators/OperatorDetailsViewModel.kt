@@ -1,0 +1,156 @@
+package eamato.funn.r6companion.ui.viewmodels.companion.operators
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.utils.UiText
+import eamato.funn.r6companion.domain.entities.companion.operators.Operator
+import eamato.funn.r6companion.ui.entities.companion.operator.OperatorDetails
+import eamato.funn.r6companion.ui.fragments.companion.FragmentOperatorDetailsArgs
+
+class OperatorDetailsViewModel(state: SavedStateHandle) : ViewModel() {
+
+    private val _operatorDetails = MutableLiveData<List<OperatorDetails>?>(null)
+    val operatorDetails: LiveData<List<OperatorDetails>?> = _operatorDetails
+
+    init {
+        val operator = FragmentOperatorDetailsArgs.fromSavedStateHandle(state).operator
+        createListOfDetailsFor(operator)
+    }
+
+    private fun createListOfDetailsFor(operator: Operator) {
+        val operatorDetails = mutableListOf<OperatorDetails>()
+
+        operator.wideImgLink
+            .let { OperatorDetails.OperatorDetailsImage(UiText.SimpleString(it)) }
+            .run { operatorDetails.add(this) }
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsTitle(
+                UiText.ResourceString(R.string.operator_details_organization)
+            )
+        )
+        operator.squad
+            .let {
+                OperatorDetails.OrganizationEntity(
+                    UiText.SimpleString(it.name),
+                    UiText.SimpleString(it.iconLink)
+                )
+            }
+            .run { operatorDetails.add(this) }
+        operatorDetails.add(OperatorDetails.OperatorDetailsDivider)
+
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsTitle(
+                UiText.ResourceString(R.string.operator_details_role)
+            )
+        )
+        operator.role
+            .let {
+                val role = when (it) {
+                    Operator.ROLE_DEFENDER -> UiText.ResourceString(
+                        R.string.operator_details_role_defender
+                    )
+                    Operator.ROLE_ATTACKER -> UiText.ResourceString(
+                        R.string.operator_details_role_attacker
+                    )
+                    else -> UiText.SimpleString(it)
+                }
+                OperatorDetails.OperatorDetailsText(role)
+            }
+            .run { operatorDetails.add(this) }
+        operatorDetails.add(OperatorDetails.OperatorDetailsDivider)
+
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsTitle(
+                UiText.ResourceString(R.string.operator_details_stats)
+            )
+        )
+        operator.speedRating
+            .let {
+                OperatorDetails.OperatorDetailsStat(
+                    UiText.ResourceString(R.string.operator_details_speed),
+                    it
+                )
+            }
+            .run { operatorDetails.add(this) }
+        operator.armorRating
+            .let {
+                OperatorDetails.OperatorDetailsStat(
+                    UiText.ResourceString(R.string.operator_details_armor),
+                    it
+                )
+            }
+            .run { operatorDetails.add(this) }
+        operatorDetails.add(OperatorDetails.OperatorDetailsDivider)
+
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsTitle(
+                UiText.ResourceString(R.string.operator_details_loadout)
+            )
+        )
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsSubtitle(
+                UiText.ResourceString(R.string.operator_details_primaries)
+            )
+        )
+        operator.equipment
+            .let {
+                it.primaries.map { primaries ->
+                    OperatorDetails.OperatorDetailsLoadOutEntity(
+                        UiText.SimpleString(primaries.name),
+                        UiText.SimpleString(primaries.iconLink),
+                        UiText.SimpleString(primaries.typeText)
+                    )
+                }
+            }
+            .run { operatorDetails.addAll(this) }
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsSubtitle(
+                UiText.ResourceString(R.string.operator_details_secondaries)
+            )
+        )
+        operator.equipment
+            .let {
+                it.secondaries.map { secondaries ->
+                    OperatorDetails.OperatorDetailsLoadOutEntity(
+                        UiText.SimpleString(secondaries.name),
+                        UiText.SimpleString(secondaries.iconLink),
+                        UiText.SimpleString(secondaries.typeText)
+                    )
+                }
+            }
+            .run { operatorDetails.addAll(this) }
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsSubtitle(
+                UiText.ResourceString(R.string.operator_details_gadgets)
+            )
+        )
+        operator.equipment
+            .let {
+                it.devices.map { gadgets ->
+                    OperatorDetails.OperatorDetailsLoadOutEntity(
+                        UiText.SimpleString(gadgets.name),
+                        UiText.SimpleString(gadgets.iconLink)
+                    )
+                }
+            }
+            .run { operatorDetails.addAll(this) }
+        operatorDetails.add(
+            OperatorDetails.OperatorDetailsSubtitle(
+                UiText.ResourceString(R.string.operator_details_ability)
+            )
+        )
+        operator.equipment.skill
+            .let {
+                OperatorDetails.OperatorDetailsAbilityEntity(
+                    UiText.SimpleString(it.name),
+                    UiText.SimpleString(it.iconLink)
+                )
+            }
+            .run { operatorDetails.add(this) }
+
+        _operatorDetails.value = operatorDetails.toList()
+    }
+}

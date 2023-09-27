@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#36A9E0</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="background">#E6F6EC</color>
+    <color name="operators_border">#2E2E2E</color>
+
+    <color name="check_tint">#237094</color>
+
+    <color name="primary_text">#36A9E0</color>
+    <color name="roulette_roll_button_border_color">#36A9E0</color>
+    <color name="roulette_roll_button_background_tint_color">#801F1B24</color>
+    <color name="text_on_image_background">#80000000</color>
+
+    <color name="colorOperatorRoleIcon">#24262A</color>
+
+    <color name="colorIconInactive">#B1DAEE</color>
+
+    <color name="tab_layout_inactive_color">#40FFFFFF</color>
+
+    <color name="colorDefaultText">#000000</color>
+    <color name="colorDefaultTextHint">#99FFFFFF</color>
+
+    <color name="colorOperatorArmorSpeedEnabled">#36A9E0</color>
+    <color name="colorOperatorArmorSpeedDisabled">#494D4F</color>
+
+    <color name="colorOperatorDetailsBackgroundColor">#B8BFBB</color>
+    <color name="colorOperatorsCellBackground">#B8BFBB</color>
+
+    <color name="progress_bar_tint_color">#36A9E0</color>
+
+    <color name="colorAdLabelText">#FFFFFF</color>
+    <color name="colorAdLabelBackground">#FFCC66</color>
+    <color name="colorAdCallToAction">#237094</color>
+
+    <color name="colorNewsCategorySelected">#36A9E0</color>
+    <color name="colorNewsCategory">#797A7A</color>
+    <color name="colorNewsDisabled">#979EA1</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FFFF0000</color>
+    <color name="green">#FF00FF00</color>
+    <color name="blue">#FF0000FF</color>
+    <color name="yellow">#FFFFFF00</color>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/FragmentHome">
+
+    <fragment
+        android:id="@+id/FragmentHome"
+        android:name="eamato.funn.r6companion.ui.fragments.home.FragmentHome"
+        android:label="@string/main_navigation_home" />
+
+    <fragment
+        android:id="@+id/FragmentRoulette"
+        android:name="eamato.funn.r6companion.ui.fragments.roulette.FragmentRoulette"
+        android:label="@string/main_navigation_roulette" />
+
+    <fragment
+        android:id="@+id/FragmentCompanion"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanion"
+        android:label="@string/main_navigation_companion" />
+
+    <fragment
+        android:id="@+id/FragmentSettings"
+        android:name="eamato.funn.r6companion.ui.fragments.settings.FragmentSettings"
+        android:label="@string/main_navigation_settings" />
+
+</navigation>

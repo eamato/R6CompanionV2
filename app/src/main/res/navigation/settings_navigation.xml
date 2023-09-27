@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_navigation"
+    app:startDestination="@id/FragmentSettingsRoot">
+
+    <fragment
+        android:id="@+id/FragmentSettingsRoot"
+        android:name="eamato.funn.r6companion.ui.fragments.settings.FragmentSettingsRoot"
+        android:label="@string/nested_navigation_settings_root" />
+
+</navigation>

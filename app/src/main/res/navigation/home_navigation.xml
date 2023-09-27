@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home_navigation"
+    app:startDestination="@id/FragmentNewsList">
+
+    <fragment
+        android:id="@+id/FragmentNewsList"
+        android:name="eamato.funn.r6companion.ui.fragments.home.FragmentNewsList"
+        android:label="@string/nested_navigation_home_news_list" />
+
+    <fragment
+        android:id="@+id/FragmentNewsDetails"
+        android:name="eamato.funn.r6companion.ui.fragments.home.FragmentNewsDetails"
+        android:label="@string/nested_navigation_home_news_details">
+
+        <argument
+            android:name="article"
+            app:argType="eamato.funn.r6companion.domain.entities.news.NewsArticle" />
+
+    </fragment>
+
+</navigation>

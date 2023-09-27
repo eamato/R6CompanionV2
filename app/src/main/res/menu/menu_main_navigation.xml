@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/FragmentHome"
+        android:title="@string/main_navigation_home"
+        android:icon="@drawable/ic_home_24dp" />
+
+    <item
+        android:id="@+id/FragmentRoulette"
+        android:title="@string/main_navigation_roulette"
+        android:icon="@drawable/ic_roulette_24dp" />
+
+    <item
+        android:id="@+id/FragmentCompanion"
+        android:title="@string/main_navigation_companion"
+        android:icon="@drawable/ic_companion_white_24dp" />
+
+    <item
+        android:id="@+id/FragmentSettings"
+        android:title="@string/main_navigation_settings"
+        android:icon="@drawable/ic_settings_white_24dp" />
+
+</menu>

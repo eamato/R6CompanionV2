@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/companion_navigation"
+    app:startDestination="@id/FragmentCompanionOperators">
+
+    <fragment
+        android:id="@+id/FragmentCompanionOperators"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionOperators"
+        android:label="@string/companion_operators_fragment_label" />
+
+    <fragment
+        android:id="@+id/FragmentOperatorDetails"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentOperatorDetails">
+
+        <argument
+            android:name="operator"
+            app:argType="eamato.funn.r6companion.domain.entities.companion.operators.Operator" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentCompanionMaps"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionMaps"
+        android:label="@string/companion_maps_fragment_label" />
+
+    <fragment
+        android:id="@+id/FragmentCompanionWeapons"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionWeapons"
+        android:label="@string/companion_weapons_fragment_label" />
+
+</navigation>

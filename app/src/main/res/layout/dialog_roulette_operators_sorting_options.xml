@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/sort_alphabetically_ascending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        layout="@layout/dialog_options_view" />
+
+    <include
+        android:id="@+id/sort_alphabetically_descending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        layout="@layout/dialog_options_view" />
+
+    <include
+        android:id="@+id/sort_selected_first"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        layout="@layout/dialog_options_view" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

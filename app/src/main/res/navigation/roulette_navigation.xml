@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/roulette_navigation"
+    app:startDestination="@id/FragmentRouletteOperators">
+
+    <fragment
+        android:id="@+id/FragmentRouletteOperators"
+        android:name="eamato.funn.r6companion.ui.fragments.roulette.FragmentRouletteOperators"
+        android:label="@string/nested_navigation_roulette_operators">
+
+        <action
+            android:id="@+id/goToRollResult"
+            app:destination="@+id/FragmentRouletteResult" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentRouletteResult"
+        android:name="eamato.funn.r6companion.ui.fragments.roulette.FragmentRouletteResult"
+        android:label="@string/nested_navigation_roulette_result" />
+
+</navigation>
