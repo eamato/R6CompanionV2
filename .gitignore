@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /local.properties
+/keystore.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -13,6 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+keystore.properties
 /app/release
 
 
@@ -43,7 +45,6 @@ Blackbox AI Chat is in beta and Blackbox is not liable for the content generated
 build/
 
 # Local configuration file (sdk path, etc)
-local.properties
 
 # Log/OS Files
 *.log
@@ -56,7 +57,6 @@ captures/
 output.json
 
 # IntelliJ
-*.iml
 .idea/
 misc.xml
 deploymentTargetDropDown.xml
@@ -143,7 +143,6 @@ $RECYCLE.BIN/
 *.lnk
 
 ### Gradle ###
-.gradle
 **/build/
 !src/**/build/
 
@@ -216,7 +215,6 @@ proguard/
 # Android Patch
 
 # External native build folder generated in Android Studio 2.2 and later
-.externalNativeBuild
 
 # NDK
 obj/
