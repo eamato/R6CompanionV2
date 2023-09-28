@@ -6,6 +6,7 @@ import eamato.funn.r6companion.core.CONNECTION_TIME_OUT
 import eamato.funn.r6companion.core.IMAGE_LOGGER_TAG
 import eamato.funn.r6companion.core.READ_TIME_OUT
 import eamato.funn.r6companion.core.WRITE_TIME_OUT
+import eamato.funn.r6companion.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,8 +47,9 @@ val defaultOkHttpClient = OkHttpClient
     .writeTimeout(WRITE_TIME_OUT, TimeUnit.MILLISECONDS)
     .addInterceptor(requestInterceptor)
     .also {
-//        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             it.addInterceptor(defaultLoggingInterceptor)
+        }
     }
     .build()
 
@@ -55,7 +57,8 @@ fun getImageOkHttpClient(context: Context) = defaultOkHttpClient
     .newBuilder()
 //    .addInterceptor(getWifiOnlyRequestInterceptor(context))
     .also {
-//        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             it.addInterceptor(imageLoggingInterceptor)
+        }
     }
     .build()
