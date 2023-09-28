@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     /* Google dependencies */
     implementation("com.google.code.gson:gson:2.10.1")

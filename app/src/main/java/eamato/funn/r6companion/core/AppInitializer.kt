@@ -2,8 +2,6 @@ package eamato.funn.r6companion.core
 
 import android.content.Context
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.initialization.InitializationStatus
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import eamato.funn.r6companion.core.extenstions.log
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
 import eamato.funn.r6companion.core.utils.logger.Message
@@ -29,8 +27,6 @@ class AppInitializer @Inject constructor(
             withTimeout(5 * 1_000L) {
                 remoteConfigRequest.await()
                 mobileAdsSDKInitializationRequest.await()
-
-                // TODO add to result
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -41,9 +37,6 @@ class AppInitializer @Inject constructor(
                     message = "Something reached timeout"
                 })
             }
-            null
-        } finally {
-
         }
     }
 

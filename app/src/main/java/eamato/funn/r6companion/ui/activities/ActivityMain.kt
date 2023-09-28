@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -31,10 +32,13 @@ class ActivityMain : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition { mainViewModel.isLoadingSplash.value }
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
-
-        mainViewModel
 
         val navController = binding.appNavHostContainer.getFragment<NavHostFragment>().navController
         binding.bnv.setOnItemSelectedListener { menuItem ->
