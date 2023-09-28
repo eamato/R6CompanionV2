@@ -44,12 +44,13 @@ android {
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            isShrinkResources = false
             isDebuggable = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "R6Companion(dev)")
         }
+
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -59,6 +60,14 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
         }
+
+        create("staging") {
+            initWith(getByName("release"))
+            isDebuggable = true
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            resValue("string", "app_name", "R6Companion(staging)")
+        }
     }
 
     compileOptions {
@@ -67,11 +76,12 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -88,6 +98,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     /* Google dependencies */
     implementation("com.google.code.gson:gson:2.10.1")
