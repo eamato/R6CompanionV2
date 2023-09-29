@@ -9,5 +9,5 @@ data class NewsRequestParams(
     val newsCount: Int = NEWS_COUNT_DEFAULT_VALUE,
     val newsLocale: String = DEFAULT_NEWS_LOCALE,
     val newsTag: String = NEWS_TAG_PARAM_R6_VALUE,
-    val newsCategoriesFilter: String? = null
+    @NewsCategory.Companion.NewsCategory val newsCategoriesFilter: String? = null
 )

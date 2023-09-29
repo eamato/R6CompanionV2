@@ -1,4 +1,4 @@
-package eamato.funn.r6companion.domain.entities.news
+package eamato.funn.r6companion.data.entities
 
 import androidx.annotation.StringDef
 

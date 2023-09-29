@@ -52,8 +52,10 @@ class NewsViewModel @Inject constructor(
 
     fun refreshNews(newsLocale: String = DEFAULT_NEWS_LOCALE, newsCategory: String? = null) {
         val newsStream = getNews(newsLocale, newsCategory) ?: return
+
         job?.cancel()
         job = viewModelScope.launch {
+            _news.value = PagingData.empty()
             newsStream.collect { pagingData ->
                 _news.value = pagingData
             }
