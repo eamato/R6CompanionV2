@@ -38,7 +38,7 @@ const val NEWS_TAG_PARAM_KEY = "tags"
 const val NEWS_CATEGORIES_FILTER_PARAM_KEY = "categoriesFilter"
 
 const val NEWS_COUNT_DEFAULT_VALUE = 60
-const val ENGLISH_NEWS_LOCALE = "en-gb"
+const val ENGLISH_NEWS_LOCALE = "en-us"
 const val RUSSIAN_NEWS_LOCALE = "ru-ru"
 const val DEFAULT_NEWS_LOCALE = ENGLISH_NEWS_LOCALE
 const val NEWS_TAG_PARAM_R6_VALUE = "BR-rainbow-six GA-siege"
