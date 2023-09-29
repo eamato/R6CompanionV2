@@ -22,7 +22,8 @@ import eamato.funn.r6companion.databinding.NewsArticleItemRowBinding
 import eamato.funn.r6companion.databinding.NewsPlaceholderItemRowBinding
 import eamato.funn.r6companion.domain.entities.news.AdvertisedNewsArticle
 
-class AdapterNewsArticles : PagingDataAdapter<AdvertisedNewsArticle, AdapterNewsArticles.ViewHolder>(DIFF_ITEM_CALLBACK) {
+class AdapterNewsArticles :
+    PagingDataAdapter<AdvertisedNewsArticle, AdapterNewsArticles.ViewHolder>(DIFF_ITEM_CALLBACK) {
 
     companion object {
         val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<AdvertisedNewsArticle>() {

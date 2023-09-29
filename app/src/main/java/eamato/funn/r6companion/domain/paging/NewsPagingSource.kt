@@ -13,6 +13,7 @@ import eamato.funn.r6companion.data.entities.NewsRequestParams
 import eamato.funn.r6companion.data.entities.Updates
 import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.domain.entities.news.AdvertisedNewsArticle
+import eamato.funn.r6companion.data.entities.NewsCategory
 import eamato.funn.r6companion.domain.mappers.news.NewsArticleUseCaseMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,7 +22,7 @@ import okhttp3.internal.toImmutableList
 class NewsPagingSource constructor(
     private val newsRepository: INewsRepository,
     private val newsLocale: String = DEFAULT_NEWS_LOCALE,
-    private val newsCategory: String? = null
+    @NewsCategory.Companion.NewsCategory private val newsCategory: String? = null
 ) : PagingSource<Int, AdvertisedNewsArticle>() {
 
     private val _newsCategoryValue = MutableLiveData<String?>(null)

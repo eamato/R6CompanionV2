@@ -41,12 +41,12 @@ class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>() {
 
         newsArticleDetailsViewModel.newsArticleImageUrl.observe(viewLifecycleOwner) { imageUrl ->
             binding?.ivNewsImage?.run {
-                binding?.clpbNewsImage?.show()
-
                 if (imageUrl == null) {
                     setImageDrawable(R.drawable.no_image_drawable.getDrawable(context))
                     return@observe
                 }
+
+                binding?.clpbNewsImage?.show()
 
                 GlideApp.with(this)
                     .load(imageUrl)

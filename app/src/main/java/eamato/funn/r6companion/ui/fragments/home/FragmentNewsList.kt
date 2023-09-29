@@ -18,8 +18,12 @@ import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
 import eamato.funn.r6companion.core.utils.logger.Message
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentNewsListBinding
-import eamato.funn.r6companion.domain.entities.news.NewsCategory
-import eamato.funn.r6companion.domain.entities.news.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_COMMUNITY_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_ESPORTS_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_GAME_UPDATES_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_PATCH_NOTES_VALUE
+import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_STORE_VALUE
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterNewsArticles
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -86,9 +90,15 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
                 if (combinedLoadStates.source.refresh is LoadState.Loading) {
                     binding?.clpbWaiting?.show()
+                    buttonsByCategory?.values?.forEach { categoryButton ->
+                        categoryButton.isEnabled = false
+                    }
                 } else {
                     binding?.clpbWaiting?.hide()
                     binding?.srlRefreshNews?.isRefreshing = false
+                    buttonsByCategory?.values?.forEach { categoryButton ->
+                        categoryButton.isEnabled = true
+                    }
                 }
 
                 val error = combinedLoadStates.source.append as? LoadState.Error
@@ -130,7 +140,7 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
     private fun initGoToTopDestinationAction() {
         mainNavigationViewModel.backToGraphRootEvent
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { binding?.rvNews?.smoothScrollToPosition(0) }
+            .onEach { binding?.rvNews?.scrollToPosition(0) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -144,8 +154,19 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
     private fun initNewsCategoryButtons() {
         binding?.run {
             buttonsByCategory = hashMapOf(
-                NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE to btnNewsCategoryAll
+                NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE to btnNewsCategoryAll,
+                NEWS_CATEGORIES_FILTER_PARAM_ESPORTS_VALUE to btnNewsCategoryEsport,
+                NEWS_CATEGORIES_FILTER_PARAM_GAME_UPDATES_VALUE to btnNewsCategoryGameUpdates,
+                NEWS_CATEGORIES_FILTER_PARAM_COMMUNITY_VALUE to btnNewsCategoryCommunity,
+                NEWS_CATEGORIES_FILTER_PARAM_PATCH_NOTES_VALUE to btnNewsCategoryPatchNotes,
+                NEWS_CATEGORIES_FILTER_PARAM_STORE_VALUE to btnNewsCategoryStore
             )
+        }
+
+        buttonsByCategory?.forEach { (category, button) ->
+            button.setOnClickListener {
+                newsViewModel.refreshNews(newsCategory = category)
+            }
         }
     }
 
@@ -155,15 +176,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         }
 
         newsViewModel.newsCategoryValue.observe(viewLifecycleOwner) { categoryValue ->
-            when (categoryValue) {
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE -> {
-
-                }
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_ESPORTS_VALUE -> {}
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_GAME_UPDATES_VALUE -> {}
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_COMMUNITY_VALUE -> {}
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_PATCH_NOTES_VALUE -> {}
-                NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_STORE_VALUE -> {}
+            buttonsByCategory?.forEach { (category, button) ->
+                button.isSelected = category == categoryValue
             }
         }
     }

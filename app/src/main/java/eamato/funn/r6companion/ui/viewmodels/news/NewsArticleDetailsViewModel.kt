@@ -26,6 +26,7 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
     private val header3 = "(?<=[^#]|^)#{3} (.*)".toRegex()
     private val imagePrefix = "(/{2}.*?\\.(?:jpg|gif|png|jpeg))".toRegex()
     private val italicPrefix = "(?<=\\*)(.*?)(?=\\*)".toRegex()
+    private val italicPrefix2 = "(?<=\\*{2})(.*?)(?=\\*{2})".toRegex()
     private val videoPrefix = "\\[video]\\((.*)\\)".toRegex()
     private val videoControls = "<video.*\\s*<source[^>]*src=\"([^\"]*)".toRegex()
 
@@ -109,6 +110,15 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
             text.startsWith("![") || this.startsWith("[![") -> {
                 imagePrefix.find(text)?.groups?.get(1)?.value?.let { nonNullValue ->
                     ContentViewImage("https:$nonNullValue")
+                }
+            }
+
+            text.startsWith("**") -> {
+                italicPrefix2.find(text)?.groups?.get(1)?.value?.let { nonNullValue ->
+                    ContentViewText(
+                        text = nonNullValue,
+                        style = R.style.R6Companion_ContentItalicStyle
+                    )
                 }
             }
 

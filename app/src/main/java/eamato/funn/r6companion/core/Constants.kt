@@ -19,16 +19,17 @@ const val ROULETTE_OPERATOR_ICON_WIDTH = 75
 const val ROULETTE_OPERATOR_ICON_HEIGHT = 75
 
 val NEGATIVE = floatArrayOf(
-    -1.0f, 0f, 0f, 0f, 255f,  // red
-    0f, -1.0f, 0f, 0f, 255f,  // green
-    0f, 0f, -1.0f, 0f, 255f,  // blue
-    0f, 0f, 0f, 1.0f, 0f // alpha
+    -1.0f, 0f, 0f, 0f, 255f,    // red
+    0f, -1.0f, 0f, 0f, 255f,    // green
+    0f, 0f, -1.0f, 0f, 255f,    // blue
+    0f, 0f, 0f, 1.0f, 0f        // alpha
 )
 
 const val NEWS_HOST = "https://nimbus.ubisoft.com/"
 const val NEWS_PATH = "api/v1/items"
 
-const val NEWS_AUTHORIZATION_TOKEN_HEADER = "authorization: 3u0FfSBUaTSew-2NVfAOSYWevVQHWtY9q3VM8Xx9Lto"
+const val NEWS_AUTHORIZATION_TOKEN_HEADER =
+    "authorization: 3u0FfSBUaTSew-2NVfAOSYWevVQHWtY9q3VM8Xx9Lto"
 
 const val NEWS_SKIP_PARAM_KEY = "skip"
 const val NEWS_COUNT_PARAM_KEY = "limit"
@@ -37,7 +38,7 @@ const val NEWS_TAG_PARAM_KEY = "tags"
 const val NEWS_CATEGORIES_FILTER_PARAM_KEY = "categoriesFilter"
 
 const val NEWS_COUNT_DEFAULT_VALUE = 60
-const val ENGLISH_NEWS_LOCALE = "en-us"
+const val ENGLISH_NEWS_LOCALE = "en-gb"
 const val RUSSIAN_NEWS_LOCALE = "ru-ru"
 const val DEFAULT_NEWS_LOCALE = ENGLISH_NEWS_LOCALE
 const val NEWS_TAG_PARAM_R6_VALUE = "BR-rainbow-six GA-siege"
