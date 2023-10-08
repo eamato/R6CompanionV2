@@ -41,6 +41,10 @@ const val NEWS_COUNT_DEFAULT_VALUE = 60
 const val ENGLISH_NEWS_LOCALE = "en-us"
 const val RUSSIAN_NEWS_LOCALE = "ru-ru"
 const val DEFAULT_NEWS_LOCALE = ENGLISH_NEWS_LOCALE
+val NEWS_LOCALES = listOf(
+    ENGLISH_NEWS_LOCALE,
+    RUSSIAN_NEWS_LOCALE
+)
 const val NEWS_TAG_PARAM_R6_VALUE = "BR-rainbow-six GA-siege"
 
 const val NEWS_PREFETCH_DISTANCE = NEWS_COUNT_DEFAULT_VALUE / 4
@@ -51,3 +55,5 @@ const val AD_INSERTION_COUNT = 15
 const val NEWS_SOURCE_PATTERN_1 = "EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzzz)"
 const val NEWS_SOURCE_PATTERN_2 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 const val NEWS_RESULT_PATTEN = "dd-MM-yyyy"
+
+const val PREFERENCE_KEY_USER_SETTINGS = "user_settings"

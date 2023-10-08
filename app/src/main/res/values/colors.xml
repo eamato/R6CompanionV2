@@ -25,6 +25,7 @@
     <color name="tab_layout_inactive_color">#40FFFFFF</color>
 
     <color name="colorDefaultText">#000000</color>
+    <color name="colorDefaultTextDisabled">#33000000</color>
     <color name="colorDefaultTextHint">#99FFFFFF</color>
 
     <color name="colorOperatorArmorSpeedEnabled">#36A9E0</color>
@@ -42,6 +43,15 @@
     <color name="colorNewsCategorySelected">#36A9E0</color>
     <color name="colorNewsCategory">#797A7A</color>
     <color name="colorNewsDisabled">#979EA1</color>
+
+    <color name="news_content_header_1_text_color">#24262A</color>
+    <color name="news_content_header_2_text_color">#24262A</color>
+    <color name="news_content_italic_text_color">#24262A</color>
+    <color name="news_content_default_text_color">#24262A</color>
+    <color name="news_content_divider_background_color">#24262A</color>
+
+    <color name="settings_item_icon_tint_color">#FF000000</color>
+    <color name="settings_item_icon_tint_color_disabled">#33000000</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

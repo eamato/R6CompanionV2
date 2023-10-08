@@ -3,10 +3,8 @@ package eamato.funn.r6companion.ui.fragments.companion
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -24,10 +22,7 @@ import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickList
 import eamato.funn.r6companion.databinding.FragmentCompanionOperatorsBinding
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionOperators
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_ALL
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_ATTACKERS
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_DEFENDERS
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultAppPopup
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -95,7 +90,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             val operatorsLayoutManager = GridLayoutManager(context, spanCount)
             layoutManager = operatorsLayoutManager
 
-            val adapterCompanionOperators = AdapterCompanionOperators()
+            val adapterCompanionOperators = AdapterCompanionOperators { scrollToPosition(0) }
             adapter = adapterCompanionOperators
 
             val spacingDecoration = SpacingItemDecoration
@@ -125,7 +120,6 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             addItemDecoration(borderDecorations)
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -192,29 +186,8 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private fun initFilterOptions() {
         binding?.btnFilterOptions?.setOnClickListener {
-            DialogCompanionOperatorsFilterOptions(
-                object : DialogCompanionOperatorsFilterOptions.IOnFilterSelected {
-                    override fun onFilterSelected(filter: Int) {
-                        when (filter) {
-                            SELECT_ALL -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.ALL
-                                )
-                            }
-                            SELECT_DEFENDERS -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.DEFENDERS
-                                )
-                            }
-                            SELECT_ATTACKERS -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.ATTACKERS
-                                )
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+            DialogDefaultAppPopup(companionOperatorsViewModel.createFilterPopupContentItems())
+                .show(childFragmentManager)
         }
     }
 

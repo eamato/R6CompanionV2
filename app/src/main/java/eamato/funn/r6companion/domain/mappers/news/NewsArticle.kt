@@ -3,8 +3,6 @@ package eamato.funn.r6companion.domain.mappers.news
 import eamato.funn.r6companion.core.NEWS_RESULT_PATTEN
 import eamato.funn.r6companion.core.NEWS_SOURCE_PATTERN_1
 import eamato.funn.r6companion.core.NEWS_SOURCE_PATTERN_2
-import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
-import eamato.funn.r6companion.core.utils.logger.Message
 import eamato.funn.r6companion.data.entities.Updates
 import eamato.funn.r6companion.domain.entities.news.NewsArticle
 import eamato.funn.r6companion.domain.usecases.IUseCaseMapper
@@ -50,11 +48,6 @@ private fun Updates.Item.toDomainNewsArticle(
         }
         ?.let { date -> outputDateFormat.format(date) }
         ?: ""
-
-    DefaultAppLogger.getInstance().i(Message.message {
-        clazz = this@toDomainNewsArticle::class.java
-        message = "Date: $date"
-    })
 
     return NewsArticle(
         id = id,

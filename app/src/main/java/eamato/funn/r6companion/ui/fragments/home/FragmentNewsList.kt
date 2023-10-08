@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
@@ -36,7 +37,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
     private val logger = DefaultAppLogger.getInstance()
 
-    override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentNewsListBinding::inflate
+    override val bindingInitializer: (LayoutInflater) -> ViewBinding =
+        FragmentNewsListBinding::inflate
 
     private val newsViewModel: NewsViewModel by viewModels()
 
@@ -114,7 +116,6 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
             }
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -133,8 +134,10 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         }
     }
 
-    private fun onLocaleChanged(locale: String) {
-        newsViewModel.refreshNews(newsLocale = locale)
+    private fun onNewsLocaleChanged(newsLocale: String) {
+        val currentNewsCategory =
+            newsViewModel.newsCategoryValue.value ?: NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE
+        newsViewModel.refreshNews(newsLocale = newsLocale, newsCategory = currentNewsCategory)
     }
 
     private fun initGoToTopDestinationAction() {
@@ -165,7 +168,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
         buttonsByCategory?.forEach { (category, button) ->
             button.setOnClickListener {
-                newsViewModel.refreshNews(newsCategory = category)
+                val currentNewsLocale = newsViewModel.newsLocale.value ?: DEFAULT_NEWS_LOCALE
+                newsViewModel.refreshNews(newsLocale = currentNewsLocale, newsCategory = category)
             }
         }
     }
@@ -179,6 +183,10 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
             buttonsByCategory?.forEach { (category, button) ->
                 button.isSelected = category == categoryValue
             }
+        }
+
+        newsViewModel.newsLocale.observe(viewLifecycleOwner) { newsLocale ->
+            onNewsLocaleChanged(newsLocale)
         }
     }
 }

@@ -9,7 +9,6 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
     id("kotlin-parcelize")
 }
 
@@ -30,6 +29,8 @@ android {
         versionName = "22"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resourceConfigurations.addAll(listOf("en", "ru"))
     }
 
     signingConfigs {
@@ -95,10 +96,12 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+    implementation("androidx.appcompat:appcompat-resources:1.6.1")
 
     /* Google dependencies */
     implementation("com.google.code.gson:gson:2.10.1")
@@ -123,7 +126,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:21.3.0")
     implementation("com.google.firebase:firebase-config-ktx:21.4.1")
     implementation("com.google.firebase:firebase-messaging:23.2.1")
-    implementation("com.google.firebase:firebase-perf:20.4.1")
     implementation("com.google.firebase:firebase-inappmessaging-display:20.3.5")
     implementation("com.google.firebase:firebase-ads:22.4.0")
     implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")

@@ -9,4 +9,9 @@
         android:name="eamato.funn.r6companion.ui.fragments.settings.FragmentSettingsRoot"
         android:label="@string/nested_navigation_settings_root" />
 
+    <fragment
+        android:id="@+id/FragmentSettingsAbout"
+        android:name="eamato.funn.r6companion.ui.fragments.settings.FragmentSettingsAbout"
+        android:label="@string/nested_navigation_settings_about" />
+
 </navigation>

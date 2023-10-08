@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,13 +19,7 @@ import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentRouletteOperatorsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterRouletteOperators
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions.Companion.CLEAR_SELECTION
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions.Companion.SELECT_ALL
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_ALPHABETICALLY_ASCENDING
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_ALPHABETICALLY_DESCENDING
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_SELECTED_FIRST
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultAppPopup
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -71,7 +64,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             val operatorsLayoutManager = GridLayoutManager(context, spanCount)
             layoutManager = operatorsLayoutManager
 
-            val adapterRouletteOperators = AdapterRouletteOperators()
+            val adapterRouletteOperators = AdapterRouletteOperators { scrollToPosition(0) }
             adapter = adapterRouletteOperators
 
             val spacingDecoration = SpacingItemDecoration
@@ -101,7 +94,6 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             addItemDecoration(borderDecorations)
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -155,43 +147,15 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            DialogRouletteOperatorsSelectionOptions(
-                object : DialogRouletteOperatorsSelectionOptions.IOnOptionSelected {
-                    override fun onOptionSelected(option: Int) {
-                        when (option) {
-                            SELECT_ALL -> {
-                                rouletteOperatorsViewModel.selectAllOperators()
-                            }
-
-                            CLEAR_SELECTION -> {
-                                rouletteOperatorsViewModel.clearSelected()
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+            DialogDefaultAppPopup(rouletteOperatorsViewModel.createSelectionPopupContentItems())
+                .show(childFragmentManager)
         }
     }
 
     private fun initSortingOptions() {
         binding?.btnSortingOptions?.setOnClickListener {
-            DialogRouletteOperatorsSortingOptions(
-                object : DialogRouletteOperatorsSortingOptions.IOnOptionSelected {
-                    override fun onOptionSelected(option: Int) {
-                        when (option) {
-                            SORT_ALPHABETICALLY_ASCENDING -> {
-                                rouletteOperatorsViewModel.sortByNameAscending()
-                            }
-                            SORT_ALPHABETICALLY_DESCENDING -> {
-                                rouletteOperatorsViewModel.sortByNameDescending()
-                            }
-                            SORT_SELECTED_FIRST -> {
-                                rouletteOperatorsViewModel.sortSelected()
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+            DialogDefaultAppPopup(rouletteOperatorsViewModel.createSortingPopupContentItems())
+                .show(childFragmentManager)
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.domain.entities.news.NewsArticle
+import eamato.funn.r6companion.ui.entities.news.details.ContentViewDivider
 import eamato.funn.r6companion.ui.entities.news.details.ContentViewImage
 import eamato.funn.r6companion.ui.entities.news.details.ContentViewText
 import eamato.funn.r6companion.ui.entities.news.details.ContentViewSimpleVideo
@@ -27,8 +28,10 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
     private val imagePrefix = "(/{2}.*?\\.(?:jpg|gif|png|jpeg))".toRegex()
     private val italicPrefix = "(?<=\\*)(.*?)(?=\\*)".toRegex()
     private val italicPrefix2 = "(?<=\\*{2})(.*?)(?=\\*{2})".toRegex()
+    private val italicPrefix3 = "\\*(.*?)\\*(?![\\s\\S]*\\*)".toRegex()
     private val videoPrefix = "\\[video]\\((.*)\\)".toRegex()
     private val videoControls = "<video.*\\s*<source[^>]*src=\"([^\"]*)".toRegex()
+    private val videoControlsInsideImageTag = "(/{2}.*?\\.mp4)".toRegex()
 
     init {
         val newsArticle = FragmentNewsDetailsArgs.fromSavedStateHandle(state).article
@@ -43,7 +46,7 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
         contentViews.add(
             ContentViewText(
                 text = newsArticle.title,
-                style = R.style.TitleStyle
+                style = R.style.R6Companion_ContentHeader1Style
             )
         )
         contentViews.addAll(newsArticle.content.contentToViewList())
@@ -74,7 +77,7 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
     }
 
     private fun String.contentToView(): IContentView? {
-        val text = replace("<br>", "\n")
+        val text = replace("<br>", "\n\n")
 
         return when {
             text.startsWith("###") -> {
@@ -108,9 +111,16 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
             }
 
             text.startsWith("![") || this.startsWith("[![") -> {
-                imagePrefix.find(text)?.groups?.get(1)?.value?.let { nonNullValue ->
-                    ContentViewImage("https:$nonNullValue")
-                }
+                imagePrefix.find(text)
+                    ?.groups
+                    ?.get(1)
+                    ?.value
+                    ?.let { nonNullValue -> ContentViewImage("https:$nonNullValue") }
+                    ?: videoControlsInsideImageTag.find(text)
+                        ?.groups
+                        ?.get(1)
+                        ?.value
+                        ?.let { nonNullValue -> ContentViewSimpleVideo("https:$nonNullValue") }
             }
 
             text.startsWith("**") -> {
@@ -123,7 +133,7 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
             }
 
             text.startsWith("*") -> {
-                italicPrefix.find(text)?.groups?.get(1)?.value?.let { nonNullValue ->
+                italicPrefix3.find(text)?.groups?.get(1)?.value?.let { nonNullValue ->
                     ContentViewText(
                         text = nonNullValue,
                         style = R.style.R6Companion_ContentItalicStyle
@@ -132,8 +142,12 @@ class NewsArticleDetailsViewModel(state: SavedStateHandle) : ViewModel() {
             }
 
             text.startsWith("-") -> {
-                val bulletSymbol = '•'
-                ContentViewText(text = text.replaceFirst('-', bulletSymbol))
+                if (text == "---") {
+                    ContentViewDivider()
+                } else {
+                    val bulletSymbol = '•'
+                    ContentViewText(text = text.replaceFirst('-', bulletSymbol))
+                }
             }
 
             text.contains(videoControls) -> {

@@ -1,0 +1,75 @@
+<resources>
+    <string name="main_navigation_home">(RU)Home</string>
+    <string name="main_navigation_roulette">(RU)Roulette</string>
+    <string name="main_navigation_companion">(RU)Companion</string>
+    <string name="main_navigation_settings">(RU)Settings</string>
+
+    <string name="nested_navigation_home_news_list">(RU)News</string>
+    <string name="nested_navigation_home_news_details">(RU)News Details</string>
+    <string name="nested_navigation_roulette_operators">(RU)Operators</string>
+    <string name="nested_navigation_roulette_result">(RU)Roll Result</string>
+    <string name="nested_navigation_companion_root">(RU)Companion</string>
+    <string name="nested_navigation_companion_operator_details">(RU)Details</string>
+    <string name="nested_navigation_settings_root">(RU)Settings</string>
+    <string name="nested_navigation_settings_about">(RU)About</string>
+
+    <string name="operator_img_description">(RU)Operator\'s image</string>
+    <string name="operator_icon_description">(RU)Operator\'s icon</string>
+    <string name="operator_side_icon_description">(RU)Operator\'s side icon</string>
+
+    <string name="roll">(RU)Roll</string>
+    <string name="roll_counted_pattern">(RU)Roll %1$d/%2$d</string>
+
+    <string name="operator_details_organization">(RU)Organization</string>
+    <string name="operator_details_role">(RU)Role</string>
+    <string name="operator_details_stats">(RU)Stats</string>
+    <string name="operator_details_speed">(RU)Speed</string>
+    <string name="operator_details_armor">(RU)Armor</string>
+    <string name="operator_details_loadout">(RU)Loadout</string>
+    <string name="operator_details_primaries">(RU)Primaries</string>
+    <string name="operator_details_secondaries">(RU)Secondaries</string>
+    <string name="operator_details_gadgets">(RU)Gadgets</string>
+    <string name="operator_details_ability">(RU)Ability</string>
+    <string name="operator_details_role_defender">(RU)Defender</string>
+    <string name="operator_details_role_attacker">(RU)Attacker</string>
+
+    <string name="companion_weapons_fragment_label">(RU)Weapons</string>
+    <string name="companion_maps_fragment_label">(RU)Maps</string>
+    <string name="companion_operators_fragment_label">(RU)Operators</string>
+
+    <string name="companion_operators_all_filter">(RU)All roles</string>
+    <string name="companion_operators_defenders_filter">(RU)Defenders</string>
+    <string name="companion_operators_attackers_filter">(RU)Attackers</string>
+    <string name="companion_operators_all_filter_description">(RU)Show all operators</string>
+    <string name="companion_operators_defenders_filter_description">(RU)Show only operators with defender role</string>
+    <string name="companion_operators_attackers_filter_description">(RU)Show only operators with attacker role</string>
+
+    <string name="news_category_all">(RU)All</string>
+    <string name="news_category_esport">(RU)ESport</string>
+    <string name="news_category_game_updates">(RU)Game updates</string>
+    <string name="news_category_community">(RU)Community</string>
+    <string name="news_category_patch_notes">(RU)Patch notes</string>
+    <string name="news_category_store">(RU)Store</string>
+
+    <string name="select_all">(RU)Select all</string>
+    <string name="clear_selections">(RU)Clear selections</string>
+
+    <string name="select_all_description">(RU)Selects all operators that are presented in operators list</string>
+    <string name="clear_selections_description">(RU)Clears all previously selected operators</string>
+
+    <string name="alphabetic_sort_ascending">(RU)Alphabetic sort ascending</string>
+    <string name="alphabetic_sort_descending">(RU)Alphabetic sort descending</string>
+    <string name="sort_selected">(RU)Selected first</string>
+
+    <string name="search_hint">(RU)Search</string>
+
+    <string name="ad_label">(RU)Ad</string>
+
+    <string name="settings_item_title_app_language">(RU)Application language</string>
+    <string name="settings_item_title_news_locale">(RU)News language</string>
+    <string name="settings_item_title_use_same_language">(RU)Use same language for news and app</string>
+    <string name="settings_item_title_use_mobile_network_to_load_images">(RU)Use mobile network</string>
+    <string name="settings_item_title_about">(RU)About</string>
+
+    <string name="settings_item_subtitle_use_mobile_network_to_load_images">(RU)Enable this to allow image downloading while using mobile network</string>
+</resources>
