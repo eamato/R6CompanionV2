@@ -31,22 +31,14 @@ class SettingsPopupButton @JvmOverloads constructor(
         isClickable = true
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-
-        binding.run {
-            tvSettingsItemTitle.text = null
-            tvSettingsItemTitle.text = null
-            ivIcon.setImageDrawable(null)
-        }
-    }
-
     fun setIsEnabled(isEnabled: Boolean) {
         binding.run {
             tvSettingsItemTitle.isEnabled = isEnabled
             tvSettingsItemSubtitle.isEnabled = isEnabled
             ivIcon.isEnabled = isEnabled
         }
+
+        setSelectableBackground(isEnabled)
     }
 
     fun setTitle(title: UiText?) {
@@ -122,5 +114,16 @@ class SettingsPopupButton @JvmOverloads constructor(
         }
 
         binding.ivIcon.setImageResource(icon)
+    }
+
+    private fun setSelectableBackground(isEnabled: Boolean) {
+        if (isEnabled) {
+            val outValue = TypedValue()
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+            setBackgroundResource(outValue.resourceId)
+        } else {
+            background = null
+        }
+        isClickable = isEnabled
     }
 }

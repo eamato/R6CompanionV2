@@ -33,19 +33,6 @@ class SettingsSwitchButton @JvmOverloads constructor(
         isClickable = true
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-
-        binding.run {
-            settingsItemSwitch.setOnCheckedChangeListener(null)
-            tvSettingsItemTitle.text = null
-            tvSettingsItemTitle.text = null
-            ivIcon.setImageDrawable(null)
-        }
-
-        setOnClickListener(null)
-    }
-
     fun setIsChecked(isChecked: Boolean) {
         binding.settingsItemSwitch.run {
             this.setOnCheckedChangeListener(null)

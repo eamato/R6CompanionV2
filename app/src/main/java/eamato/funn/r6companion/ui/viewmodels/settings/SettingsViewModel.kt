@@ -92,7 +92,7 @@ class SettingsViewModel @Inject constructor(
                 SettingsItem.SettingsItemPopup(
                     icon = R.drawable.ic_companion_white_24dp,
                     title = R.string.settings_item_title_app_language,
-                    subTitle = UiText.SimpleString(currentAppLocale),
+                    subTitle = UiText.SimpleString(currentAppLocale.second),
                     isEnabled = true,
                     popupContentItems = supportedAppLocales.map { (key, value) ->
                         PopupContentItem(
@@ -103,6 +103,16 @@ class SettingsViewModel @Inject constructor(
                                 assert(Looper.myLooper() == Looper.getMainLooper())
                                 val appLocales = LocaleListCompat.forLanguageTags(key)
                                 AppCompatDelegate.setApplicationLocales(appLocales)
+
+                                if (currentIsSameLocale) {
+                                    updateNewsLocale(
+                                        appLocalesToNewsLocales.getOrDefault(
+                                            key,
+                                            DEFAULT_NEWS_LOCALE
+                                        )
+                                    )
+                                }
+
                                 _settingsChangedEvent.value = Unit
                             }
                         )
@@ -143,7 +153,7 @@ class SettingsViewModel @Inject constructor(
                             if (isChecked) {
                                 updateNewsLocale(
                                     appLocalesToNewsLocales.getOrDefault(
-                                        currentAppLocale,
+                                        currentAppLocale.first,
                                         DEFAULT_NEWS_LOCALE
                                     )
                                 )
@@ -185,17 +195,23 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentAppLocale(): String {
+    private fun getCurrentAppLocale(): Pair<String, String> {
         val locales = AppCompatDelegate.getApplicationLocales()
         if (locales.isEmpty) {
-            return Locale.getDefault().getDisplayName(Locale.getDefault())
-                .replaceFirstChar { char -> char.uppercase(Locale.getDefault()) }
+            val currentLocale = Locale.getDefault()
+            return currentLocale.toLanguageTag() to
+                    currentLocale.getDisplayName(currentLocale)
+                        .replaceFirstChar { char -> char.uppercase(currentLocale) }
         }
-        val firstLocale = locales[0]
-            ?: return Locale.getDefault().getDisplayName(Locale.getDefault())
-                .replaceFirstChar { char -> char.uppercase(Locale.getDefault()) }
+        val firstLocale = locales[0] ?: kotlin.run {
+            val currentLocale = Locale.getDefault()
+            return currentLocale.toLanguageTag() to
+                    currentLocale.getDisplayName(currentLocale)
+                        .replaceFirstChar { char -> char.uppercase(currentLocale) }
+        }
 
-        return firstLocale.getDisplayName(firstLocale)
-            .replaceFirstChar { char -> char.uppercase(firstLocale) }
+        return firstLocale.toLanguageTag() to
+                firstLocale.getDisplayName(firstLocale)
+                    .replaceFirstChar { char -> char.uppercase(firstLocale) }
     }
 }

@@ -36,11 +36,12 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private val companionOperatorsViewModel: CompanionOperatorsViewModel by viewModels()
 
-    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            handleBackPress()
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackPress()
+            }
         }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -151,6 +152,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
                 is UiState.Success -> {
                     submitOperators(it.data)
                 }
+
                 else -> {}
             }
         }
@@ -186,8 +188,9 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private fun initFilterOptions() {
         binding?.btnFilterOptions?.setOnClickListener {
-            DialogDefaultAppPopup(companionOperatorsViewModel.createFilterPopupContentItems())
-                .show(childFragmentManager)
+            DialogDefaultAppPopup.getInstance(
+                companionOperatorsViewModel.createFilterPopupContentItems()
+            ).show(childFragmentManager)
         }
     }
 

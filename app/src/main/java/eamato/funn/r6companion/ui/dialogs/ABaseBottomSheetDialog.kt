@@ -11,9 +11,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import eamato.funn.r6companion.ui.entities.PopupContentItem
 
-abstract class ABaseBottomSheetDialog<VB : ViewBinding>(
-    protected val popupItems: List<PopupContentItem>
-) : BottomSheetDialogFragment() {
+abstract class ABaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragment() {
 
     protected var binding: VB? = null
         private set
@@ -21,6 +19,7 @@ abstract class ABaseBottomSheetDialog<VB : ViewBinding>(
     abstract val bindingInitializer: (LayoutInflater) -> ViewBinding
 
     abstract fun getChildTag(): String
+    abstract fun getPopupItems(): List<PopupContentItem>
 
     @CallSuper
     @Suppress("UNCHECKED_CAST")
@@ -37,10 +36,6 @@ abstract class ABaseBottomSheetDialog<VB : ViewBinding>(
     }
 
     fun show(fragmentManager: FragmentManager) {
-        if (popupItems.isEmpty()) {
-            return
-        }
-
         fragmentManager.executePendingTransactions()
 
         fragmentManager.findFragmentByTag(getChildTag())

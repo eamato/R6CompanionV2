@@ -147,15 +147,17 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            DialogDefaultAppPopup(rouletteOperatorsViewModel.createSelectionPopupContentItems())
-                .show(childFragmentManager)
+            DialogDefaultAppPopup.getInstance(
+                rouletteOperatorsViewModel.createSelectionPopupContentItems()
+            ).show(childFragmentManager)
         }
     }
 
     private fun initSortingOptions() {
         binding?.btnSortingOptions?.setOnClickListener {
-            DialogDefaultAppPopup(rouletteOperatorsViewModel.createSortingPopupContentItems())
-                .show(childFragmentManager)
+            DialogDefaultAppPopup.getInstance(
+                rouletteOperatorsViewModel.createSortingPopupContentItems()
+            ).show(childFragmentManager)
         }
     }
 

@@ -79,9 +79,11 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
                             .takeIf { it.isEnabled }
                         when (selectedItem) {
                             is SettingsItem.SettingsItemPopup -> {
-                                DialogDefaultAppPopup(selectedItem.popupContentItems)
-                                    .show(childFragmentManager)
+                                DialogDefaultAppPopup.getInstance(
+                                    selectedItem.popupContentItems
+                                ).show(childFragmentManager)
                             }
+
                             is SettingsItem.SettingsItemScreen -> {
                                 findNavController().navigate(R.id.FragmentSettingsAbout)
                             }
