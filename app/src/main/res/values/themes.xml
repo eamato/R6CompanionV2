@@ -1,4 +1,5 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="R6Companion.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimary</item>
@@ -18,15 +19,19 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-<!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- Optional: set to transparent if your app is drawing behind the status bar. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
+
+        <!--<item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowActivityTransitions">true</item>
 
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>-->
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
 
 <!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
@@ -35,6 +40,24 @@
 
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textViewStyle">@style/R6Companion.DefaultTextViewStyle</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="sideSheetDialogTheme">@style/ThemeOverlay.App.SideSheetDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/R6Companion.ModalBottomSheetDialog</item>
+    </style>
+
+    <style name="R6Companion.ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.App.SideSheetDialog" parent="ThemeOverlay.Material3.DayNight.SideSheetDialog">
+        <item name="sideSheetModalStyle">@style/R6Companion.ModalSideSheetDialog</item>
+    </style>
+
+    <style name="R6Companion.ModalSideSheetDialog" parent="Widget.Material3.SideSheet">
+        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="R6Companion.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

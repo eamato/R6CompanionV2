@@ -27,10 +27,7 @@ class SettingsSwitchButton @JvmOverloads constructor(
     private var checkedChangeListener: ((View, Boolean) -> Unit)? = null
 
     init {
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-        setBackgroundResource(outValue.resourceId)
-        isClickable = true
+        setSelectableBackground(true)
     }
 
     fun setIsChecked(isChecked: Boolean) {
@@ -50,6 +47,8 @@ class SettingsSwitchButton @JvmOverloads constructor(
             tvSettingsItemSubtitle.isEnabled = isEnabled
             ivIcon.isEnabled = isEnabled
         }
+
+        setSelectableBackground(isEnabled)
     }
 
     fun setTitle(title: UiText?) {
@@ -130,5 +129,16 @@ class SettingsSwitchButton @JvmOverloads constructor(
     fun setOnCheckedChangeListener(action: (View, Boolean) -> Unit) {
         setOnClickListener { binding.settingsItemSwitch.toggle() }
         checkedChangeListener = action
+    }
+
+    private fun setSelectableBackground(isEnabled: Boolean) {
+        if (isEnabled) {
+            val outValue = TypedValue()
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+            setBackgroundResource(outValue.resourceId)
+        } else {
+            background = null
+        }
+        isClickable = isEnabled
     }
 }

@@ -1,5 +1,6 @@
 package eamato.funn.r6companion.ui.fragments.companion
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,7 @@ import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickList
 import eamato.funn.r6companion.databinding.FragmentCompanionOperatorsBinding
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionOperators
-import eamato.funn.r6companion.ui.dialogs.DialogDefaultAppPopup
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -43,6 +44,9 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             }
         }
 
+    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
+        DialogDefaultPopupManager(this)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -53,6 +57,12 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         initOperatorsRecyclerView()
         setObservers()
         initSearchView()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        dialogDefaultPopupManager.dismiss()
     }
 
     private fun initCompanionButtons() {
@@ -188,9 +198,11 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private fun initFilterOptions() {
         binding?.btnFilterOptions?.setOnClickListener {
-            DialogDefaultAppPopup.getInstance(
-                companionOperatorsViewModel.createFilterPopupContentItems()
-            ).show(childFragmentManager)
+            dialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    companionOperatorsViewModel.createFilterPopupContentItems()
+                )
         }
     }
 

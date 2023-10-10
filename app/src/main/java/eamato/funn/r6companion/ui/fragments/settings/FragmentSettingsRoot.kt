@@ -1,5 +1,6 @@
 package eamato.funn.r6companion.ui.fragments.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterSettingsItems
-import eamato.funn.r6companion.ui.dialogs.DialogDefaultAppPopup
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -29,11 +30,20 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentSettingsRootBinding::inflate
 
+    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
+        DialogDefaultPopupManager(this)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setObservers()
         initSettingsRecyclerView()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        dialogDefaultPopupManager.dismiss()
     }
 
     private fun setObservers() {
@@ -79,13 +89,15 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
                             .takeIf { it.isEnabled }
                         when (selectedItem) {
                             is SettingsItem.SettingsItemPopup -> {
-                                DialogDefaultAppPopup.getInstance(
-                                    selectedItem.popupContentItems
-                                ).show(childFragmentManager)
+                                dialogDefaultPopupManager.create(context)
+                                    .show(childFragmentManager, selectedItem.popupContentItems)
                             }
 
                             is SettingsItem.SettingsItemScreen -> {
-                                findNavController().navigate(R.id.FragmentSettingsAbout)
+                                findNavController().navigate(
+                                    selectedItem.destinationId,
+                                    selectedItem.args
+                                )
                             }
 
                             else -> {}

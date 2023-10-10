@@ -1,5 +1,6 @@
 package eamato.funn.r6companion.ui.fragments.roulette
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,7 @@ import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentRouletteOperatorsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterRouletteOperators
-import eamato.funn.r6companion.ui.dialogs.DialogDefaultAppPopup
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -40,6 +41,9 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             }
         }
 
+    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
+        DialogDefaultPopupManager(this)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,6 +58,12 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         initSearchView()
         initSelectionOptions()
         initSortingOptions()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        dialogDefaultPopupManager.dismiss()
     }
 
     private fun initOperatorsRecyclerView() {
@@ -147,17 +157,21 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            DialogDefaultAppPopup.getInstance(
-                rouletteOperatorsViewModel.createSelectionPopupContentItems()
-            ).show(childFragmentManager)
+            dialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    rouletteOperatorsViewModel.createSelectionPopupContentItems()
+                )
         }
     }
 
     private fun initSortingOptions() {
         binding?.btnSortingOptions?.setOnClickListener {
-            DialogDefaultAppPopup.getInstance(
-                rouletteOperatorsViewModel.createSortingPopupContentItems()
-            ).show(childFragmentManager)
+            dialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    rouletteOperatorsViewModel.createSortingPopupContentItems()
+                )
         }
     }
 

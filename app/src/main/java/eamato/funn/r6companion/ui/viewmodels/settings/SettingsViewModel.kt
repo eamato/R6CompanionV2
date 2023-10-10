@@ -182,7 +182,9 @@ class SettingsViewModel @Inject constructor(
             settingsItems.add(
                 SettingsItem.SettingsItemScreen(
                     icon = R.drawable.ic_companion_white_24dp,
-                    title = R.string.settings_item_title_about
+                    title = R.string.settings_item_title_about,
+                    destinationId = R.id.FragmentSettingsAbout,
+                    null
                 )
             )
 

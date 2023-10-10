@@ -25,10 +25,7 @@ class SettingsPopupButton @JvmOverloads constructor(
     )
 
     init {
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-        setBackgroundResource(outValue.resourceId)
-        isClickable = true
+        setSelectableBackground(true)
     }
 
     fun setIsEnabled(isEnabled: Boolean) {

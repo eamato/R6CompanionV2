@@ -1,6 +1,8 @@
 package eamato.funn.r6companion.ui.entities.settings
 
+import android.os.Bundle
 import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.ui.entities.IViewType
@@ -57,6 +59,8 @@ sealed class SettingsItem(
     data class SettingsItemScreen(
         @DrawableRes override val icon: Int,
         @StringRes override val title: Int,
+        @IdRes val destinationId: Int,
+        val args: Bundle?
     ) : SettingsItem(
         icon = icon,
         title = title,
