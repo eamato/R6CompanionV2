@@ -1,18 +1,28 @@
 package eamato.funn.r6companion.ui.fragments.home
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
+import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_LANDSCAPE
+import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.isLandscape
+import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
@@ -54,6 +64,13 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         initNewsRecyclerView()
         initGoToTopDestinationAction()
         initSwipeRefreshLayout()
+        applySystemInsetsInNeeded()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        binding?.rvNews?.layoutManager = createNewsRecyclerViewLayoutManager()
     }
 
     override fun onDestroyView() {
@@ -68,21 +85,11 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         binding?.rvNews?.run {
             setHasFixedSize(true)
 
-            val linearLayoutManager = LinearLayoutManager(context)
-            layoutManager = linearLayoutManager
+            layoutManager = createNewsRecyclerViewLayoutManager()
 
             adapter = adapterNewsArticles
 
-            val spacingDecoration = SpacingItemDecoration
-                .linear()
-                .setSpacingRes(
-                    R.dimen.dp_4,
-                    R.dimen.dp_4,
-                    R.dimen.dp_4,
-                    R.dimen.dp_4
-                )
-                .create(context)
-            setItemDecoration(spacingDecoration)
+            setNewsRecyclerViewItemDecorations()
 
             adapterNewsArticles.addLoadStateListener { combinedLoadStates ->
                 logger.i(Message.message {
@@ -134,6 +141,26 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         }
     }
 
+    private fun createNewsRecyclerViewLayoutManager(): RecyclerView.LayoutManager {
+        val spanCount = context
+            .isLandscape()
+            .onTrueInvoke { NEWS_LIST_GRID_COUNT_LANDSCAPE }
+            ?: NEWS_LIST_GRID_COUNT_PORTRAIT
+
+        return GridLayoutManager(context, spanCount)
+    }
+
+    private fun setNewsRecyclerViewItemDecorations() {
+        binding?.rvNews?.run {
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_4, R.dimen.dp_4, R.dimen.dp_4, R.dimen.dp_4)
+                .create(context)
+
+            setItemDecoration(spacingDecoration)
+        }
+    }
+
     private fun onNewsLocaleChanged(newsLocale: String) {
         val currentNewsCategory =
             newsViewModel.newsCategoryValue.value ?: NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE
@@ -151,6 +178,20 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         binding?.srlRefreshNews?.run {
             setColorSchemeResources(R.color.blue, R.color.yellow, R.color.red)
             setOnRefreshListener { adapterNewsArticles.refresh() }
+        }
+    }
+
+    private fun applySystemInsetsInNeeded() {
+        binding?.run {
+            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                clHeaderButtons.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = insets.left
+                    rightMargin = insets.right
+                }
+
+                WindowInsetsCompat.CONSUMED
+            }
         }
     }
 

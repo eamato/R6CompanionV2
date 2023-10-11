@@ -28,8 +28,14 @@ class DialogDefaultPopupManager(private val lifecycleOwner: LifecycleOwner) {
 
     fun create(context: Context): IDialogDefault {
         if (context.isLandscape()) {
+            dialog?.dismiss()
+            dialog = null
+
             return DialogDefaultAppPopupSide(context).also { dialog = it }
         }
+
+        dialog?.dismiss()
+        dialog = null
 
         return DialogDefaultAppPopup().also { dialog = it }
     }

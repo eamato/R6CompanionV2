@@ -4,17 +4,25 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
 import eamato.funn.r6companion.core.extenstions.getDimensionPixelSize
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
+import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
@@ -58,50 +66,28 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         initSearchView()
         initSelectionOptions()
         initSortingOptions()
+        applySystemInsetsInNeeded()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
         dialogDefaultPopupManager.dismiss()
+
+        binding?.rvOperators?.layoutManager = createOperatorsRecyclerViewLayoutManager()
+        setOperatorsRecyclerViewItemDecorations()
     }
 
     private fun initOperatorsRecyclerView() {
         binding?.rvOperators?.run {
             setHasFixedSize(true)
 
-            val spanCount = context.isLandscape().onTrueInvoke { 5 } ?: 3
-            val operatorsLayoutManager = GridLayoutManager(context, spanCount)
-            layoutManager = operatorsLayoutManager
+            layoutManager = createOperatorsRecyclerViewLayoutManager()
 
             val adapterRouletteOperators = AdapterRouletteOperators { scrollToPosition(0) }
             adapter = adapterRouletteOperators
 
-            val spacingDecoration = SpacingItemDecoration
-                .grid()
-                .setIncludeEdge(true)
-                .setSpanCount(spanCount)
-                .setSpacingRes(
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                )
-                .setTopSpacingMultiplier(
-                    R.dimen.dp_1.getDimensionPixelSize(context)
-                )
-                .setBottomSpacingMultiplier(
-                    R.dimen.dp_11.getDimensionPixelSize(context)
-                )
-                .create(context)
-            addItemDecoration(spacingDecoration)
-
-            val borderDecorations = BorderItemDecoration(
-                R.color.operators_border,
-                R.dimen.dp_1,
-                context
-            )
-            addItemDecoration(borderDecorations)
+            setOperatorsRecyclerViewItemDecorations()
 
             val clickListener = RecyclerViewItemClickListener(
                 this,
@@ -115,6 +101,44 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             )
 
             setOnItemClickListener(clickListener)
+        }
+    }
+
+    private fun createOperatorsRecyclerViewLayoutManager(): LayoutManager {
+        val spanCount = context
+            .isLandscape()
+            .onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+            ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+        return GridLayoutManager(context, spanCount)
+    }
+
+    private fun setOperatorsRecyclerViewItemDecorations() {
+        binding?.rvOperators?.run {
+            removeAllItemDecorations()
+
+            val spanCount = layoutManager
+                ?.let { layoutManager -> layoutManager as? GridLayoutManager }
+                ?.spanCount
+                ?: context.isLandscape().onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+                ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+            val spacingDecoration = SpacingItemDecoration
+                .grid()
+                .setIncludeEdge(true)
+                .setSpanCount(spanCount)
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .setTopSpacingMultiplier(R.dimen.dp_1.getDimensionPixelSize(context))
+                .setBottomSpacingMultiplier(R.dimen.dp_11.getDimensionPixelSize(context))
+                .create(context)
+            addItemDecoration(spacingDecoration)
+
+            val borderDecorations = BorderItemDecoration(
+                R.color.operators_border,
+                R.dimen.dp_1,
+                context
+            )
+            addItemDecoration(borderDecorations)
         }
     }
 
@@ -172,6 +196,20 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
                     childFragmentManager,
                     rouletteOperatorsViewModel.createSortingPopupContentItems()
                 )
+        }
+    }
+
+    private fun applySystemInsetsInNeeded() {
+        binding?.run {
+            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                clHeaderButtons.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = insets.left
+                    rightMargin = insets.right
+                }
+
+                WindowInsetsCompat.CONSUMED
+            }
         }
     }
 

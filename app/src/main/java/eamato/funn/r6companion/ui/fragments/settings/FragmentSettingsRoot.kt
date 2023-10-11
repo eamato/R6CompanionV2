@@ -71,12 +71,7 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
             val spacingDecoration = SpacingItemDecoration
                 .linear()
-                .setSpacingRes(
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2
-                )
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
                 .setTopSpacingMultiplier(R.dimen.dp_7.getDimensionPixelSize(context))
                 .create(context)
             setItemDecoration(spacingDecoration)

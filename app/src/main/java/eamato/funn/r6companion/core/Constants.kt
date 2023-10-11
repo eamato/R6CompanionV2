@@ -57,3 +57,9 @@ const val NEWS_SOURCE_PATTERN_2 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 const val NEWS_RESULT_PATTEN = "dd-MM-yyyy"
 
 const val PREFERENCE_KEY_USER_SETTINGS = "user_settings"
+
+const val OPERATORS_LIST_GRID_COUNT_PORTRAIT = 3
+const val OPERATORS_LIST_GRID_COUNT_LANDSCAPE = 5
+
+const val NEWS_LIST_GRID_COUNT_PORTRAIT = 1
+const val NEWS_LIST_GRID_COUNT_LANDSCAPE = 2
