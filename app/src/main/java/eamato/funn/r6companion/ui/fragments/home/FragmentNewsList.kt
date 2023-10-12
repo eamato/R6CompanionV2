@@ -1,6 +1,5 @@
 package eamato.funn.r6companion.ui.fragments.home
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,12 +64,6 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         initGoToTopDestinationAction()
         initSwipeRefreshLayout()
         applySystemInsetsInNeeded()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        binding?.rvNews?.layoutManager = createNewsRecyclerViewLayoutManager()
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,5 @@
 package eamato.funn.r6companion.ui.fragments.companion
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,10 +25,10 @@ import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.extenstions.setViewsEnabled
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionOperatorsBinding
-import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionOperators
 import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
@@ -52,9 +51,6 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             }
         }
 
-    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
-        DialogDefaultPopupManager(this)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -66,15 +62,6 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         setObservers()
         initSearchView()
         applySystemInsetsInNeeded()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        dialogDefaultPopupManager.dismiss()
-
-        binding?.rvOperators?.layoutManager = createOperatorsRecyclerViewLayoutManager()
-        setOperatorsRecyclerViewItemDecorations()
     }
 
     private fun initCompanionButtons() {
@@ -111,7 +98,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
             layoutManager = createOperatorsRecyclerViewLayoutManager()
 
-            val adapterCompanionOperators = AdapterCompanionOperators { scrollToPosition(0) }
+            val adapterCompanionOperators = AdapterCompanionOperators()
             adapter = adapterCompanionOperators
 
             setOperatorsRecyclerViewItemDecorations()
@@ -184,7 +171,18 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             when (it) {
                 is UiState.Error -> {}
                 is UiState.Success -> {
-                    submitOperators(it.data)
+                    val adapter = binding?.rvOperators?.adapter
+                        ?.let { adapter -> adapter as? AdapterCompanionOperators }
+                        ?: return@observe
+
+                    when (it.additionalEvent) {
+                        is ScrollToTopAdditionalEvent -> {
+                            adapter.submitList(it.data) {
+                                binding?.rvOperators?.scrollToPosition(0)
+                            }
+                        }
+                        else -> adapter.submitList(it.data)
+                    }
                 }
 
                 else -> {}
@@ -236,18 +234,12 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private fun initFilterOptions() {
         binding?.btnFilterOptions?.setOnClickListener {
-            dialogDefaultPopupManager.create(it.context)
+            DialogDefaultPopupManager.create(it.context)
                 .show(
                     childFragmentManager,
                     companionOperatorsViewModel.createFilterPopupContentItems()
                 )
         }
-    }
-
-    private fun submitOperators(operators: List<Operator>) {
-        binding?.rvOperators?.adapter
-            ?.let { adapter -> adapter as? AdapterCompanionOperators }
-            ?.submitList(operators)
     }
 
     private fun handleBackPress() {

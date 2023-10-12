@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.utils.Result
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
@@ -41,7 +42,7 @@ class CompanionOperatorsViewModel @Inject constructor(
 
         this.nameFilter = nameFilter.trim()
 
-        _operators.value = UiState.Success(applyFilters().toList())
+        _operators.value = UiState.Success(applyFilters().toList(), ScrollToTopAdditionalEvent)
     }
 
     fun createFilterPopupContentItems(): List<PopupContentItem> {
@@ -67,7 +68,7 @@ class CompanionOperatorsViewModel @Inject constructor(
     private fun filterOperatorsByRole(role: ERoleFilter) {
         roleFilter = role
         _operators.value = UiState.Progress
-        _operators.value = UiState.Success(applyFilters().toList())
+        _operators.value = UiState.Success(applyFilters().toList(), ScrollToTopAdditionalEvent)
     }
 
     private fun applyFilters(): List<Operator> {

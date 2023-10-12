@@ -1,6 +1,5 @@
 package eamato.funn.r6companion.ui.fragments.settings
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,20 +29,11 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentSettingsRootBinding::inflate
 
-    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
-        DialogDefaultPopupManager(this)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setObservers()
         initSettingsRecyclerView()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        dialogDefaultPopupManager.dismiss()
     }
 
     private fun setObservers() {
@@ -84,7 +74,7 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
                             .takeIf { it.isEnabled }
                         when (selectedItem) {
                             is SettingsItem.SettingsItemPopup -> {
-                                dialogDefaultPopupManager.create(context)
+                                DialogDefaultPopupManager.create(context)
                                     .show(childFragmentManager, selectedItem.popupContentItems)
                             }
 

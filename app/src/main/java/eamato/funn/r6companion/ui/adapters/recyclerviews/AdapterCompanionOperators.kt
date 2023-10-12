@@ -12,12 +12,10 @@ import eamato.funn.r6companion.core.ROULETTE_OPERATOR_IMAGE_WIDTH
 import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.ImageResizeTransformation
-import eamato.funn.r6companion.core.utils.recyclerview.ListChangeListener
 import eamato.funn.r6companion.databinding.CompanionOperatorItemViewBinding
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 
-class AdapterCompanionOperators(listChangeListener: ListChangeListener) :
-    ABaseAdapter<Operator>(DIFF_ITEM_CALLBACK, listChangeListener) {
+class AdapterCompanionOperators : ABaseAdapter<Operator>(DIFF_ITEM_CALLBACK) {
 
     companion object {
         val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<Operator>() {

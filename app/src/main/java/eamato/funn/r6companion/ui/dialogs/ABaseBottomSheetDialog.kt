@@ -30,6 +30,13 @@ abstract class ABaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragm
         savedInstanceState: Bundle?
     ): View = bindingInitializer(layoutInflater).also { binding = it as? VB }.root
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            dismiss()
+        }
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     @CallSuper
     override fun onDestroyView() {
         binding = null

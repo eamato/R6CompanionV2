@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.utils.Result
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.SelectableObject
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.UiText
@@ -58,7 +59,7 @@ class RouletteOperatorsViewModel @Inject constructor(
             }
             .toList()
 
-        _operators.value = UiState.Success(filteredOperators)
+        _operators.value = UiState.Success(filteredOperators, ScrollToTopAdditionalEvent)
     }
 
     fun selectUnselectOperator(selectedOperator: SelectableObject<Operator>) {
@@ -148,7 +149,8 @@ class RouletteOperatorsViewModel @Inject constructor(
                     data = operator,
                     isSelected = selectedOperators.contains(operator)
                 )
-            }
+            },
+            ScrollToTopAdditionalEvent
         )
     }
 
@@ -163,7 +165,8 @@ class RouletteOperatorsViewModel @Inject constructor(
                     data = operator,
                     isSelected = selectedOperators.contains(operator)
                 )
-            }
+            },
+            ScrollToTopAdditionalEvent
         )
     }
 
@@ -178,7 +181,8 @@ class RouletteOperatorsViewModel @Inject constructor(
                     data = operator,
                     isSelected = selectedOperators.contains(operator)
                 )
-            }
+            },
+            ScrollToTopAdditionalEvent
         )
     }
 

@@ -1,6 +1,5 @@
 package eamato.funn.r6companion.ui.fragments.roulette
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,7 @@ import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentRouletteOperatorsBinding
@@ -49,9 +49,6 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             }
         }
 
-    private val dialogDefaultPopupManager: DialogDefaultPopupManager =
-        DialogDefaultPopupManager(this)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -69,22 +66,13 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         applySystemInsetsInNeeded()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        dialogDefaultPopupManager.dismiss()
-
-        binding?.rvOperators?.layoutManager = createOperatorsRecyclerViewLayoutManager()
-        setOperatorsRecyclerViewItemDecorations()
-    }
-
     private fun initOperatorsRecyclerView() {
         binding?.rvOperators?.run {
             setHasFixedSize(true)
 
             layoutManager = createOperatorsRecyclerViewLayoutManager()
 
-            val adapterRouletteOperators = AdapterRouletteOperators { scrollToPosition(0) }
+            val adapterRouletteOperators = AdapterRouletteOperators()
             adapter = adapterRouletteOperators
 
             setOperatorsRecyclerViewItemDecorations()
@@ -153,9 +141,18 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             when (it) {
                 is UiState.Error -> {}
                 is UiState.Success -> {
-                    binding?.rvOperators?.adapter
+                    val adapter = binding?.rvOperators?.adapter
                         ?.let { adapter -> adapter as? AdapterRouletteOperators }
-                        ?.submitList(it.data)
+                        ?: return@observe
+
+                    when (it.additionalEvent) {
+                        is ScrollToTopAdditionalEvent -> {
+                            adapter.submitList(it.data) {
+                                binding?.rvOperators?.scrollToPosition(0)
+                            }
+                        }
+                        else -> adapter.submitList(it.data)
+                    }
 
                     changeRollButton()
                 }
@@ -181,7 +178,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            dialogDefaultPopupManager.create(it.context)
+            DialogDefaultPopupManager.create(it.context)
                 .show(
                     childFragmentManager,
                     rouletteOperatorsViewModel.createSelectionPopupContentItems()
@@ -191,7 +188,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSortingOptions() {
         binding?.btnSortingOptions?.setOnClickListener {
-            dialogDefaultPopupManager.create(it.context)
+            DialogDefaultPopupManager.create(it.context)
                 .show(
                     childFragmentManager,
                     rouletteOperatorsViewModel.createSortingPopupContentItems()
