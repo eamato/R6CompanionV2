@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDimension
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
@@ -61,7 +60,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         initOperatorsRecyclerView()
         setObservers()
         initSearchView()
-        applySystemInsetsInNeeded()
+        applySystemInsetsIfNeeded()
     }
 
     private fun initCompanionButtons() {
@@ -218,16 +217,12 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         })
     }
 
-    private fun applySystemInsetsInNeeded() {
-        binding?.run {
-            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsets ->
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                clHeaderButtons.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    leftMargin = insets.left
-                    rightMargin = insets.right
-                }
-
-                WindowInsetsCompat.CONSUMED
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
             }
         }
     }

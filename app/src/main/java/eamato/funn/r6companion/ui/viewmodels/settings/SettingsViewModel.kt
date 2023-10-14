@@ -17,6 +17,7 @@ import eamato.funn.r6companion.core.utils.SingleLiveEvent
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.ui.entities.PopupContentItem
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem
+import eamato.funn.r6companion.ui.fragments.settings.FragmentSettingsAbout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -90,7 +91,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemPopup(
-                    icon = R.drawable.ic_companion_white_24dp,
+                    icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_app_language,
                     subTitle = UiText.SimpleString(currentAppLocale.second),
                     isEnabled = true,
@@ -122,7 +123,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemPopup(
-                    icon = R.drawable.ic_companion_white_24dp,
+                    icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_news_locale,
                     subTitle = UiText.SimpleString(currentNewsLocale.localeTagToLocaleDisplayName()),
                     isEnabled = !currentIsSameLocale,
@@ -143,7 +144,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemSwitch(
-                    icon = R.drawable.ic_companion_white_24dp,
+                    icon = R.drawable.ic_language_24,
                     title = R.string.settings_item_title_use_same_language,
                     subTitle = null,
                     isChecked = currentIsSameLocale,
@@ -166,7 +167,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemSwitch(
-                    icon = R.drawable.ic_companion_white_24dp,
+                    icon = R.drawable.ic_mobile_network_24,
                     title = R.string.settings_item_title_use_mobile_network_to_load_images,
                     subTitle = UiText.ResourceString(R.string.settings_item_subtitle_use_mobile_network_to_load_images),
                     isChecked = currentUseMobileNetworkForImages,
@@ -184,7 +185,8 @@ class SettingsViewModel @Inject constructor(
                     icon = R.drawable.ic_companion_white_24dp,
                     title = R.string.settings_item_title_about,
                     destinationId = R.id.FragmentSettingsAbout,
-                    null
+                    destinationClass = FragmentSettingsAbout::class,
+                    args = null
                 )
             )
 

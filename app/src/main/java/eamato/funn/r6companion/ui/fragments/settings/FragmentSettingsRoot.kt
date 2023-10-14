@@ -3,22 +3,35 @@ package eamato.funn.r6companion.ui.fragments.settings
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
+import androidx.navigation.createGraph
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
-import eamato.funn.r6companion.core.extenstions.getDimensionPixelSize
+import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
+import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
+import eamato.funn.r6companion.core.extenstions.isLandscape
+import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
+import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
+import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterPopupContent
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterSettingsItems
 import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
+import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.settings.SettingsViewModel
 
 @AndroidEntryPoint
@@ -34,6 +47,7 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
         setObservers()
         initSettingsRecyclerView()
+        applySystemInsetsToListIfNeeded()
     }
 
     private fun setObservers() {
@@ -62,7 +76,6 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
             val spacingDecoration = SpacingItemDecoration
                 .linear()
                 .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
-                .setTopSpacingMultiplier(R.dimen.dp_7.getDimensionPixelSize(context))
                 .create(context)
             setItemDecoration(spacingDecoration)
 
@@ -70,28 +83,140 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
-                        val selectedItem = adapterSettingsItems.getItemAtPosition(position)
+                        adapterSettingsItems.getItemAtPosition(position)
                             .takeIf { it.isEnabled }
-                        when (selectedItem) {
-                            is SettingsItem.SettingsItemPopup -> {
-                                DialogDefaultPopupManager.create(context)
-                                    .show(childFragmentManager, selectedItem.popupContentItems)
-                            }
-
-                            is SettingsItem.SettingsItemScreen -> {
-                                findNavController().navigate(
-                                    selectedItem.destinationId,
-                                    selectedItem.args
-                                )
-                            }
-
-                            else -> {}
-                        }
+                            ?.run { onSettingsItemSelected(this) }
                     }
                 }
             )
 
             setOnItemClickListener(clickListener)
         }
+    }
+
+    private fun applySystemInsetsToListIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            val spacingDecoration = SystemSpacingsItemDecoration(
+                insets.top, insets.left, insets.bottom, insets.right
+            )
+            binding?.rvSettings?.replaceItemDecoration(spacingDecoration)
+            binding?.flSettingsItemContentContainer?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                rightMargin = insets.right
+            }
+        }
+    }
+
+    private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
+        val context = requireContext()
+        val isLandscape = context.isLandscape()
+        if (isLandscape) {
+            clearContainer()
+        }
+
+        when (selectedSettingsItem) {
+            is SettingsItem.SettingsItemPopup -> {
+                if (isLandscape) {
+                    showSettingsItemPopupContentInContainer(selectedSettingsItem)
+                } else {
+                    showSettingsItemPopup(selectedSettingsItem)
+                }
+            }
+
+            is SettingsItem.SettingsItemScreen -> {
+                if (isLandscape) {
+                    showSettingsItemScreenContent(selectedSettingsItem)
+                } else {
+                    goToSettingsItemScreen(selectedSettingsItem)
+                }
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun showSettingsItemPopupContentInContainer(
+        selectedSettingsItem: SettingsItem.SettingsItemPopup
+    ) {
+        binding?.flSettingsItemContentContainer?.run {
+            val popupBinding = DialogDefaultAppPopupBinding.inflate(
+                LayoutInflater.from(context),
+                this,
+                true
+            )
+            popupBinding.rvPopupItems.layoutManager = LinearLayoutManager(context)
+            val adapterPopupContent = AdapterPopupContent()
+            popupBinding.rvPopupItems.adapter = adapterPopupContent
+                .also { adapter -> adapter.submitList(selectedSettingsItem.popupContentItems) }
+
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .create(context)
+            popupBinding.rvPopupItems.setItemDecoration(spacingDecoration)
+
+            val clickListener = RecyclerViewItemClickListener(
+                popupBinding.rvPopupItems,
+                object : RecyclerViewItemClickListener.OnItemTapListener {
+                    override fun onItemClicked(view: View, position: Int) {
+                        adapterPopupContent.getItemAtPosition(position).onClickListener?.invoke()
+                    }
+                }
+            )
+
+            popupBinding.rvPopupItems.setOnItemClickListener(clickListener)
+        }
+    }
+
+    private fun showSettingsItemPopup(selectedSettingsItem: SettingsItem.SettingsItemPopup) {
+        val context = requireContext()
+        DialogDefaultPopupManager.create(context)
+            .show(childFragmentManager, selectedSettingsItem.popupContentItems)
+    }
+
+    private fun showSettingsItemScreenContent(selectedSettingsItem: SettingsItem.SettingsItemScreen) {
+        val navHostFragment = NavHostFragment()
+        childFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fl_settings_item_content_container,
+                navHostFragment,
+                SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
+            )
+            .runOnCommit {
+                val navigator = FragmentNavigator(
+                    requireContext(),
+                    childFragmentManager,
+                    R.id.fl_settings_item_content_container
+                )
+                val destinationBuilder = FragmentNavigatorDestinationBuilder(
+                    navigator,
+                    SETTINGS_ITEM_SCREEN_ROUTE_NAME,
+                    selectedSettingsItem.destinationClass
+                )
+                val graph = navHostFragment.navController.createGraph(
+                    startDestination = SETTINGS_ITEM_SCREEN_ROUTE_NAME,
+                    builder = { destination(destinationBuilder) }
+                )
+                navHostFragment.navController.setGraph(graph, selectedSettingsItem.args)
+            }
+            .commit()
+    }
+
+    private fun goToSettingsItemScreen(selectedSettingsItem: SettingsItem.SettingsItemScreen) {
+        findNavController().navigate(selectedSettingsItem.destinationId, selectedSettingsItem.args)
+    }
+
+    private fun clearContainer() {
+        val currentSettingsItemScreenFragment = childFragmentManager
+            .findFragmentByTag(SETTINGS_ITEM_SCREEN_FRAGMENT_TAG)
+        if (currentSettingsItemScreenFragment != null) {
+            childFragmentManager
+                .beginTransaction()
+                .remove(currentSettingsItemScreenFragment)
+                .commitNow()
+        }
+
+        binding?.flSettingsItemContentContainer?.removeAllViews()
     }
 }

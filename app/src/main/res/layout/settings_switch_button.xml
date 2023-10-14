@@ -7,21 +7,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:minHeight="@dimen/dp_60">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_icon_margin"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.11" />
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="iv_icon" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="@+id/gl_icon_margin"
+        app:layout_constraintEnd_toStartOf="@+id/barrier_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/R6Companion.SettingsItemIconStyle"
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settings_item_switch"
-        app:layout_constraintStart_toEndOf="@+id/gl_icon_margin"
+        app:layout_constraintStart_toEndOf="@+id/barrier_icon"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.textview.MaterialTextView

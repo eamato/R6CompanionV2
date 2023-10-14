@@ -1,7 +1,6 @@
 package eamato.funn.r6companion.ui.adapters.recyclerviews
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -50,22 +49,11 @@ class AdapterPopupContent :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PopupContentItem) {
-            item.icon
-                ?.run { binding.ivIcon.setImageResource(this) }
-                ?: kotlin.run { binding.ivIcon.setImageDrawable(null) }
-
-            binding.tvTitle.text = item.title.asString(itemView.context)
-
-            item.subTitle
-                ?.asString(itemView.context)
-                ?.run {
-                    binding.tvSubTitle.text = this
-                    binding.tvSubTitle.visibility = View.VISIBLE
-                }
-                ?: kotlin.run {
-                    binding.tvSubTitle.text = ""
-                    binding.tvSubTitle.visibility = View.GONE
-                }
+            binding.settingsPopupContentItem.run {
+                setTitle(item.title)
+                setSubtitle(item.subTitle)
+                setIcon(item.icon)
+            }
         }
     }
 }

@@ -15,6 +15,16 @@ fun RecyclerView.setItemDecoration(itemDecoration: RecyclerView.ItemDecoration) 
     addItemDecoration(itemDecoration)
 }
 
+fun RecyclerView.replaceItemDecoration(itemDecoration: RecyclerView.ItemDecoration) {
+    for (index in 0 until itemDecorationCount) {
+        if (getItemDecorationAt(index)::class.java == itemDecoration::class.java) {
+            removeItemDecorationAt(index)
+            break
+        }
+    }
+    addItemDecoration(itemDecoration)
+}
+
 fun RecyclerView?.setOnItemClickListener(listener: RecyclerViewItemClickListener) {
     if (this == null)
         return

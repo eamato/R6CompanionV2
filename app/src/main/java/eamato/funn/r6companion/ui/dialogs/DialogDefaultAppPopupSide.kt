@@ -8,11 +8,17 @@ import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.sidesheet.SideSheetDialog
+import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
+import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
+import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterPopupContent
 import eamato.funn.r6companion.ui.entities.PopupContentItem
+import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
+import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDecoration
 
 class DialogDefaultAppPopupSide(context: Context) : SideSheetDialog(context), IDialogDefault {
 
@@ -38,6 +44,12 @@ class DialogDefaultAppPopupSide(context: Context) : SideSheetDialog(context), ID
             val adapterPopupContent = AdapterPopupContent()
             adapter = adapterPopupContent.also { it.submitList(popupItems) }
 
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .create(context)
+            setItemDecoration(spacingDecoration)
+
             val clickListener = RecyclerViewItemClickListener(
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
@@ -50,6 +62,8 @@ class DialogDefaultAppPopupSide(context: Context) : SideSheetDialog(context), ID
 
             setOnItemClickListener(clickListener)
         }
+
+        applySystemInsetsToListIfNeeded()
     }
 
     override fun show(fragmentManager: FragmentManager, popupItems: List<PopupContentItem>) {
@@ -59,5 +73,14 @@ class DialogDefaultAppPopupSide(context: Context) : SideSheetDialog(context), ID
 
         this.popupItems = popupItems
         this.show()
+    }
+
+    private fun applySystemInsetsToListIfNeeded() {
+        window?.decorView?.applySystemInsetsIfNeeded { insets ->
+            val spacingDecoration = SystemSpacingsItemDecoration(
+                insets.top, 0, insets.bottom, insets.right
+            )
+            binding?.rvPopupItems?.replaceItemDecoration(spacingDecoration)
+        }
     }
 }

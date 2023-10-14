@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -20,6 +18,7 @@ import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
 import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
@@ -63,7 +62,7 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         initNewsRecyclerView()
         initGoToTopDestinationAction()
         initSwipeRefreshLayout()
-        applySystemInsetsInNeeded()
+        applySystemInsetsIfNeeded()
     }
 
     override fun onDestroyView() {
@@ -174,16 +173,12 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         }
     }
 
-    private fun applySystemInsetsInNeeded() {
-        binding?.run {
-            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsets ->
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                clHeaderButtons.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    leftMargin = insets.left
-                    rightMargin = insets.right
-                }
-
-                WindowInsetsCompat.CONSUMED
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
             }
         }
     }

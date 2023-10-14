@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import eamato.funn.r6companion.databinding.SettingsItemPopupItemRowBinding
 import eamato.funn.r6companion.databinding.SettingsItemScreenItemRowBinding
 import eamato.funn.r6companion.databinding.SettingsItemSwitchItemRowBinding
@@ -14,8 +12,7 @@ import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_TYPE_SCREEN
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_TYPE_SWITCH
 
-class AdapterSettingsItems :
-    ListAdapter<SettingsItem, AdapterSettingsItems.ViewHolder>(DIFF_ITEM_CALLBACK) {
+class AdapterSettingsItems : ABaseAdapter<SettingsItem>(DIFF_ITEM_CALLBACK) {
 
     companion object {
         val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<SettingsItem>() {
@@ -25,6 +22,14 @@ class AdapterSettingsItems :
 
             override fun areContentsTheSame(oldItem: SettingsItem, newItem: SettingsItem): Boolean {
                 if (oldItem is SettingsItem.SettingsItemPopup && newItem is SettingsItem.SettingsItemPopup) {
+                    return oldItem == newItem
+                }
+
+                if (oldItem is SettingsItem.SettingsItemSwitch && newItem is SettingsItem.SettingsItemSwitch) {
+                    return oldItem == newItem
+                }
+
+                if (oldItem is SettingsItem.SettingsItemScreen && newItem is SettingsItem.SettingsItemScreen) {
                     return oldItem == newItem
                 }
 
@@ -52,33 +57,25 @@ class AdapterSettingsItems :
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
     override fun getItemViewType(position: Int): Int {
         return getItem(position).getItemViewType()
     }
 
-    fun getItemAtPosition(position: Int): SettingsItem = getItem(position)
-
-    sealed class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        abstract fun <T : SettingsItem> bind(settingsItem: T)
+    sealed class ViewHolder(itemView: View) : ABaseViewHolder<SettingsItem>(itemView) {
 
         class SettingsItemPopupViewHolder(private val binding: SettingsItemPopupItemRowBinding) :
             ViewHolder(binding.root) {
 
-            override fun <T : SettingsItem> bind(settingsItem: T) {
-                if (settingsItem !is SettingsItem.SettingsItemPopup) {
+            override fun bind(item: SettingsItem) {
+                if (item !is SettingsItem.SettingsItemPopup) {
                     return
                 }
 
                 binding.settingsPopupItem.run {
-                    setIsEnabled(settingsItem.isEnabled)
-                    setTitle(settingsItem.title)
-                    setSubtitle(settingsItem.subTitle)
-                    setIcon(settingsItem.icon)
+                    setIsEnabled(item.isEnabled)
+                    setTitle(item.title)
+                    setSubtitle(item.subTitle)
+                    setIcon(item.icon)
                 }
             }
         }
@@ -87,19 +84,19 @@ class AdapterSettingsItems :
             private val binding: SettingsItemSwitchItemRowBinding
         ) : ViewHolder(binding.root) {
 
-            override fun <T : SettingsItem> bind(settingsItem: T) {
-                if (settingsItem !is SettingsItem.SettingsItemSwitch) {
+            override fun bind(item: SettingsItem) {
+                if (item !is SettingsItem.SettingsItemSwitch) {
                     return
                 }
 
                 binding.settingsSwitchItem.run {
-                    setIsEnabled(settingsItem.isEnabled)
-                    setIsChecked(settingsItem.isChecked)
-                    setTitle(settingsItem.title)
-                    setSubtitle(settingsItem.subTitle)
-                    setIcon(settingsItem.icon)
+                    setIsEnabled(item.isEnabled)
+                    setIsChecked(item.isChecked)
+                    setTitle(item.title)
+                    setSubtitle(item.subTitle)
+                    setIcon(item.icon)
                     setOnCheckedChangeListener { _, isChecked ->
-                        settingsItem.onCheckedListener(isChecked)
+                        item.onCheckedListener(isChecked)
                     }
                 }
             }
@@ -109,16 +106,16 @@ class AdapterSettingsItems :
             private val binding: SettingsItemScreenItemRowBinding
         ) : ViewHolder(binding.root) {
 
-            override fun <T : SettingsItem> bind(settingsItem: T) {
-                if (settingsItem !is SettingsItem.SettingsItemScreen) {
+            override fun bind(item: SettingsItem) {
+                if (item !is SettingsItem.SettingsItemScreen) {
                     return
                 }
 
                 binding.settingsScreenItem.run {
-                    setIsEnabled(settingsItem.isEnabled)
-                    setTitle(settingsItem.title)
-                    setSubtitle(settingsItem.subTitle)
-                    setIcon(settingsItem.icon)
+                    setIsEnabled(item.isEnabled)
+                    setTitle(item.title)
+                    setSubtitle(item.subTitle)
+                    setIcon(item.icon)
                 }
             }
         }

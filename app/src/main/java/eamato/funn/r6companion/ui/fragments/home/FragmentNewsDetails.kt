@@ -3,12 +3,15 @@ package eamato.funn.r6companion.ui.fragments.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
@@ -30,6 +33,7 @@ class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         setObservers()
+        applySystemInsetsToListIfNeeded()
     }
 
     private fun setObservers() {
@@ -72,6 +76,21 @@ class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>() {
                     contentView.setApplicationContext(activity?.applicationContext)
                 }
                 contentView.createView(this, viewLifecycleOwner)?.run { addView(this) }
+            }
+        }
+    }
+
+    private fun applySystemInsetsToListIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeader?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
+            }
+
+            binding?.llContent?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                rightMargin = insets.right
             }
         }
     }

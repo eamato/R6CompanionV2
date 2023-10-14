@@ -18,7 +18,7 @@ abstract class ABaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragm
 
     protected var popupItems: List<PopupContentItem> = emptyList()
 
-    abstract val bindingInitializer: (LayoutInflater) -> ViewBinding
+    protected abstract val bindingInitializer: (LayoutInflater) -> ViewBinding
 
     abstract fun getChildTag(): String
 
