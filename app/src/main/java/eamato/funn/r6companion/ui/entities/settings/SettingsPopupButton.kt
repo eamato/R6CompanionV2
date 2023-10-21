@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.databinding.SettingsPopupButtonBinding
 
@@ -26,6 +29,7 @@ class SettingsPopupButton @JvmOverloads constructor(
 
     init {
         setSelectableBackground(true)
+        setAutoScrollTextView(true)
     }
 
     fun setIsEnabled(isEnabled: Boolean) {
@@ -36,6 +40,7 @@ class SettingsPopupButton @JvmOverloads constructor(
         }
 
         setSelectableBackground(isEnabled)
+        setAutoScrollTextView(isEnabled)
     }
 
     fun setTitle(title: UiText?) {
@@ -117,10 +122,19 @@ class SettingsPopupButton @JvmOverloads constructor(
         if (isEnabled) {
             val outValue = TypedValue()
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            setBackgroundResource(outValue.resourceId)
+            foreground = AppCompatResources.getDrawable(context, outValue.resourceId)
+
+            if (context.isLandscape()) {
+                setBackgroundResource(R.drawable.settings_item_background_selector)
+            }
         } else {
             background = null
         }
         isClickable = isEnabled
+    }
+
+    private fun setAutoScrollTextView(isEnabled: Boolean) {
+//        binding.tvSettingsItemTitle.isSelected = isEnabled
+//        binding.tvSettingsItemSubtitle.isSelected = isEnabled
     }
 }

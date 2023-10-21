@@ -19,9 +19,11 @@ import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.isLandscape
+import eamato.funn.r6companion.core.extenstions.isPortrait
 import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
+import eamato.funn.r6companion.core.utils.SelectableObject
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
@@ -59,7 +61,7 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
             binding?.rvSettings
                 ?.adapter
                 ?.let { it as? AdapterSettingsItems }
-                ?.submitList(settingsItems)
+                ?.submitList(settingsViewModel.mapSettingsItemsToSelectableItems(settingsItems))
         }
     }
 
@@ -84,8 +86,8 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
                         adapterSettingsItems.getItemAtPosition(position)
-                            .takeIf { it.isEnabled }
-                            ?.run { onSettingsItemSelected(this) }
+                            .takeIf { isSettingsItemSelectable(it) }
+                            ?.run { onSettingsItemSelected(data) }
                     }
                 }
             )
@@ -107,16 +109,36 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
         }
     }
 
+    private fun isSettingsItemSelectable(selectedSettingsItem: SelectableObject<SettingsItem>): Boolean {
+        if (!selectedSettingsItem.data.isEnabled) {
+            return false
+        }
+
+        if (requireContext().isPortrait()) {
+            return true
+        }
+
+        return !selectedSettingsItem.isSelected
+    }
+
+    private fun selectFirstItemIfNeeded() {
+        binding?.rvSettings
+            ?.adapter
+            ?.let { it as? AdapterSettingsItems }
+            ?.takeIf { it.currentList.isNotEmpty() }
+            ?.getItemAtPosition(0)
+            ?.takeIf { isSettingsItemSelectable(it) }
+            ?.run { onSettingsItemSelected(data) }
+    }
+
     private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
         val context = requireContext()
         val isLandscape = context.isLandscape()
-        if (isLandscape) {
-            clearContainer()
-        }
 
         when (selectedSettingsItem) {
             is SettingsItem.SettingsItemPopup -> {
                 if (isLandscape) {
+                    clearContainer()
                     showSettingsItemPopupContentInContainer(selectedSettingsItem)
                 } else {
                     showSettingsItemPopup(selectedSettingsItem)
@@ -125,6 +147,7 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
             is SettingsItem.SettingsItemScreen -> {
                 if (isLandscape) {
+                    clearContainer()
                     showSettingsItemScreenContent(selectedSettingsItem)
                 } else {
                     goToSettingsItemScreen(selectedSettingsItem)

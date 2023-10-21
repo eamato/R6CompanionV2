@@ -11,6 +11,7 @@ import eamato.funn.r6companion.ui.entities.PopupContentItem
 import kotlin.reflect.KClass
 
 sealed class SettingsItem(
+    open val id: String,
     @DrawableRes open val icon: Int,
     @StringRes open val title: Int,
     open val subTitle: UiText?,
@@ -32,12 +33,14 @@ sealed class SettingsItem(
     }
 
     data class SettingsItemPopup(
+        override val id: String,
         @DrawableRes override val icon: Int,
         @StringRes override val title: Int,
         override val subTitle: UiText?,
         override val isEnabled: Boolean = true,
         val popupContentItems: List<PopupContentItem>
     ) : SettingsItem(
+        id = id,
         icon = icon,
         title = title,
         subTitle = subTitle,
@@ -45,6 +48,7 @@ sealed class SettingsItem(
     )
 
     data class SettingsItemSwitch(
+        override val id: String,
         @DrawableRes override val icon: Int,
         @StringRes override val title: Int,
         override val subTitle: UiText?,
@@ -52,6 +56,7 @@ sealed class SettingsItem(
         override val isEnabled: Boolean = true,
         val onCheckedListener: (Boolean) -> Unit
     ) : SettingsItem(
+        id = id,
         icon = icon,
         title = title,
         subTitle = subTitle,
@@ -59,12 +64,14 @@ sealed class SettingsItem(
     )
 
     data class SettingsItemScreen(
+        override val id: String,
         @DrawableRes override val icon: Int,
         @StringRes override val title: Int,
         @IdRes val destinationId: Int,
         val destinationClass: KClass<out Fragment>,
         val args: Bundle?
     ) : SettingsItem(
+        id = id,
         icon = icon,
         title = title,
         subTitle = null,

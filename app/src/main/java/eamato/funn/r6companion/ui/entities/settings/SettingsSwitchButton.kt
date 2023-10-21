@@ -28,6 +28,7 @@ class SettingsSwitchButton @JvmOverloads constructor(
 
     init {
         setSelectableBackground(true)
+        setAutoScrollTextView(true)
     }
 
     fun setIsChecked(isChecked: Boolean) {
@@ -49,6 +50,7 @@ class SettingsSwitchButton @JvmOverloads constructor(
         }
 
         setSelectableBackground(isEnabled)
+        setAutoScrollTextView(isEnabled)
     }
 
     fun setTitle(title: UiText?) {
@@ -140,5 +142,10 @@ class SettingsSwitchButton @JvmOverloads constructor(
             background = null
         }
         isClickable = isEnabled
+    }
+
+    private fun setAutoScrollTextView(isEnabled: Boolean) {
+//        binding.tvSettingsItemTitle.isSelected = isEnabled
+//        binding.tvSettingsItemSubtitle.isSelected = isEnabled
     }
 }

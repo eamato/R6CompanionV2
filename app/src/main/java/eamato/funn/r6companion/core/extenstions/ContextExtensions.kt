@@ -30,6 +30,8 @@ fun Context?.isLandscape(): Boolean {
     return this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
 
+fun Context?.isPortrait(): Boolean = isLandscape().not()
+
 fun Context.getDataFromXmlResource(@XmlRes xmlResId: Int, tag: String): List<String> {
     val tagsList = mutableListOf<String>()
     try {

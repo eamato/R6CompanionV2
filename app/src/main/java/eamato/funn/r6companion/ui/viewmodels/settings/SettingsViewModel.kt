@@ -11,8 +11,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
 import eamato.funn.r6companion.core.NEWS_LOCALES
+import eamato.funn.r6companion.core.SETTINGS_ITEM_ABOUT_SCREEN_ID
+import eamato.funn.r6companion.core.SETTINGS_ITEM_APP_LANGUAGE_ID
+import eamato.funn.r6companion.core.SETTINGS_ITEM_NEWS_LANGUAGE_ID
+import eamato.funn.r6companion.core.SETTINGS_ITEM_SAME_LANGUAGE_ID
+import eamato.funn.r6companion.core.SETTINGS_ITEM_USE_MOBILE_NETWORK_ID
 import eamato.funn.r6companion.core.extenstions.localeTagToLocaleDisplayName
 import eamato.funn.r6companion.core.storage.PreferenceManager
+import eamato.funn.r6companion.core.utils.SelectableObject
 import eamato.funn.r6companion.core.utils.SingleLiveEvent
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.ui.entities.PopupContentItem
@@ -35,6 +41,7 @@ class SettingsViewModel @Inject constructor(
     private val _settingsChangedEvent = SingleLiveEvent<Unit>()
     val settingsChangedEvent: LiveData<Unit> = _settingsChangedEvent
 
+    // TODO add UIState
     private val _settingsItems = MutableLiveData<List<SettingsItem>>(emptyList())
     val settingsItems: LiveData<List<SettingsItem>> = _settingsItems
 
@@ -53,10 +60,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun initSettingsList() {
-        viewModelScope.launch {
-            _settingsItems.value = createListOfSettingsItems()
-        }
+        viewModelScope.launch { _settingsItems.value = createListOfSettingsItems() }
     }
+
+    fun mapSettingsItemsToSelectableItems(
+        settingsItems: List<SettingsItem>
+    ): List<SelectableObject<SettingsItem>> = settingsItems
+        .map { settingsItem -> SelectableObject(settingsItem) }
 
     private suspend fun createListOfSettingsItems(): List<SettingsItem> =
         withContext(Dispatchers.IO) {
@@ -91,6 +101,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemPopup(
+                    id = SETTINGS_ITEM_APP_LANGUAGE_ID,
                     icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_app_language,
                     subTitle = UiText.SimpleString(currentAppLocale.second),
@@ -101,9 +112,11 @@ class SettingsViewModel @Inject constructor(
                             title = UiText.SimpleString(value),
                             subTitle = null,
                             onClickListener = {
-                                assert(Looper.myLooper() == Looper.getMainLooper())
-                                val appLocales = LocaleListCompat.forLanguageTags(key)
-                                AppCompatDelegate.setApplicationLocales(appLocales)
+                                if (key == currentAppLocale.first) {
+                                    return@PopupContentItem
+                                }
+
+                                updateAppLocale(key)
 
                                 if (currentIsSameLocale) {
                                     updateNewsLocale(
@@ -123,6 +136,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemPopup(
+                    id = SETTINGS_ITEM_NEWS_LANGUAGE_ID,
                     icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_news_locale,
                     subTitle = UiText.SimpleString(currentNewsLocale.localeTagToLocaleDisplayName()),
@@ -144,6 +158,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemSwitch(
+                    id = SETTINGS_ITEM_SAME_LANGUAGE_ID,
                     icon = R.drawable.ic_language_24,
                     title = R.string.settings_item_title_use_same_language,
                     subTitle = null,
@@ -167,6 +182,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemSwitch(
+                    id = SETTINGS_ITEM_USE_MOBILE_NETWORK_ID,
                     icon = R.drawable.ic_mobile_network_24,
                     title = R.string.settings_item_title_use_mobile_network_to_load_images,
                     subTitle = UiText.ResourceString(R.string.settings_item_subtitle_use_mobile_network_to_load_images),
@@ -182,6 +198,7 @@ class SettingsViewModel @Inject constructor(
 
             settingsItems.add(
                 SettingsItem.SettingsItemScreen(
+                    id = SETTINGS_ITEM_ABOUT_SCREEN_ID,
                     icon = R.drawable.ic_companion_white_24dp,
                     title = R.string.settings_item_title_about,
                     destinationId = R.id.FragmentSettingsAbout,
@@ -194,9 +211,13 @@ class SettingsViewModel @Inject constructor(
         }
 
     private fun updateNewsLocale(newsLocale: String) {
-        viewModelScope.launch {
-            preferenceManager.changeNewsLocale(newsLocale)
-        }
+        viewModelScope.launch { preferenceManager.changeNewsLocale(newsLocale) }
+    }
+
+    private fun updateAppLocale(appLocale: String) {
+        assert(Looper.myLooper() == Looper.getMainLooper())
+        val appLocales = LocaleListCompat.forLanguageTags(appLocale)
+        AppCompatDelegate.setApplicationLocales(appLocales)
     }
 
     private fun getCurrentAppLocale(): Pair<String, String> {
