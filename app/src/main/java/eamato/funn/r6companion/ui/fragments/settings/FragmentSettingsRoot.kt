@@ -47,6 +47,9 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        settingsViewModel.setSelectedSettingsItem(null)
+        settingsViewModel.initSettingsList()
+
         setObservers()
         initSettingsRecyclerView()
         applySystemInsetsToListIfNeeded()
@@ -61,7 +64,19 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
             binding?.rvSettings
                 ?.adapter
                 ?.let { it as? AdapterSettingsItems }
-                ?.submitList(settingsViewModel.mapSettingsItemsToSelectableItems(settingsItems))
+                ?.submitList(settingsItems)
+        }
+
+        settingsViewModel.clearContainerEvent.observe(viewLifecycleOwner) {
+            if (requireContext().isLandscape()) {
+                clearContainer()
+            }
+        }
+
+        settingsViewModel.showContentForSettingsItem.observe(viewLifecycleOwner) { settingsItem ->
+            if (requireContext().isLandscape()) {
+                showSettingsItemContent(settingsItem)
+            }
         }
     }
 
@@ -121,17 +136,13 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
         return !selectedSettingsItem.isSelected
     }
 
-    private fun selectFirstItemIfNeeded() {
-        binding?.rvSettings
-            ?.adapter
-            ?.let { it as? AdapterSettingsItems }
-            ?.takeIf { it.currentList.isNotEmpty() }
-            ?.getItemAtPosition(0)
-            ?.takeIf { isSettingsItemSelectable(it) }
-            ?.run { onSettingsItemSelected(data) }
+    private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
+        settingsViewModel.setSelectedSettingsItem(selectedSettingsItem)
+
+        showSettingsItemContent(selectedSettingsItem)
     }
 
-    private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
+    private fun showSettingsItemContent(selectedSettingsItem: SettingsItem) {
         val context = requireContext()
         val isLandscape = context.isLandscape()
 

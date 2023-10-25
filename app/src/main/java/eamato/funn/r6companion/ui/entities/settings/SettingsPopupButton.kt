@@ -9,8 +9,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
-import eamato.funn.r6companion.R
-import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.databinding.SettingsPopupButtonBinding
 
@@ -28,7 +26,7 @@ class SettingsPopupButton @JvmOverloads constructor(
     )
 
     init {
-        setSelectableBackground(true)
+        setSelectableForeground(true)
         setAutoScrollTextView(true)
     }
 
@@ -39,7 +37,7 @@ class SettingsPopupButton @JvmOverloads constructor(
             ivIcon.isEnabled = isEnabled
         }
 
-        setSelectableBackground(isEnabled)
+        setSelectableForeground(isEnabled)
         setAutoScrollTextView(isEnabled)
     }
 
@@ -118,15 +116,11 @@ class SettingsPopupButton @JvmOverloads constructor(
         binding.ivIcon.setImageResource(icon)
     }
 
-    private fun setSelectableBackground(isEnabled: Boolean) {
+    private fun setSelectableForeground(isEnabled: Boolean) {
         if (isEnabled) {
             val outValue = TypedValue()
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = AppCompatResources.getDrawable(context, outValue.resourceId)
-
-            if (context.isLandscape()) {
-                setBackgroundResource(R.drawable.settings_item_background_selector)
-            }
         } else {
             background = null
         }

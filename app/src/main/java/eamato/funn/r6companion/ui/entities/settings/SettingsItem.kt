@@ -15,7 +15,8 @@ sealed class SettingsItem(
     @DrawableRes open val icon: Int,
     @StringRes open val title: Int,
     open val subTitle: UiText?,
-    open val isEnabled: Boolean = true
+    open val isEnabled: Boolean = true,
+    open val isSelectable: Boolean = false
 ) : IViewType {
 
     companion object {
@@ -44,7 +45,8 @@ sealed class SettingsItem(
         icon = icon,
         title = title,
         subTitle = subTitle,
-        isEnabled = isEnabled
+        isEnabled = isEnabled,
+        isSelectable = true
     )
 
     data class SettingsItemSwitch(
@@ -75,6 +77,7 @@ sealed class SettingsItem(
         icon = icon,
         title = title,
         subTitle = null,
-        isEnabled = true
+        isEnabled = true,
+        isSelectable = true
     )
 }

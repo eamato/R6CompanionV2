@@ -42,31 +42,84 @@ class SettingsViewModel @Inject constructor(
     val settingsChangedEvent: LiveData<Unit> = _settingsChangedEvent
 
     // TODO add UIState
-    private val _settingsItems = MutableLiveData<List<SettingsItem>>(emptyList())
-    val settingsItems: LiveData<List<SettingsItem>> = _settingsItems
+    private val _settingsItems = MutableLiveData<List<SelectableObject<SettingsItem>>>(emptyList())
+    val settingsItems: LiveData<List<SelectableObject<SettingsItem>>> = _settingsItems
+
+    private val _clearContainerEvent = SingleLiveEvent<Unit>()
+    val clearContainerEvent: LiveData<Unit> = _clearContainerEvent
+
+    private val _showContentForSettingsItem = SingleLiveEvent<SettingsItem>()
+    val showContentForSettingsItem: LiveData<SettingsItem> = _showContentForSettingsItem
+
+    private var selectedSettingsItem: SettingsItem? = null
 
     init {
         viewModelScope.launch {
-            preferenceManager.newsLocale.distinctUntilChanged().collectLatest {
-                _settingsChangedEvent.value = Unit
-            }
+            preferenceManager
+                .newsLocale
+                .distinctUntilChanged()
+                .collectLatest { _settingsChangedEvent.value = Unit }
         }
 
         viewModelScope.launch {
-            preferenceManager.isSameLocale.distinctUntilChanged().collectLatest {
-                _settingsChangedEvent.value = Unit
-            }
+            preferenceManager
+                .isSameLocale
+                .distinctUntilChanged()
+                .collectLatest { _settingsChangedEvent.value = Unit }
         }
     }
 
     fun initSettingsList() {
-        viewModelScope.launch { _settingsItems.value = createListOfSettingsItems() }
+        viewModelScope.launch {
+            val selectedSettingsItem = this@SettingsViewModel.selectedSettingsItem
+            val settingsItems = createListOfSettingsItems()
+                .map { settingsItem ->
+                    val isSelected: Boolean = if (selectedSettingsItem != null) {
+                        if (selectedSettingsItem.id == settingsItem.id) {
+                            settingsItem.isEnabled
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    }
+
+                    if (isSelected) {
+                        setSelectedSettingsItem(settingsItem)
+                    }
+
+                    SelectableObject(settingsItem, isSelected)
+                }
+
+            if (settingsItems.find { settingsItem -> settingsItem.isSelected } == null) {
+                settingsItems.firstOrNull()?.run {
+                    _clearContainerEvent.value = Unit
+                    val settingsItem = this.data
+                    _showContentForSettingsItem.value = settingsItem
+                    setSelectedSettingsItem(settingsItem)
+                    isSelected = true
+                }
+            }
+
+            _settingsItems.value = settingsItems
+        }
     }
 
-    fun mapSettingsItemsToSelectableItems(
-        settingsItems: List<SettingsItem>
-    ): List<SelectableObject<SettingsItem>> = settingsItems
-        .map { settingsItem -> SelectableObject(settingsItem) }
+    fun setSelectedSettingsItem(selectedSettingsItem: SettingsItem?) {
+        if (selectedSettingsItem == null) {
+            this.selectedSettingsItem = null
+            return
+        }
+
+        if (!selectedSettingsItem.isSelectable) {
+            return
+        }
+
+        if (this.selectedSettingsItem?.id != selectedSettingsItem.id) {
+            this.selectedSettingsItem = selectedSettingsItem
+            initSettingsList()
+        }
+    }
 
     private suspend fun createListOfSettingsItems(): List<SettingsItem> =
         withContext(Dispatchers.IO) {

@@ -88,8 +88,8 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
                     return
                 }
 
+                itemView.isSelected = item.isSelected
                 binding.settingsPopupItem.run {
-                    isSelected = item.isSelected
                     setIsEnabled(item.data.isEnabled)
                     setTitle(item.data.title)
                     setSubtitle(item.data.subTitle)
@@ -129,8 +129,8 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
                     return
                 }
 
+                itemView.isSelected = item.isSelected
                 binding.settingsScreenItem.run {
-                    isSelected = item.isSelected
                     setIsEnabled(item.data.isEnabled)
                     setTitle(item.data.title)
                     setSubtitle(item.data.subTitle)

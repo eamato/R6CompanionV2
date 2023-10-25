@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.databinding.SettingsSwitchButtonBinding
@@ -27,7 +28,7 @@ class SettingsSwitchButton @JvmOverloads constructor(
     private var checkedChangeListener: ((View, Boolean) -> Unit)? = null
 
     init {
-        setSelectableBackground(true)
+        setSelectableForeground(true)
         setAutoScrollTextView(true)
     }
 
@@ -49,7 +50,7 @@ class SettingsSwitchButton @JvmOverloads constructor(
             ivIcon.isEnabled = isEnabled
         }
 
-        setSelectableBackground(isEnabled)
+        setSelectableForeground(isEnabled)
         setAutoScrollTextView(isEnabled)
     }
 
@@ -133,11 +134,11 @@ class SettingsSwitchButton @JvmOverloads constructor(
         checkedChangeListener = action
     }
 
-    private fun setSelectableBackground(isEnabled: Boolean) {
+    private fun setSelectableForeground(isEnabled: Boolean) {
         if (isEnabled) {
             val outValue = TypedValue()
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            setBackgroundResource(outValue.resourceId)
+            foreground = AppCompatResources.getDrawable(context, outValue.resourceId)
         } else {
             background = null
         }
