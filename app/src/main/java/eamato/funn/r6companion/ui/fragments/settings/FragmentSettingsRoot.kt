@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
+import eamato.funn.r6companion.core.SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.isPortrait
@@ -48,18 +49,30 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         settingsViewModel.setSelectedSettingsItem(null)
-        settingsViewModel.initSettingsList()
 
         setObservers()
         initSettingsRecyclerView()
         applySystemInsetsToListIfNeeded()
     }
 
-    private fun setObservers() {
-        settingsViewModel.settingsChangedEvent.observe(viewLifecycleOwner) {
-            settingsViewModel.initSettingsList()
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
+        if (requireContext().isPortrait()) {
+            outState.putBoolean(SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY, true)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        savedInstanceState
+            ?.getBoolean(SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY, false)
+            ?.takeIf { it }
+            ?.run { settingsViewModel.initSettingsList() }
+    }
+
+    private fun setObservers() {
         settingsViewModel.settingsItems.observe(viewLifecycleOwner) { settingsItems ->
             binding?.rvSettings
                 ?.adapter

@@ -25,6 +25,7 @@ import eamato.funn.r6companion.ui.entities.PopupContentItem
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem
 import eamato.funn.r6companion.ui.fragments.settings.FragmentSettingsAbout
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
@@ -38,10 +39,6 @@ class SettingsViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager
 ) : ViewModel() {
 
-    private val _settingsChangedEvent = SingleLiveEvent<Unit>()
-    val settingsChangedEvent: LiveData<Unit> = _settingsChangedEvent
-
-    // TODO add UIState
     private val _settingsItems = MutableLiveData<List<SelectableObject<SettingsItem>>>(emptyList())
     val settingsItems: LiveData<List<SelectableObject<SettingsItem>>> = _settingsItems
 
@@ -53,24 +50,34 @@ class SettingsViewModel @Inject constructor(
 
     private var selectedSettingsItem: SettingsItem? = null
 
+    private var settingsItemsCreatingJob: Job? = null
+
     init {
         viewModelScope.launch {
             preferenceManager
                 .newsLocale
                 .distinctUntilChanged()
-                .collectLatest { _settingsChangedEvent.value = Unit }
+                .collectLatest { initSettingsList() }
         }
 
         viewModelScope.launch {
             preferenceManager
                 .isSameLocale
                 .distinctUntilChanged()
-                .collectLatest { _settingsChangedEvent.value = Unit }
+                .collectLatest { initSettingsList() }
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        settingsItemsCreatingJob?.cancel()
+        settingsItemsCreatingJob = null
+    }
+
     fun initSettingsList() {
-        viewModelScope.launch {
+        settingsItemsCreatingJob?.cancel()
+        settingsItemsCreatingJob = viewModelScope.launch {
             val selectedSettingsItem = this@SettingsViewModel.selectedSettingsItem
             val settingsItems = createListOfSettingsItems()
                 .map { settingsItem ->
@@ -85,7 +92,7 @@ class SettingsViewModel @Inject constructor(
                     }
 
                     if (isSelected) {
-                        setSelectedSettingsItem(settingsItem)
+                        setSelectedSettingsItem(settingsItem, false)
                     }
 
                     SelectableObject(settingsItem, isSelected)
@@ -96,7 +103,7 @@ class SettingsViewModel @Inject constructor(
                     _clearContainerEvent.value = Unit
                     val settingsItem = this.data
                     _showContentForSettingsItem.value = settingsItem
-                    setSelectedSettingsItem(settingsItem)
+                    setSelectedSettingsItem(settingsItem, false)
                     isSelected = true
                 }
             }
@@ -105,7 +112,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedSettingsItem(selectedSettingsItem: SettingsItem?) {
+    fun setSelectedSettingsItem(
+        selectedSettingsItem: SettingsItem?,
+        shouldReInitSettingsItems: Boolean = true
+    ) {
         if (selectedSettingsItem == null) {
             this.selectedSettingsItem = null
             return
@@ -117,7 +127,9 @@ class SettingsViewModel @Inject constructor(
 
         if (this.selectedSettingsItem?.id != selectedSettingsItem.id) {
             this.selectedSettingsItem = selectedSettingsItem
-            initSettingsList()
+            if (shouldReInitSettingsItems) {
+                initSettingsList()
+            }
         }
     }
 
@@ -179,8 +191,6 @@ class SettingsViewModel @Inject constructor(
                                         )
                                     )
                                 }
-
-                                _settingsChangedEvent.value = Unit
                             }
                         )
                     }
@@ -202,7 +212,6 @@ class SettingsViewModel @Inject constructor(
                             onClickListener = {
                                 assert(Looper.myLooper() == Looper.getMainLooper())
                                 updateNewsLocale(key)
-                                _settingsChangedEvent.value = Unit
                             }
                         )
                     }
