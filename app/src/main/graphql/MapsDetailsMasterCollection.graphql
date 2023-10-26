@@ -1,0 +1,16 @@
+query MapsDetailsMasterCollection {
+    mapsDetailsMasterCollection {
+        total
+        skip
+        limit
+        items {
+            slug
+            sys {
+                id
+            }
+            mapThumbnail {
+                url
+            }
+        }
+    }
+}

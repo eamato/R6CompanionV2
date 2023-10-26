@@ -1,0 +1,60 @@
+list:
+query MapsDetailsMasterCollection {
+    mapsDetailsMasterCollection {
+        total
+        skip
+        limit
+        items {
+            slug
+            sys {
+                id
+            }
+            mapThumbnail {
+                url
+            }
+        }
+    }
+}
+
+details:
+query MapsDetailsMaster {
+    mapsDetailsMaster(id: "1CgAm1qVcVbYbKzbVJluCI") {
+        managementName
+        tags
+        slug
+        mapLastChangeDate
+        playlists
+        mapThumbnail {
+            url
+        }
+        sys {
+            id
+        }
+        localizedItems {
+            blueprintsGallery {
+                localizedItems {
+                    assetWithDetailsCollection {
+                        total
+                        skip
+                        limit
+                        items {
+                            localizedItems {
+                                image {
+                                    size
+                                    sys {
+                                        id
+                                    }
+                                    width
+                                    height
+                                }
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+

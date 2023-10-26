@@ -11,6 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     id("kotlin-parcelize")
+    id("com.apollographql.apollo3") version "3.8.2"
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -83,6 +84,14 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    apollo {
+        generateKotlinModels.set(true)
+        packageNamesFromFilePaths()
+        service("service") {
+            packageName.set("eamato.funn.r6companion")
+        }
+    }
 }
 
 kapt {
@@ -116,6 +125,10 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation("com.github.bumptech.glide:okhttp3-integration:4.15.1")
     kapt("com.github.bumptech.glide:compiler:4.15.1")
+
+    /* Apollo dependencies */
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
+//    implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.5")
 
     /* Firebase dependencies */
     implementation("com.google.firebase:firebase-core:21.1.1")
