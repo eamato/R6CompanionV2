@@ -28,6 +28,9 @@ val NEGATIVE = floatArrayOf(
 const val NEWS_HOST = "https://nimbus.ubisoft.com/"
 const val NEWS_PATH = "api/v1/items"
 
+const val UBISOFT_GRAPH_URL = "https://cms-cache.ubisoft.com/GraphQL/content/v1/spaces/p0f8o8d25gmk"
+const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER
+
 const val NEWS_AUTHORIZATION_TOKEN_HEADER =
     "authorization: 3u0FfSBUaTSew-2NVfAOSYWevVQHWtY9q3VM8Xx9Lto"
 

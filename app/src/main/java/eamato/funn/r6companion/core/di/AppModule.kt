@@ -1,6 +1,7 @@
 package eamato.funn.r6companion.core.di
 
 import android.content.Context
+import com.apollographql.apollo3.ApolloClient
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -56,4 +57,8 @@ object AppModule {
     fun provideNewsRetrofitService(
         retrofitService: RetrofitService
     ): NewsRetrofitService = retrofitService.service.create(NewsRetrofitService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideApolloClient(): ApolloClient = ApolloClient.Builder().build()
 }
