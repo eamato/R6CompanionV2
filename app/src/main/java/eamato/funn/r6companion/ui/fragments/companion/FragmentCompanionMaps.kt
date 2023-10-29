@@ -3,6 +3,7 @@ package eamato.funn.r6companion.ui.fragments.companion
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import androidx.viewbinding.ViewBinding
@@ -10,14 +11,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.databinding.FragmentCompanionMapsBinding
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
+import eamato.funn.r6companion.ui.viewmodels.companion.maps.CompanionMapsViewModel
 
 @AndroidEntryPoint
 class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
 
-    override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentCompanionMapsBinding::inflate
+    override val bindingInitializer: (LayoutInflater) -> ViewBinding =
+        FragmentCompanionMapsBinding::inflate
+
+    private val companionMapsViewModel: CompanionMapsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        companionMapsViewModel
 
         initCompanionButtons()
     }

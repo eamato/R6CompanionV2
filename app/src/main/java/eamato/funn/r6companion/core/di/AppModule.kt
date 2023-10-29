@@ -2,6 +2,7 @@ package eamato.funn.r6companion.core.di
 
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.okHttpClient
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -12,11 +13,14 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import eamato.funn.r6companion.core.AppInitializer
+import eamato.funn.r6companion.core.UBISOFT_GRAPH_APP_ID_HEADER
+import eamato.funn.r6companion.core.UBISOFT_GRAPH_APP_ID_HEADER_VALUE
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_APP_NAME_HEADER
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_APP_NAME_HEADER_VALUE
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER_VALUE
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_URL
+import eamato.funn.r6companion.core.okhttp.defaultOkHttpClient
 import eamato.funn.r6companion.core.storage.PreferenceManager
 import eamato.funn.r6companion.data.FirebaseRemoteConfigService
 import eamato.funn.r6companion.data.network.NewsRetrofitService
@@ -67,7 +71,9 @@ object AppModule {
     @Provides
     fun provideApolloClient(): ApolloClient = ApolloClient.Builder()
         .serverUrl(UBISOFT_GRAPH_URL)
+        .addHttpHeader(UBISOFT_GRAPH_APP_ID_HEADER, UBISOFT_GRAPH_APP_ID_HEADER_VALUE)
         .addHttpHeader(UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER, UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER_VALUE)
         .addHttpHeader(UBISOFT_GRAPH_APP_NAME_HEADER, UBISOFT_GRAPH_APP_NAME_HEADER_VALUE)
+        .okHttpClient(defaultOkHttpClient)
         .build()
 }

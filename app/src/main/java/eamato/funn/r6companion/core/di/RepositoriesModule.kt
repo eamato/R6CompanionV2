@@ -6,6 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import eamato.funn.r6companion.data.repositories.maps.IMapsRepository
+import eamato.funn.r6companion.data.repositories.maps.MapsRepository
 import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.data.repositories.news.NewsRepository
 import eamato.funn.r6companion.data.repositories.operators.IOperatorsRepository
@@ -37,4 +39,10 @@ object RepositoriesModule {
         @ApplicationContext context: Context,
         remoteDataSource: eamato.funn.r6companion.data.sources.remote.news.IRemoteDataSource
     ): INewsRepository = NewsRepository(context, remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideMapsRepository(
+        remoteDataSource: eamato.funn.r6companion.data.sources.remote.maps.IRemoteDataSource
+    ): IMapsRepository = MapsRepository(remoteDataSource)
 }
