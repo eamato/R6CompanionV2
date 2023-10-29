@@ -1,10 +1,7 @@
 package eamato.funn.r6companion.ui.entities.companion.operator
 
 import eamato.funn.r6companion.core.utils.UiText
-
-interface IViewType {
-    fun getItemViewType(): Int
-}
+import eamato.funn.r6companion.ui.entities.IViewType
 
 sealed class OperatorDetails : IViewType {
 

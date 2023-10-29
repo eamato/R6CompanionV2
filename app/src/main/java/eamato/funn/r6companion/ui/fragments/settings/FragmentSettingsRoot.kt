@@ -3,88 +3,255 @@ package eamato.funn.r6companion.ui.fragments.settings
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.widget.FrameLayout
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.viewModels
+import androidx.navigation.createGraph
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
+import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
+import eamato.funn.r6companion.core.extenstions.isLandscape
+import eamato.funn.r6companion.core.extenstions.isPortrait
+import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
+import eamato.funn.r6companion.core.extenstions.setItemDecoration
+import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
+import eamato.funn.r6companion.core.utils.SelectableObject
+import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
+import eamato.funn.r6companion.core.utils.logger.Message
+import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
+import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
+import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterPopupContent
+import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterSettingsItems
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
+import eamato.funn.r6companion.ui.entities.settings.SettingsItem
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
+import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
+import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDecoration
+import eamato.funn.r6companion.ui.viewmodels.settings.SettingsViewModel
 
 @AndroidEntryPoint
 class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
-    override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentSettingsRootBinding::inflate
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
-    private var webView: WebView? = null
-
-    private val htmlContent = """
-            <html>
-            <head></head>
-            <body style='margin:0;padding:0;'>
-                <div id="videoContainer">
-                    <video controls width="100%" height="100%" preload="metadata" poster="null">
-                        <source src="https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/1sQGrBqYLs5CVeB9oZ26Sn/1ea0162b2024e22589d0a39dcdff9438/R6_Guardian_1X1_FINAL.mp4">
-                    </video>
-                </div>
-            </body>
-            </html>
-        """.trimIndent()
+    override val bindingInitializer: (LayoutInflater) -> ViewBinding =
+        FragmentSettingsRootBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val youtubeUrl = "https://www.youtube-nocookie.com/embed/FOLGq0I6xWs?cc_lang_pref=en&cc_load_policy=1&hl=en"
-        val youtubeUrl2 = "https://www.youtube.com/watch?v=FOLGq0I6xWs"
-        val mp4Url = "https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/30OCLazuhixNzrWmArWgzL/2b88ece25ac60854d0c6d7019fa7fe17/R6S_DN_Y8S3_BalancingMatrix_Att.mp4"
-        val mp4Url2 = "https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/1sQGrBqYLs5CVeB9oZ26Sn/1ea0162b2024e22589d0a39dcdff9438/R6_Guardian_1X1_FINAL.mp4"
+        settingsViewModel.setSelectedSettingsItem(null)
 
-        val utubeShort = "FOLGq0I6xWs"
-        val aa = "<iframe " +
-                "width=\"100%\" " +
-                "height=\"100%\" " +
-                "frameBorder=\"0\" " +
-                "src=\"https://www.youtube.com/embed/$utubeShort?controls=0&showinfo=0\">" +
-                "</iframe>"
+        setObservers()
+        initSettingsRecyclerView()
+        applySystemInsetsToListIfNeeded()
+    }
 
-        webView = WebView(requireActivity().applicationContext).apply {
-            settings.mediaPlaybackRequiresUserGesture = true
-            settings.javaScriptEnabled = true
-            webChromeClient = WebChromeClient()
-            loadData(htmlContent, "text/html", "utf-8")
-        }.also {
-            it.layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
+    private fun setObservers() {
+        settingsViewModel.settingsItems.observe(viewLifecycleOwner) { settingsItems ->
+            DefaultAppLogger.getInstance().i(Message.message {
+                clazz = this@FragmentSettingsRoot::class.java
+                message = "settings items received, count = ${settingsItems?.size}"
+            })
+            binding?.rvSettings
+                ?.adapter
+                ?.let { it as? AdapterSettingsItems }
+                ?.submitList(settingsItems)
+        }
+
+        settingsViewModel.clearContainerEvent.observe(viewLifecycleOwner) {
+            if (requireContext().isLandscape()) {
+                clearContainer()
+            }
+        }
+
+        settingsViewModel.showContentForSettingsItem.observe(viewLifecycleOwner) { settingsItem ->
+            if (requireContext().isLandscape()) {
+                showSettingsItemContent(settingsItem)
+            }
+        }
+    }
+
+    private fun initSettingsRecyclerView() {
+        binding?.rvSettings?.run {
+            setHasFixedSize(true)
+
+            val linearLayoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
+
+            val adapterSettingsItems = AdapterSettingsItems()
+            adapter = adapterSettingsItems
+
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .create(context)
+            setItemDecoration(spacingDecoration)
+
+            val clickListener = RecyclerViewItemClickListener(
+                this,
+                object : RecyclerViewItemClickListener.OnItemTapListener {
+                    override fun onItemClicked(view: View, position: Int) {
+                        adapterSettingsItems.getItemAtPosition(position)
+                            .takeIf { isSettingsItemSelectable(it) }
+                            ?.run { onSettingsItemSelected(data) }
+                    }
+                }
             )
-            binding?.fl?.addView(it)
+
+            setOnItemClickListener(clickListener)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        webView?.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        webView?.onPause()
-    }
-
-    override fun onDestroyView() {
-        webView?.run {
-            binding?.fl?.removeView(webView)
-            binding?.fl?.removeAllViews()
-            stopLoading()
-            settings.javaScriptEnabled = false
-            clearView()
-            webChromeClient = null
-            clearHistory()
-            clearCache(true)
-            removeAllViews()
-            destroy()
+    private fun applySystemInsetsToListIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            val spacingDecoration = SystemSpacingsItemDecoration(
+                insets.top, insets.left, insets.bottom, insets.right
+            )
+            binding?.rvSettings?.replaceItemDecoration(spacingDecoration)
+            binding?.flSettingsItemContentContainer?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                rightMargin = insets.right
+            }
         }
-        webView = null
-        super.onDestroyView()
+    }
+
+    private fun isSettingsItemSelectable(selectedSettingsItem: SelectableObject<SettingsItem>): Boolean {
+        if (!selectedSettingsItem.data.isEnabled) {
+            return false
+        }
+
+        if (requireContext().isPortrait()) {
+            return true
+        }
+
+        return !selectedSettingsItem.isSelected
+    }
+
+    private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
+        if (requireContext().isLandscape()) {
+            settingsViewModel.setSelectedSettingsItem(selectedSettingsItem)
+        }
+
+        showSettingsItemContent(selectedSettingsItem)
+    }
+
+    private fun showSettingsItemContent(selectedSettingsItem: SettingsItem) {
+        val context = requireContext()
+        val isLandscape = context.isLandscape()
+
+        when (selectedSettingsItem) {
+            is SettingsItem.SettingsItemPopup -> {
+                if (isLandscape) {
+                    showSettingsItemPopupContentInContainer(selectedSettingsItem)
+                } else {
+                    showSettingsItemPopup(selectedSettingsItem)
+                }
+            }
+
+            is SettingsItem.SettingsItemScreen -> {
+                if (isLandscape) {
+                    showSettingsItemScreenContent(selectedSettingsItem)
+                } else {
+                    goToSettingsItemScreen(selectedSettingsItem)
+                }
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun showSettingsItemPopupContentInContainer(
+        selectedSettingsItem: SettingsItem.SettingsItemPopup
+    ) {
+        binding?.flSettingsItemContentContainer?.run {
+            val popupBinding = DialogDefaultAppPopupBinding.inflate(
+                LayoutInflater.from(context),
+                this,
+                true
+            )
+            popupBinding.rvPopupItems.layoutManager = LinearLayoutManager(context)
+            val adapterPopupContent = AdapterPopupContent()
+            popupBinding.rvPopupItems.adapter = adapterPopupContent
+                .also { adapter -> adapter.submitList(selectedSettingsItem.popupContentItems) }
+
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .create(context)
+            popupBinding.rvPopupItems.setItemDecoration(spacingDecoration)
+
+            val clickListener = RecyclerViewItemClickListener(
+                popupBinding.rvPopupItems,
+                object : RecyclerViewItemClickListener.OnItemTapListener {
+                    override fun onItemClicked(view: View, position: Int) {
+                        adapterPopupContent.getItemAtPosition(position).onClickListener?.invoke()
+                    }
+                }
+            )
+
+            popupBinding.rvPopupItems.setOnItemClickListener(clickListener)
+        }
+    }
+
+    private fun showSettingsItemPopup(selectedSettingsItem: SettingsItem.SettingsItemPopup) {
+        val context = requireContext()
+        DialogDefaultPopupManager.create(context)
+            .show(childFragmentManager, selectedSettingsItem.popupContentItems)
+    }
+
+    private fun showSettingsItemScreenContent(selectedSettingsItem: SettingsItem.SettingsItemScreen) {
+        val navHostFragment = NavHostFragment()
+        childFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fl_settings_item_content_container,
+                navHostFragment,
+                SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
+            )
+            .runOnCommit {
+                val navigator = FragmentNavigator(
+                    requireContext(),
+                    childFragmentManager,
+                    R.id.fl_settings_item_content_container
+                )
+                val destinationBuilder = FragmentNavigatorDestinationBuilder(
+                    navigator,
+                    SETTINGS_ITEM_SCREEN_ROUTE_NAME,
+                    selectedSettingsItem.destinationClass
+                )
+                val graph = navHostFragment.navController.createGraph(
+                    startDestination = SETTINGS_ITEM_SCREEN_ROUTE_NAME,
+                    builder = { destination(destinationBuilder) }
+                )
+                navHostFragment.navController.setGraph(graph, selectedSettingsItem.args)
+            }
+            .commit()
+    }
+
+    private fun goToSettingsItemScreen(selectedSettingsItem: SettingsItem.SettingsItemScreen) {
+        findNavController().navigate(selectedSettingsItem.destinationId, selectedSettingsItem.args)
+    }
+
+    private fun clearContainer() {
+        val currentSettingsItemScreenFragment = childFragmentManager
+            .findFragmentByTag(SETTINGS_ITEM_SCREEN_FRAGMENT_TAG)
+        if (currentSettingsItemScreenFragment != null) {
+            childFragmentManager
+                .beginTransaction()
+                .remove(currentSettingsItemScreenFragment)
+                .commitNow()
+        }
+
+        binding?.flSettingsItemContentContainer?.removeAllViews()
     }
 }

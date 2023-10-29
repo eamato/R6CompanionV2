@@ -5,5 +5,15 @@
     <color name="operators_border">#C4CCC7</color>
     <color name="colorOperatorRoleIcon">#FFFFFF</color>
     <color name="colorDefaultText">#FFFFFF</color>
+    <color name="colorDefaultTextDisabled">#33FFFFFF</color>
     <color name="colorOperatorsCellBackground">#383838</color>
+
+    <color name="news_content_header_1_text_color">#C3C5DB</color>
+    <color name="news_content_header_2_text_color">#C3C5DB</color>
+    <color name="news_content_italic_text_color">#C3C5DB</color>
+    <color name="news_content_default_text_color">#C3C5DB</color>
+    <color name="news_content_divider_background_color">#C3C5DB</color>
+
+    <color name="settings_item_icon_tint_color">#FFFFFFFF</color>
+    <color name="settings_item_icon_tint_color_disabled">#33FFFFFF</color>
 </resources>

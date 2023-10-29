@@ -38,6 +38,7 @@ class ActivityMain : AppCompatActivity() {
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContentView(binding.root)
 
         val navController = binding.appNavHostContainer.getFragment<NavHostFragment>().navController

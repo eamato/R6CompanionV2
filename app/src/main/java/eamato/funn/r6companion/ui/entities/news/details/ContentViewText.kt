@@ -2,7 +2,6 @@ package eamato.funn.r6companion.ui.entities.news.details
 
 import android.content.Context
 import android.graphics.Typeface
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -16,21 +15,19 @@ import android.widget.TextView
 import androidx.annotation.StyleRes
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.text.HtmlCompat
-import androidx.core.text.buildSpannedString
 import androidx.core.text.util.LinkifyCompat
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.extenstions.openUrlInBrowser
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class ContentViewText(
     private val text: String,
-    @StyleRes private val style: Int = R.style.R6Companion_DefaultTextViewStyle,
+    @StyleRes private val style: Int = R.style.R6Companion_ContentDefaultStyle,
     private val topMargin: Int = 10
 ) : AContentView() {
 
     private val textLink = "\\[(.*?)]\\((.*?)\\)".toRegex()
     private val textBold = "_{2}(.*?)_{2}".toRegex()
+    private val asterisk = "\\*".toRegex()
 
     override fun onCreateView(parent: ViewGroup): View {
         return TextView(parent.context, null, 0, style)
@@ -39,6 +36,7 @@ class ContentViewText(
                     .applyInnerHtml()
                     .applyInnerLink(context)
                     .applyInnerBold()
+                    .applyAsteriskReplacementForItalic()
 
                 movementMethod = LinkMovementMethod.getInstance()
                 LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
@@ -53,17 +51,26 @@ class ContentViewText(
 
     }
 
+    private fun String.applyInnerHtml(): SpannableStringBuilder {
+        return SpannableStringBuilder(
+            HtmlCompat.fromHtml(
+                toString(),
+                HtmlCompat.FROM_HTML_MODE_COMPACT
+            )
+        )
+    }
+
     private fun SpannableStringBuilder.applyInnerLink(context: Context): SpannableStringBuilder {
         textLink.findAll(this@ContentViewText.text).forEach { matchResult ->
             val linkText = matchResult.groups[1]?.value ?: return@forEach
             val linkUrl = matchResult.groups[2]?.value ?: return@forEach
             val matchValue = matchResult.value
 
-            val replacingStartIndex = indexOf(matchValue)
+            val replacingStartIndex = indexOf(matchValue).takeIf { it >= 0 } ?: return@forEach
             val replacingEndIndex = replacingStartIndex + matchValue.length
             replace(replacingStartIndex, replacingEndIndex, linkText)
 
-            val startIndex = indexOf(linkText)
+            val startIndex = indexOf(linkText).takeIf { it >= 0 } ?: return@forEach
             val endIndex = startIndex + linkText.length
 
             val clickableSpan = object : ClickableSpan() {
@@ -78,41 +85,35 @@ class ContentViewText(
         return this
     }
 
-    private fun SpannableStringBuilder.applyInnerBullet(): SpannableStringBuilder {
-        val bulletSymbol = '•'
-        var hyphenIndex = this@ContentViewText.text.indexOf('-')
-        while (hyphenIndex >= 0) {
-            replace(hyphenIndex, hyphenIndex + 1, bulletSymbol.toString())
-            hyphenIndex = this@ContentViewText.text.indexOf('-', hyphenIndex + 1)
-        }
-
-        return this
-    }
-
-    private fun String.applyInnerHtml(): SpannableStringBuilder {
-        return SpannableStringBuilder(
-            HtmlCompat.fromHtml(
-                toString(),
-                HtmlCompat.FROM_HTML_MODE_COMPACT
-            )
-        )
-    }
-
     private fun SpannableStringBuilder.applyInnerBold(): SpannableStringBuilder {
         textBold.findAll(this@ContentViewText.text).forEach { matchResult ->
             val replacement = matchResult.groups[0]?.value ?: return@forEach
             val value = matchResult.groups[1]?.value ?: return@forEach
 
-            val replacingStartIndex = indexOf(replacement)
+            val replacingStartIndex = indexOf(replacement).takeIf { it >= 0 } ?: return@forEach
             val replacingEndIndex = replacingStartIndex + replacement.length
             replace(replacingStartIndex, replacingEndIndex, value)
 
             val span = StyleSpan(Typeface.BOLD)
 
-            val startIndex = indexOf(value)
+            val startIndex = indexOf(value).takeIf { it >= 0 } ?: return@forEach
             val endIndex = startIndex + value.length
 
             setSpan(span, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        return this
+    }
+
+    private fun SpannableStringBuilder.applyAsteriskReplacementForItalic(): SpannableStringBuilder {
+        if (style == R.style.R6Companion_ContentItalicStyle) {
+            asterisk.findAll(this@ContentViewText.text).forEach { matchResult ->
+                val replacement = matchResult.groups[0]?.value ?: return@forEach
+
+                val replacingStartIndex = indexOf(replacement).takeIf { it >= 0 } ?: return@forEach
+                val replacingEndIndex = replacingStartIndex + replacement.length
+
+                replace(replacingStartIndex, replacingEndIndex, "")
+            }
         }
         return this
     }

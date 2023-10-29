@@ -8,6 +8,7 @@
         android:name=".ui.R6CompanionApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:localeConfig="@xml/locale_config"
         android:fullBackupContent="@xml/backup_rules"
         android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/R6Companion.Splash"
-        tools:targetApi="31">
+        tools:targetApi="33">
 
         <activity android:name=".ui.activities.ActivityMain"
             android:exported="true">
@@ -27,6 +28,14 @@
             </intent-filter>
 
         </activity>
+
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

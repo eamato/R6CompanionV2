@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.viewbinding.ViewBinding
 
 abstract class ABaseDialog<VB : ViewBinding> : DialogFragment() {
@@ -45,7 +44,7 @@ abstract class ABaseDialog<VB : ViewBinding> : DialogFragment() {
         super.onDestroyView()
     }
 
-    fun show(fragmentManager: FragmentManager, fragmentTransaction: FragmentTransaction) {
+    fun show(fragmentManager: FragmentManager) {
         fragmentManager.executePendingTransactions()
 
         fragmentManager.findFragmentByTag(getChildTag())
@@ -53,7 +52,7 @@ abstract class ABaseDialog<VB : ViewBinding> : DialogFragment() {
             ?.dismiss()
 
         try {
-            show(fragmentTransaction, getChildTag())
+            show(fragmentManager.beginTransaction(), getChildTag())
         } catch (e: Exception) {
             e.printStackTrace()
         }

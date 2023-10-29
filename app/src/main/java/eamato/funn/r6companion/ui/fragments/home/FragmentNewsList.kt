@@ -3,15 +3,24 @@ package eamato.funn.r6companion.ui.fragments.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
+import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_LANDSCAPE
+import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
+import eamato.funn.r6companion.core.extenstions.isLandscape
+import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
@@ -36,7 +45,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
     private val logger = DefaultAppLogger.getInstance()
 
-    override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentNewsListBinding::inflate
+    override val bindingInitializer: (LayoutInflater) -> ViewBinding =
+        FragmentNewsListBinding::inflate
 
     private val newsViewModel: NewsViewModel by viewModels()
 
@@ -52,6 +62,7 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         initNewsRecyclerView()
         initGoToTopDestinationAction()
         initSwipeRefreshLayout()
+        applySystemInsetsIfNeeded()
     }
 
     override fun onDestroyView() {
@@ -66,21 +77,11 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         binding?.rvNews?.run {
             setHasFixedSize(true)
 
-            val linearLayoutManager = LinearLayoutManager(context)
-            layoutManager = linearLayoutManager
+            layoutManager = createNewsRecyclerViewLayoutManager()
 
             adapter = adapterNewsArticles
 
-            val spacingDecoration = SpacingItemDecoration
-                .linear()
-                .setSpacingRes(
-                    R.dimen.dp_4,
-                    R.dimen.dp_4,
-                    R.dimen.dp_4,
-                    R.dimen.dp_4
-                )
-                .create(context)
-            setItemDecoration(spacingDecoration)
+            setNewsRecyclerViewItemDecorations()
 
             adapterNewsArticles.addLoadStateListener { combinedLoadStates ->
                 logger.i(Message.message {
@@ -114,7 +115,6 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
             }
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -133,8 +133,30 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         }
     }
 
-    private fun onLocaleChanged(locale: String) {
-        newsViewModel.refreshNews(newsLocale = locale)
+    private fun createNewsRecyclerViewLayoutManager(): RecyclerView.LayoutManager {
+        val spanCount = context
+            .isLandscape()
+            .onTrueInvoke { NEWS_LIST_GRID_COUNT_LANDSCAPE }
+            ?: NEWS_LIST_GRID_COUNT_PORTRAIT
+
+        return GridLayoutManager(context, spanCount)
+    }
+
+    private fun setNewsRecyclerViewItemDecorations() {
+        binding?.rvNews?.run {
+            val spacingDecoration = SpacingItemDecoration
+                .linear()
+                .setSpacingRes(R.dimen.dp_4, R.dimen.dp_4, R.dimen.dp_4, R.dimen.dp_4)
+                .create(context)
+
+            setItemDecoration(spacingDecoration)
+        }
+    }
+
+    private fun onNewsLocaleChanged(newsLocale: String) {
+        val currentNewsCategory =
+            newsViewModel.newsCategoryValue.value ?: NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE
+        newsViewModel.refreshNews(newsLocale = newsLocale, newsCategory = currentNewsCategory)
     }
 
     private fun initGoToTopDestinationAction() {
@@ -148,6 +170,16 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
         binding?.srlRefreshNews?.run {
             setColorSchemeResources(R.color.blue, R.color.yellow, R.color.red)
             setOnRefreshListener { adapterNewsArticles.refresh() }
+        }
+    }
+
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
+            }
         }
     }
 
@@ -165,7 +197,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
         buttonsByCategory?.forEach { (category, button) ->
             button.setOnClickListener {
-                newsViewModel.refreshNews(newsCategory = category)
+                val currentNewsLocale = newsViewModel.newsLocale.value ?: DEFAULT_NEWS_LOCALE
+                newsViewModel.refreshNews(newsLocale = currentNewsLocale, newsCategory = category)
             }
         }
     }
@@ -179,6 +212,10 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
             buttonsByCategory?.forEach { (category, button) ->
                 button.isSelected = category == categoryValue
             }
+        }
+
+        newsViewModel.newsLocale.observe(viewLifecycleOwner) { newsLocale ->
+            onNewsLocaleChanged(newsLocale)
         }
     }
 }

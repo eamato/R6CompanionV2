@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.google.gson.Gson
+import java.util.Locale
 
 fun <T> String.fromJson(classOfT: Class<T>): T? {
     try {
@@ -17,4 +18,16 @@ fun <T> String.fromJson(classOfT: Class<T>): T? {
 
 fun String.openUrlInBrowser(context: Context) {
     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(this)))
+}
+
+fun String.localeTagToLocaleDisplayName(): String {
+    val locale = Locale.Builder()
+        .setLanguageTag(this)
+        .build()
+
+    return locale.getDisplayName(locale).replaceFirstChar { char -> char.uppercase(locale) }
+}
+
+fun String.areLocalesEqual(locale: String): Boolean {
+    return Locale.forLanguageTag(this).language == Locale.forLanguageTag(locale).language
 }

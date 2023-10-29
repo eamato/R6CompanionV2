@@ -5,11 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.utils.Result
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
+import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.domain.mappers.companion.CompanionOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
+import eamato.funn.r6companion.ui.entities.PopupContentItem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,13 +42,33 @@ class CompanionOperatorsViewModel @Inject constructor(
 
         this.nameFilter = nameFilter.trim()
 
-        _operators.value = UiState.Success(applyFilters().toList())
+        _operators.value = UiState.Success(applyFilters().toList(), ScrollToTopAdditionalEvent)
     }
 
-    fun filterOperatorsByRole(role: ERoleFilter) {
+    fun createFilterPopupContentItems(): List<PopupContentItem> {
+        return listOf(
+            PopupContentItem(
+                icon = R.drawable.ic_all_operators_24,
+                title = UiText.ResourceString(R.string.companion_operators_all_filter),
+                subTitle = null
+            ) { filterOperatorsByRole(ERoleFilter.ALL) },
+            PopupContentItem(
+                icon = R.drawable.ic_attackers_24,
+                title = UiText.ResourceString(R.string.companion_operators_attackers_filter),
+                subTitle = null
+            ) { filterOperatorsByRole(ERoleFilter.ATTACKERS) },
+            PopupContentItem(
+                icon = R.drawable.ic_defenders_24,
+                title = UiText.ResourceString(R.string.companion_operators_defenders_filter),
+                subTitle = null
+            ) { filterOperatorsByRole(ERoleFilter.DEFENDERS) },
+        )
+    }
+
+    private fun filterOperatorsByRole(role: ERoleFilter) {
         roleFilter = role
         _operators.value = UiState.Progress
-        _operators.value = UiState.Success(applyFilters().toList())
+        _operators.value = UiState.Success(applyFilters().toList(), ScrollToTopAdditionalEvent)
     }
 
     private fun applyFilters(): List<Operator> {
