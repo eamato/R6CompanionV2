@@ -7,6 +7,7 @@ import eamato.funn.r6companion.core.NEWS_COUNT_DEFAULT_VALUE
 import eamato.funn.r6companion.core.NEWS_MAX_PAGE_SIZE
 import eamato.funn.r6companion.core.NEWS_PREFETCH_DISTANCE
 import eamato.funn.r6companion.core.utils.OneSourceMediatorLiveData
+import eamato.funn.r6companion.data.entities.NewsCategory
 import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.domain.paging.NewsPagingSource
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class NewsUseCase @Inject constructor(
 
     operator fun invoke(
         newsLocale: String = DEFAULT_NEWS_LOCALE,
-        newsCategory: String? = null,
+        newsCategory: String = NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE,
         categoryValue: OneSourceMediatorLiveData<String?>
     ) = Pager(
         config = pagingConfig,

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import eamato.funn.r6companion.core.AD_INSERTION_COUNT
-import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
 import eamato.funn.r6companion.core.extenstions.insertItemAtEveryStep
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
 import eamato.funn.r6companion.core.utils.logger.Message
@@ -21,7 +20,7 @@ import okhttp3.internal.toImmutableList
 
 class NewsPagingSource constructor(
     private val newsRepository: INewsRepository,
-    private val newsLocale: String = DEFAULT_NEWS_LOCALE,
+    private val newsLocale: String = NewsCategory.NEWS_CATEGORIES_FILTER_PARAM_ALL_VALUE,
     @NewsCategory.Companion.NewsCategory private val newsCategory: String? = null
 ) : PagingSource<Int, AdvertisedNewsArticle>() {
 

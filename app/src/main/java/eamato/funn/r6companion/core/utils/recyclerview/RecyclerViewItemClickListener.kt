@@ -1,19 +1,17 @@
 package eamato.funn.r6companion.core.utils.recyclerview
 
-import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerViewItemClickListener(
-    context: Context?,
     private val recyclerView: RecyclerView,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.OnItemTouchListener {
 
     private val gestureDetector =
-        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        GestureDetector(recyclerView.context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapUp(e: MotionEvent) = true
             override fun onLongPress(e: MotionEvent) {
                 recyclerView.findChildViewUnder(e.x, e.y)

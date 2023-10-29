@@ -3,30 +3,31 @@ package eamato.funn.r6companion.ui.fragments.roulette
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDimensionPixelSize
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
+import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentRouletteOperatorsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterRouletteOperators
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions.Companion.CLEAR_SELECTION
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSelectionOptions.Companion.SELECT_ALL
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_ALPHABETICALLY_ASCENDING
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_ALPHABETICALLY_DESCENDING
-import eamato.funn.r6companion.ui.dialogs.roulette.DialogRouletteOperatorsSortingOptions.Companion.SORT_SELECTED_FIRST
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -61,47 +62,21 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         initSearchView()
         initSelectionOptions()
         initSortingOptions()
+        applySystemInsetsIfNeeded()
     }
 
     private fun initOperatorsRecyclerView() {
         binding?.rvOperators?.run {
             setHasFixedSize(true)
 
-            val spanCount = context.isLandscape().onTrueInvoke { 5 } ?: 3
-            val operatorsLayoutManager = GridLayoutManager(context, spanCount)
-            layoutManager = operatorsLayoutManager
+            layoutManager = createOperatorsRecyclerViewLayoutManager()
 
             val adapterRouletteOperators = AdapterRouletteOperators()
             adapter = adapterRouletteOperators
 
-            val spacingDecoration = SpacingItemDecoration
-                .grid()
-                .setIncludeEdge(true)
-                .setSpanCount(spanCount)
-                .setSpacingRes(
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                )
-                .setTopSpacingMultiplier(
-                    R.dimen.dp_1.getDimensionPixelSize(context)
-                )
-                .setBottomSpacingMultiplier(
-                    R.dimen.dp_11.getDimensionPixelSize(context)
-                )
-                .create(context)
-            addItemDecoration(spacingDecoration)
-
-            val borderDecorations = BorderItemDecoration(
-                R.color.operators_border,
-                R.dimen.dp_1,
-                context
-            )
-            addItemDecoration(borderDecorations)
+            setOperatorsRecyclerViewItemDecorations()
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -116,6 +91,44 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         }
     }
 
+    private fun createOperatorsRecyclerViewLayoutManager(): LayoutManager {
+        val spanCount = context
+            .isLandscape()
+            .onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+            ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+        return GridLayoutManager(context, spanCount)
+    }
+
+    private fun setOperatorsRecyclerViewItemDecorations() {
+        binding?.rvOperators?.run {
+            removeAllItemDecorations()
+
+            val spanCount = layoutManager
+                ?.let { layoutManager -> layoutManager as? GridLayoutManager }
+                ?.spanCount
+                ?: context.isLandscape().onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+                ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+            val spacingDecoration = SpacingItemDecoration
+                .grid()
+                .setIncludeEdge(true)
+                .setSpanCount(spanCount)
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .setTopSpacingMultiplier(R.dimen.dp_1.getDimensionPixelSize(context))
+                .setBottomSpacingMultiplier(R.dimen.dp_11.getDimensionPixelSize(context))
+                .create(context)
+            addItemDecoration(spacingDecoration)
+
+            val borderDecorations = BorderItemDecoration(
+                R.color.operators_border,
+                R.dimen.dp_1,
+                context
+            )
+            addItemDecoration(borderDecorations)
+        }
+    }
+
     private fun setObservers() {
         rouletteOperatorsViewModel.operators.observe(viewLifecycleOwner) {
             if (it == null) {
@@ -127,9 +140,18 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             when (it) {
                 is UiState.Error -> {}
                 is UiState.Success -> {
-                    binding?.rvOperators?.adapter
+                    val adapter = binding?.rvOperators?.adapter
                         ?.let { adapter -> adapter as? AdapterRouletteOperators }
-                        ?.submitList(it.data)
+                        ?: return@observe
+
+                    when (it.additionalEvent) {
+                        is ScrollToTopAdditionalEvent -> {
+                            adapter.submitList(it.data) {
+                                binding?.rvOperators?.scrollToPosition(0)
+                            }
+                        }
+                        else -> adapter.submitList(it.data)
+                    }
 
                     changeRollButton()
                 }
@@ -155,43 +177,31 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            DialogRouletteOperatorsSelectionOptions(
-                object : DialogRouletteOperatorsSelectionOptions.IOnOptionSelected {
-                    override fun onOptionSelected(option: Int) {
-                        when (option) {
-                            SELECT_ALL -> {
-                                rouletteOperatorsViewModel.selectAllOperators()
-                            }
-
-                            CLEAR_SELECTION -> {
-                                rouletteOperatorsViewModel.clearSelected()
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+            DialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    rouletteOperatorsViewModel.createSelectionPopupContentItems()
+                )
         }
     }
 
     private fun initSortingOptions() {
         binding?.btnSortingOptions?.setOnClickListener {
-            DialogRouletteOperatorsSortingOptions(
-                object : DialogRouletteOperatorsSortingOptions.IOnOptionSelected {
-                    override fun onOptionSelected(option: Int) {
-                        when (option) {
-                            SORT_ALPHABETICALLY_ASCENDING -> {
-                                rouletteOperatorsViewModel.sortByNameAscending()
-                            }
-                            SORT_ALPHABETICALLY_DESCENDING -> {
-                                rouletteOperatorsViewModel.sortByNameDescending()
-                            }
-                            SORT_SELECTED_FIRST -> {
-                                rouletteOperatorsViewModel.sortSelected()
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+            DialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    rouletteOperatorsViewModel.createSortingPopupContentItems()
+                )
+        }
+    }
+
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
+            }
         }
     }
 

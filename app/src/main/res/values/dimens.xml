@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="dp_0_5">0.5dp</dimen>
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_1_3">1.3dp</dimen>
     <dimen name="dp_2">2dp</dimen>
@@ -32,6 +33,7 @@
     <dimen name="dp_35">35dp</dimen>
     <dimen name="dp_50">50dp</dimen>
     <dimen name="dp_57">57dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
 
     <dimen name="ad_icon_width">40dp</dimen>
     <dimen name="ad_icon_height">40dp</dimen>
@@ -41,5 +43,13 @@
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="text_size_subtitle">15sp</dimen>
     <dimen name="text_size_default">12sp</dimen>
+
+    <dimen name="news_content_header_1_text_size">26sp</dimen>
+    <dimen name="news_content_header_2_text_size">20sp</dimen>
+    <dimen name="news_content_italic_text_size">12sp</dimen>
+    <dimen name="news_content_default_text_size">12sp</dimen>
+
     <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
 </resources>

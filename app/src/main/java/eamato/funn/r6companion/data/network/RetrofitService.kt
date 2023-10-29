@@ -1,13 +1,13 @@
 package eamato.funn.r6companion.data.network
 
 import eamato.funn.r6companion.core.NEWS_HOST
-import eamato.funn.r6companion.core.okhttp.defaultOkHttpClient
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
 import eamato.funn.r6companion.core.utils.logger.Message
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitService {
+class RetrofitService(defaultOkHttpClient: OkHttpClient) {
 
     private val logger = DefaultAppLogger.getInstance()
 

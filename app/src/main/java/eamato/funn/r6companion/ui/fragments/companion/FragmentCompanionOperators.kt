@@ -6,28 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
+import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDimension
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
+import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.extenstions.setViewsEnabled
+import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionOperatorsBinding
-import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionOperators
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_ALL
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_ATTACKERS
-import eamato.funn.r6companion.ui.dialogs.companion.DialogCompanionOperatorsFilterOptions.Companion.SELECT_DEFENDERS
+import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
@@ -41,11 +43,12 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     private val companionOperatorsViewModel: CompanionOperatorsViewModel by viewModels()
 
-    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            handleBackPress()
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackPress()
+            }
         }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +60,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         initOperatorsRecyclerView()
         setObservers()
         initSearchView()
+        applySystemInsetsIfNeeded()
     }
 
     private fun initCompanionButtons() {
@@ -91,41 +95,14 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         binding?.rvOperators?.run {
             setHasFixedSize(true)
 
-            val spanCount = context.isLandscape().onTrueInvoke { 5 } ?: 3
-            val operatorsLayoutManager = GridLayoutManager(context, spanCount)
-            layoutManager = operatorsLayoutManager
+            layoutManager = createOperatorsRecyclerViewLayoutManager()
 
             val adapterCompanionOperators = AdapterCompanionOperators()
             adapter = adapterCompanionOperators
 
-            val spacingDecoration = SpacingItemDecoration
-                .grid()
-                .setIncludeEdge(true)
-                .setSpanCount(spanCount)
-                .setSpacingRes(
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                    R.dimen.dp_2,
-                )
-                .setTopSpacingMultiplier(
-                    R.dimen.dp_1.getDimension(context)
-                )
-                .setBottomSpacingMultiplier(
-                    R.dimen.dp_1.getDimension(context)
-                )
-                .create(context)
-            addItemDecoration(spacingDecoration)
-
-            val borderDecorations = BorderItemDecoration(
-                R.color.operators_border,
-                R.dimen.dp_1,
-                context
-            )
-            addItemDecoration(borderDecorations)
+            setOperatorsRecyclerViewItemDecorations()
 
             val clickListener = RecyclerViewItemClickListener(
-                context,
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
@@ -143,6 +120,44 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         }
     }
 
+    private fun createOperatorsRecyclerViewLayoutManager(): RecyclerView.LayoutManager {
+        val spanCount = context
+            .isLandscape()
+            .onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+            ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+        return GridLayoutManager(context, spanCount)
+    }
+
+    private fun setOperatorsRecyclerViewItemDecorations() {
+        binding?.rvOperators?.run {
+            removeAllItemDecorations()
+
+            val spanCount = layoutManager
+                ?.let { layoutManager -> layoutManager as? GridLayoutManager }
+                ?.spanCount
+                ?: context.isLandscape().onTrueInvoke { OPERATORS_LIST_GRID_COUNT_LANDSCAPE }
+                ?: OPERATORS_LIST_GRID_COUNT_PORTRAIT
+
+            val spacingDecoration = SpacingItemDecoration
+                .grid()
+                .setIncludeEdge(true)
+                .setSpanCount(spanCount)
+                .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
+                .setTopSpacingMultiplier(R.dimen.dp_1.getDimension(context))
+                .setBottomSpacingMultiplier(R.dimen.dp_1.getDimension(context))
+                .create(context)
+            addItemDecoration(spacingDecoration)
+
+            val borderDecorations = BorderItemDecoration(
+                R.color.operators_border,
+                R.dimen.dp_1,
+                context
+            )
+            addItemDecoration(borderDecorations)
+        }
+    }
+
     private fun setObservers() {
         companionOperatorsViewModel.operators.observe(viewLifecycleOwner) {
             if (it == null) {
@@ -155,8 +170,20 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
             when (it) {
                 is UiState.Error -> {}
                 is UiState.Success -> {
-                    submitOperators(it.data)
+                    val adapter = binding?.rvOperators?.adapter
+                        ?.let { adapter -> adapter as? AdapterCompanionOperators }
+                        ?: return@observe
+
+                    when (it.additionalEvent) {
+                        is ScrollToTopAdditionalEvent -> {
+                            adapter.submitList(it.data) {
+                                binding?.rvOperators?.scrollToPosition(0)
+                            }
+                        }
+                        else -> adapter.submitList(it.data)
+                    }
                 }
+
                 else -> {}
             }
         }
@@ -190,38 +217,24 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
         })
     }
 
-    private fun initFilterOptions() {
-        binding?.btnFilterOptions?.setOnClickListener {
-            DialogCompanionOperatorsFilterOptions(
-                object : DialogCompanionOperatorsFilterOptions.IOnFilterSelected {
-                    override fun onFilterSelected(filter: Int) {
-                        when (filter) {
-                            SELECT_ALL -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.ALL
-                                )
-                            }
-                            SELECT_DEFENDERS -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.DEFENDERS
-                                )
-                            }
-                            SELECT_ATTACKERS -> {
-                                companionOperatorsViewModel.filterOperatorsByRole(
-                                    CompanionOperatorsViewModel.ERoleFilter.ATTACKERS
-                                )
-                            }
-                        }
-                    }
-                }
-            ).show(childFragmentManager, childFragmentManager.beginTransaction())
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
+            }
         }
     }
 
-    private fun submitOperators(operators: List<Operator>) {
-        binding?.rvOperators?.adapter
-            ?.let { adapter -> adapter as? AdapterCompanionOperators }
-            ?.submitList(operators)
+    private fun initFilterOptions() {
+        binding?.btnFilterOptions?.setOnClickListener {
+            DialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    companionOperatorsViewModel.createFilterPopupContentItems()
+                )
+        }
     }
 
     private fun handleBackPress() {

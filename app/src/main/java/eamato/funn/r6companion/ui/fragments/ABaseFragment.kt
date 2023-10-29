@@ -19,7 +19,7 @@ abstract class ABaseFragment<VB : ViewBinding> : Fragment() {
     protected var binding: VB? = null
         private set
 
-    abstract val bindingInitializer: (LayoutInflater) -> ViewBinding
+    protected abstract val bindingInitializer: (LayoutInflater) -> ViewBinding
 
     @CallSuper
     @Suppress("UNCHECKED_CAST")

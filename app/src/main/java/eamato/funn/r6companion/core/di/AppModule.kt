@@ -15,12 +15,14 @@ import eamato.funn.r6companion.core.storage.PreferenceManager
 import eamato.funn.r6companion.data.FirebaseRemoteConfigService
 import eamato.funn.r6companion.data.network.NewsRetrofitService
 import eamato.funn.r6companion.data.network.RetrofitService
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Singleton
     @Provides
     fun providePreferenceManager(@ApplicationContext context: Context) = PreferenceManager(context)
 
@@ -49,7 +51,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitService() = RetrofitService()
+    fun provideRetrofitService(
+        @DefaultOkHttpClient defaultOkHttpClient: OkHttpClient
+    ) = RetrofitService(defaultOkHttpClient)
 
     @Singleton
     @Provides

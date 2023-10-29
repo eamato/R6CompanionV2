@@ -1,4 +1,5 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="R6Companion.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimary</item>
@@ -18,15 +19,19 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-<!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- Optional: set to transparent if your app is drawing behind the status bar. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
+
+        <!--<item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowActivityTransitions">true</item>
 
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>-->
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
 
 <!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
@@ -34,6 +39,25 @@
 <!--        <item name="android:windowLightStatusBar">true</item>-->
 
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:textViewStyle">@style/R6Companion.DefaultTextViewStyle</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="sideSheetDialogTheme">@style/ThemeOverlay.App.SideSheetDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/R6Companion.ModalBottomSheetDialog</item>
+    </style>
+
+    <style name="R6Companion.ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.App.SideSheetDialog" parent="ThemeOverlay.Material3.DayNight.SideSheetDialog">
+        <item name="sideSheetModalStyle">@style/R6Companion.ModalSideSheetDialog</item>
+    </style>
+
+    <style name="R6Companion.ModalSideSheetDialog" parent="Widget.Material3.SideSheet">
+        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="R6Companion.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -55,6 +79,11 @@
 
     <style name="RouletteOperatorNameStyle" parent="TitleStyle">
         <item name="android:background">@drawable/text_bg</item>
+    </style>
+
+    <style name="R6Companion.DefaultTextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorDefaultText</item>
+        <item name="android:textSize">@dimen/text_size_default</item>
     </style>
 
     <style name="R6Companion.OutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -155,40 +184,44 @@
     </style>
 
     <style name="R6Companion.ContentHeader1Style" parent="Widget.MaterialComponents.TextView">
-<!--        <item name="android:textColor">@color/colorDefaultText</item>-->
+        <item name="android:textColor">@color/news_content_header_1_text_color</item>
         <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/text_size_title</item>
-
-        <item name="android:textColor">@color/yellow</item>
-    </style>
-
-    <style name="R6Companion.DefaultTextViewStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/colorDefaultText</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">@dimen/news_content_header_1_text_size</item>
     </style>
 
     <style name="R6Companion.ContentHeader2Style" parent="Widget.MaterialComponents.TextView">
-<!--        <item name="android:textColor">@color/colorDefaultText</item>-->
+        <item name="android:textColor">@color/news_content_header_2_text_color</item>
+        <item name="android:textStyle">bold|italic</item>
         <item name="fontFamily">sans-serif-condensed</item>
-        <item name="android:textSize">@dimen/text_size_subtitle</item>
-
-        <item name="android:textColor">@color/red</item>
-    </style>
-
-    <style name="R6Companion.ContentCaptionStyle" parent="Widget.MaterialComponents.TextView">
-<!--        <item name="android:textColor">@color/colorDefaultText</item>-->
-        <item name="android:textStyle">italic</item>
-        <item name="android:textSize">@dimen/text_size_subtitle</item>
-
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/news_content_header_2_text_size</item>
     </style>
 
     <style name="R6Companion.ContentItalicStyle" parent="Widget.MaterialComponents.TextView">
-<!--        <item name="android:textColor">@color/colorDefaultText</item>-->
+        <item name="android:textColor">@color/news_content_italic_text_color</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textSize">@dimen/text_size_default</item>
+        <item name="android:textSize">@dimen/news_content_italic_text_size</item>
+    </style>
 
-        <item name="android:textColor">@color/green</item>
+    <style name="R6Companion.ContentDefaultStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/news_content_default_text_color</item>
+        <item name="android:textSize">@dimen/news_content_default_text_size</item>
+    </style>
+
+    <style name="R6Companion.DefaultPopupTextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="R6Companion.DefaultPopupSubtitleTextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="R6Companion.ContentDividerStyle" parent="">
+        <item name="android:background">@color/news_content_divider_background_color</item>
     </style>
 
     <style name="R6Companion.NewsCategoryButtonStyle" parent="Widget.AppCompat.Button.Colored">
@@ -209,5 +242,28 @@
         <item name="cornerRadius">0dp</item>
         <item name="android:textSize">@dimen/sp_12</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="R6Companion.SettingsItemTitleStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/settings_item_text_color_selector</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:scrollHorizontally">true</item>
+    </style>
+
+    <style name="R6Companion.SettingsItemSubtitleStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/settings_item_text_color_selector</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="R6Companion.SettingsItemIconStyle" parent="">
+        <item name="tint">@color/settings_item_icon_tint_selector</item>
     </style>
 </resources>
