@@ -29,7 +29,12 @@ const val NEWS_HOST = "https://nimbus.ubisoft.com/"
 const val NEWS_PATH = "api/v1/items"
 
 const val UBISOFT_GRAPH_URL = "https://cms-cache.ubisoft.com/GraphQL/content/v1/spaces/p0f8o8d25gmk"
-const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER
+const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER =
+    "Authorization"
+const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER_VALUE =
+    "Bearer pYflq4nCMNCwz7yxsA1k7UNg1E7SQCRjI4PtDUpsOeg"
+const val UBISOFT_GRAPH_APP_NAME_HEADER = "Ubi-Appname"
+const val UBISOFT_GRAPH_APP_NAME_HEADER_VALUE = "RainbowSixSiege"
 
 const val NEWS_AUTHORIZATION_TOKEN_HEADER =
     "authorization: 3u0FfSBUaTSew-2NVfAOSYWevVQHWtY9q3VM8Xx9Lto"
