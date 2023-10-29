@@ -4,12 +4,15 @@ query MapsDetailsMasterCollection {
         skip
         limit
         items {
-            slug
+            mapLastChangeDate
             sys {
                 id
             }
             mapThumbnail {
                 url
+            }
+            localizedItems {
+                title
             }
         }
     }

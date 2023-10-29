@@ -74,6 +74,9 @@ const val OPERATORS_LIST_GRID_COUNT_LANDSCAPE = 5
 const val NEWS_LIST_GRID_COUNT_PORTRAIT = 1
 const val NEWS_LIST_GRID_COUNT_LANDSCAPE = 2
 
+const val MAPS_LIST_GRID_COUNT_PORTRAIT = 1
+const val MAPS_LIST_GRID_COUNT_LANDSCAPE = 2
+
 const val SETTINGS_ITEM_SCREEN_FRAGMENT_TAG = "settings_item_screen_fragment_tag"
 const val SETTINGS_ITEM_SCREEN_ROUTE_NAME = "settings_item_screen_fragment_rote"
 

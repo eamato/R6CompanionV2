@@ -6,15 +6,22 @@ query MapsDetailsMasterCollection {
         limit
         items {
             slug
+            mapLastChangeDate
             sys {
                 id
             }
             mapThumbnail {
                 url
             }
+            localizedItems {
+                title
+                location
+                content
+            }
         }
     }
 }
+
 
 details:
 query MapsDetailsMaster {

@@ -12,8 +12,10 @@ object MapsUseCaseMapper : IUseCaseMapper<Item, Map?> {
 }
 
 private fun Item.toDomainMap(): Map? {
+    val localizedItems = this.localizedItems ?: return null
+
     val id = this.sys.id
-    val name = this.slug?.capitalize() ?: return null
+    val name = localizedItems.title ?: return null
     val imageUrl = this.mapThumbnail?.url
 
     return Map(id = id, name = name, imageUrl = imageUrl)
