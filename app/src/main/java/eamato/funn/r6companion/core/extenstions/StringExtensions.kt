@@ -27,3 +27,7 @@ fun String.localeTagToLocaleDisplayName(): String {
 
     return locale.getDisplayName(locale).replaceFirstChar { char -> char.uppercase(locale) }
 }
+
+fun String.areLocalesEqual(locale: String): Boolean {
+    return Locale.forLanguageTag(this).language == Locale.forLanguageTag(locale).language
+}

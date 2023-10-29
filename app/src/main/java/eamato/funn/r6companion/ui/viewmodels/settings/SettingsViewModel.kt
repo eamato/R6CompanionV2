@@ -16,6 +16,7 @@ import eamato.funn.r6companion.core.SETTINGS_ITEM_APP_LANGUAGE_ID
 import eamato.funn.r6companion.core.SETTINGS_ITEM_NEWS_LANGUAGE_ID
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SAME_LANGUAGE_ID
 import eamato.funn.r6companion.core.SETTINGS_ITEM_USE_MOBILE_NETWORK_ID
+import eamato.funn.r6companion.core.extenstions.areLocalesEqual
 import eamato.funn.r6companion.core.extenstions.localeTagToLocaleDisplayName
 import eamato.funn.r6companion.core.storage.PreferenceManager
 import eamato.funn.r6companion.core.utils.SelectableObject
@@ -153,20 +154,18 @@ class SettingsViewModel @Inject constructor(
             val currentAppLocale = getCurrentAppLocale()
 
             settingsItems.run {
-                val appLocaleSettingsItem = SettingsItem.SettingsItemPopup(
+                add(SettingsItem.SettingsItemPopup(
                     id = SETTINGS_ITEM_APP_LANGUAGE_ID,
                     icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_app_language,
                     subTitle = UiText.SimpleString(currentAppLocale.second),
                     isEnabled = true,
-                    popupContentItems = emptyList()
-                ).apply {
                     popupContentItems = supportedAppLocales.map { (key, value) ->
                         PopupContentItem(
                             icon = null,
                             title = UiText.SimpleString(value),
                             subTitle = null,
-                            isEnabled = currentAppLocale.first != key,
+                            isEnabled = currentAppLocale.first.areLocalesEqual(key),
                             onClickListener = {
                                 val wasLocaleChanged = changeAppLocale(key)
                                 if (currentIsSameLocale) {
@@ -185,37 +184,28 @@ class SettingsViewModel @Inject constructor(
                             }
                         )
                     }
-                }
-
-                add(appLocaleSettingsItem)
+                ))
             }
 
             settingsItems.run {
-                val newsLocaleSettingsItem = SettingsItem.SettingsItemPopup(
+                add(SettingsItem.SettingsItemPopup(
                     id = SETTINGS_ITEM_NEWS_LANGUAGE_ID,
                     icon = R.drawable.ic_translate_24,
                     title = R.string.settings_item_title_news_locale,
                     subTitle = UiText.SimpleString(currentNewsLocale.localeTagToLocaleDisplayName()),
                     isEnabled = !currentIsSameLocale,
-                    popupContentItems = emptyList()
-                ).apply {
                     popupContentItems = supportedNewsLocales.map { (key, value) ->
                         PopupContentItem(
                             icon = null,
                             title = UiText.SimpleString(value),
                             subTitle = null,
-                            isEnabled = currentNewsLocale != key,
+                            isEnabled = currentNewsLocale.areLocalesEqual(key),
                             onClickListener = {
-                                val wasLocaleChanged = changeNewsLocale(key)
-                                if (wasLocaleChanged) {
-//                                    createSettingsItemsAsync()
-                                }
+                                changeNewsLocale(key)
                             }
                         )
                     }
-                }
-
-                add(newsLocaleSettingsItem)
+                ))
             }
 
             settingsItems.run {
