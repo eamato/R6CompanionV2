@@ -38,8 +38,11 @@ class DialogDefaultAppPopup : ABaseBottomSheetDialog<DialogDefaultAppPopupBindin
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
+                        val selectedSettingsItem = adapterPopupContent.getItemAtPosition(position)
                         adapterPopupContent.getItemAtPosition(position).onClickListener?.invoke()
-                        this@DialogDefaultAppPopup.dismiss()
+                        if (selectedSettingsItem.isEnabled) {
+                            this@DialogDefaultAppPopup.dismiss()
+                        }
                     }
                 }
             )

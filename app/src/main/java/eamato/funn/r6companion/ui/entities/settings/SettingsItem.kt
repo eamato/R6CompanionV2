@@ -39,7 +39,7 @@ sealed class SettingsItem(
         @StringRes override val title: Int,
         override val subTitle: UiText?,
         override val isEnabled: Boolean = true,
-        val popupContentItems: List<PopupContentItem>
+        var popupContentItems: List<PopupContentItem>
     ) : SettingsItem(
         id = id,
         icon = icon,

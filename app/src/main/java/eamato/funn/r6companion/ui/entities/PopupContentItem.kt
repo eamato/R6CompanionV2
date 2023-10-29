@@ -7,5 +7,6 @@ data class PopupContentItem(
     @DrawableRes val icon: Int?,
     val title: UiText,
     val subTitle: UiText?,
+    var isEnabled: Boolean = true,
     val onClickListener: (() -> Unit)?
 )

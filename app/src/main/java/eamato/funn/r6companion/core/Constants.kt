@@ -72,5 +72,3 @@ const val SETTINGS_ITEM_NEWS_LANGUAGE_ID = "news_language"
 const val SETTINGS_ITEM_SAME_LANGUAGE_ID = "same_language"
 const val SETTINGS_ITEM_USE_MOBILE_NETWORK_ID = "use_mobile_network"
 const val SETTINGS_ITEM_ABOUT_SCREEN_ID = "about"
-
-const val SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY = "init_settings_list"

@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
-import eamato.funn.r6companion.core.SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.isPortrait
@@ -25,6 +24,8 @@ import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.SelectableObject
+import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
+import eamato.funn.r6companion.core.utils.logger.Message
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
@@ -55,25 +56,12 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
         applySystemInsetsToListIfNeeded()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        if (requireContext().isPortrait()) {
-            outState.putBoolean(SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY, true)
-        }
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        savedInstanceState
-            ?.getBoolean(SETTINGS_SCREEN_INIT_LIST_BUNDLE_KEY, false)
-            ?.takeIf { it }
-            ?.run { settingsViewModel.initSettingsList() }
-    }
-
     private fun setObservers() {
         settingsViewModel.settingsItems.observe(viewLifecycleOwner) { settingsItems ->
+            DefaultAppLogger.getInstance().i(Message.message {
+                clazz = this@FragmentSettingsRoot::class.java
+                message = "settings items received, count = ${settingsItems?.size}"
+            })
             binding?.rvSettings
                 ?.adapter
                 ?.let { it as? AdapterSettingsItems }
@@ -150,7 +138,9 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
     }
 
     private fun onSettingsItemSelected(selectedSettingsItem: SettingsItem) {
-        settingsViewModel.setSelectedSettingsItem(selectedSettingsItem)
+        if (requireContext().isLandscape()) {
+            settingsViewModel.setSelectedSettingsItem(selectedSettingsItem)
+        }
 
         showSettingsItemContent(selectedSettingsItem)
     }
@@ -162,7 +152,6 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
         when (selectedSettingsItem) {
             is SettingsItem.SettingsItemPopup -> {
                 if (isLandscape) {
-                    clearContainer()
                     showSettingsItemPopupContentInContainer(selectedSettingsItem)
                 } else {
                     showSettingsItemPopup(selectedSettingsItem)
@@ -171,7 +160,6 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
             is SettingsItem.SettingsItemScreen -> {
                 if (isLandscape) {
-                    clearContainer()
                     showSettingsItemScreenContent(selectedSettingsItem)
                 } else {
                     goToSettingsItemScreen(selectedSettingsItem)

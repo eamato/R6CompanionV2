@@ -50,6 +50,7 @@ class AdapterPopupContent :
 
         fun bind(item: PopupContentItem) {
             binding.settingsPopupContentItem.run {
+                setIsEnabled(item.isEnabled)
                 setTitle(item.title)
                 setSubtitle(item.subTitle)
                 setIcon(item.icon)

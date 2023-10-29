@@ -21,7 +21,7 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
                 oldItem: SelectableObject<SettingsItem>,
                 newItem: SelectableObject<SettingsItem>
             ): Boolean {
-                return true
+                return oldItem.data.id == newItem.data.id
             }
 
             override fun areContentsTheSame(

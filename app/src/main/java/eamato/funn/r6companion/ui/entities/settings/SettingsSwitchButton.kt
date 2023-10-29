@@ -132,6 +132,9 @@ class SettingsSwitchButton @JvmOverloads constructor(
     fun setOnCheckedChangeListener(action: (View, Boolean) -> Unit) {
         setOnClickListener { binding.settingsItemSwitch.toggle() }
         checkedChangeListener = action
+        binding.settingsItemSwitch.setOnCheckedChangeListener { view, isChecked ->
+            checkedChangeListener?.invoke(view, isChecked)
+        }
     }
 
     private fun setSelectableForeground(isEnabled: Boolean) {
