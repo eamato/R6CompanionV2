@@ -165,7 +165,7 @@ class SettingsViewModel @Inject constructor(
                             icon = null,
                             title = UiText.SimpleString(value),
                             subTitle = null,
-                            isEnabled = currentAppLocale.first.areLocalesEqual(key),
+                            isEnabled = !currentAppLocale.first.areLocalesEqual(key),
                             onClickListener = {
                                 val wasLocaleChanged = changeAppLocale(key)
                                 if (currentIsSameLocale) {
@@ -199,7 +199,7 @@ class SettingsViewModel @Inject constructor(
                             icon = null,
                             title = UiText.SimpleString(value),
                             subTitle = null,
-                            isEnabled = currentNewsLocale.areLocalesEqual(key),
+                            isEnabled = !currentNewsLocale.areLocalesEqual(key),
                             onClickListener = {
                                 changeNewsLocale(key)
                             }
