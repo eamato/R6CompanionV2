@@ -7,7 +7,8 @@ import dagger.hilt.components.SingletonComponent
 import eamato.funn.r6companion.data.repositories.maps.IMapsRepository
 import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.data.repositories.operators.IOperatorsRepository
-import eamato.funn.r6companion.domain.usecases.MapsUseCase
+import eamato.funn.r6companion.domain.usecases.MapDetailsUseCase
+import eamato.funn.r6companion.domain.usecases.MapsListUseCase
 import eamato.funn.r6companion.domain.usecases.NewsUseCase
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
 import javax.inject.Singleton
@@ -32,5 +33,11 @@ object UseCasesModule {
     @Provides
     fun provideMapsUseCase(
         mapsRepository: IMapsRepository
-    ) = MapsUseCase(mapsRepository)
+    ) = MapsListUseCase(mapsRepository)
+
+    @Singleton
+    @Provides
+    fun provideMapDetailsUseCase(
+        mapsRepository: IMapsRepository
+    ) = MapDetailsUseCase(mapsRepository)
 }

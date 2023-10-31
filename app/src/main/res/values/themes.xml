@@ -266,4 +266,15 @@
     <style name="R6Companion.SettingsItemIconStyle" parent="">
         <item name="tint">@color/settings_item_icon_tint_selector</item>
     </style>
+
+    <style name="R6Companion.TextOnImageStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/sp_35</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/text_on_image_text_color</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

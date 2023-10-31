@@ -50,6 +50,8 @@
     <color name="news_content_default_text_color">#24262A</color>
     <color name="news_content_divider_background_color">#24262A</color>
 
+    <color name="text_on_image_text_color">#24262A</color>
+
     <color name="settings_item_icon_tint_color">#FF000000</color>
     <color name="settings_item_icon_tint_color_disabled">#33000000</color>
 

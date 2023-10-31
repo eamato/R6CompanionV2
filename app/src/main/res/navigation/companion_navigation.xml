@@ -29,4 +29,14 @@
         android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionWeapons"
         android:label="@string/companion_weapons_fragment_label" />
 
+    <fragment
+        android:id="@+id/FragmentMapDetails"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentMapDetails">
+
+        <argument
+            android:name="mapId"
+            app:argType="string" />
+
+    </fragment>
+
 </navigation>

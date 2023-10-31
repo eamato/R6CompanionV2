@@ -12,6 +12,7 @@ import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
 import eamato.funn.r6companion.databinding.CompanionMapItemViewBinding
 import eamato.funn.r6companion.domain.entities.companion.maps.Map
 
+
 class AdapterCompanionMaps : ABaseAdapter<Map>(DIFF_ITEM_CALLBACK) {
 
     companion object {

@@ -9,13 +9,13 @@ import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.domain.mappers.companion.MapsUseCaseMapper
 import eamato.funn.r6companion.domain.entities.companion.maps.Map
-import eamato.funn.r6companion.domain.usecases.MapsUseCase
+import eamato.funn.r6companion.domain.usecases.MapsListUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CompanionMapsViewModel @Inject constructor(
-    private val mapsUseCase: MapsUseCase
+    private val mapsListUseCase: MapsListUseCase
 ) : ViewModel() {
 
     private val _maps = MutableLiveData<UiState<List<Map>>>()
@@ -29,7 +29,7 @@ class CompanionMapsViewModel @Inject constructor(
         viewModelScope.launch {
             _maps.value = UiState.Progress
 
-            when (val result = mapsUseCase(MapsUseCaseMapper)) {
+            when (val result = mapsListUseCase(MapsUseCaseMapper)) {
                 is Result.Success -> {
                     _maps.value = UiState.Success(result.data)
                 }

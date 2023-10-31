@@ -8,18 +8,16 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
-import eamato.funn.r6companion.core.MAPS_LIST_GRID_COUNT_LANDSCAPE
-import eamato.funn.r6companion.core.MAPS_LIST_GRID_COUNT_PORTRAIT
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
-import eamato.funn.r6companion.core.extenstions.isLandscape
-import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
+import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.utils.UiState
+import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionMapsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionMaps
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
@@ -102,16 +100,27 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
             adapter = adapterCompanionMaps
 
             setMapsRecyclerViewItemDecorations()
+
+            val clickListener = RecyclerViewItemClickListener(
+                this,
+                object : RecyclerViewItemClickListener.OnItemTapListener {
+                    override fun onItemClicked(view: View, position: Int) {
+                        val selectedMap = adapterCompanionMaps.getItemAtPosition(position)
+
+                        findNavController().navigate(
+                            R.id.FragmentMapDetails,
+                            FragmentMapDetailsArgs(selectedMap.id).toBundle()
+                        )
+                    }
+                }
+            )
+
+            setOnItemClickListener(clickListener)
         }
     }
 
     private fun createMapsRecyclerViewLayoutManager(): RecyclerView.LayoutManager {
-        val spanCount = context
-            .isLandscape()
-            .onTrueInvoke { MAPS_LIST_GRID_COUNT_LANDSCAPE }
-            ?: MAPS_LIST_GRID_COUNT_PORTRAIT
-
-        return GridLayoutManager(context, spanCount)
+        return LinearLayoutManager(context)
     }
 
     private fun setMapsRecyclerViewItemDecorations() {

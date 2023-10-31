@@ -6,7 +6,7 @@ import eamato.funn.r6companion.domain.entities.companion.maps.Map
 import eamato.funn.r6companion.core.utils.Result
 import javax.inject.Inject
 
-class MapsUseCase @Inject constructor(private val mapsRepository: IMapsRepository) {
+class MapsListUseCase @Inject constructor(private val mapsRepository: IMapsRepository) {
 
     suspend operator fun invoke(mapper: IUseCaseMapper<Item, Map?>): Result<List<Map>> {
         val mapsResponse = mapsRepository.getMaps()
