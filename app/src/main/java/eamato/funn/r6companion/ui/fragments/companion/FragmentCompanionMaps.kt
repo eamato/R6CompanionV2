@@ -39,6 +39,7 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
         initMapsRecyclerView()
         setObservables()
         applySystemInsetsIfNeeded()
+        initSwipeRefreshLayout()
     }
 
     private fun initCompanionButtons() {
@@ -141,6 +142,7 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
         }
 
         binding?.clpbWaiting?.hide()
+        binding?.srlRefreshMaps?.isRefreshing = false
     }
 
     private fun applySystemInsetsIfNeeded() {
@@ -150,6 +152,13 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
                 leftMargin = insets.left
                 rightMargin = insets.right
             }
+        }
+    }
+
+    private fun initSwipeRefreshLayout() {
+        binding?.srlRefreshMaps?.run {
+            setColorSchemeResources(R.color.blue, R.color.yellow, R.color.red)
+            setOnRefreshListener { companionMapsViewModel.refresh() }
         }
     }
 }

@@ -3,11 +3,14 @@ package eamato.funn.r6companion.ui.fragments.companion
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.databinding.FragmentCompanionWeaponsBinding
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 
@@ -20,6 +23,7 @@ class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         initCompanionButtons()
+        applySystemInsetsIfNeeded()
     }
 
     private fun initCompanionButtons() {
@@ -47,6 +51,16 @@ class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>(
                     }
                 }
             )
+        }
+    }
+
+    private fun applySystemInsetsIfNeeded() {
+        binding?.root?.applySystemInsetsIfNeeded { insets ->
+            binding?.clHeaderButtons?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                leftMargin = insets.left
+                rightMargin = insets.right
+            }
         }
     }
 }

@@ -18,9 +18,9 @@
             app:layout_scrollFlags="scroll|enterAlways">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_header_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_35"
                 android:layout_marginHorizontal="@dimen/dp_2"
                 android:layout_marginBottom="@dimen/dp_2">
 

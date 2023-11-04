@@ -39,4 +39,14 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/FragmentImageView"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentImageView">
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+
+    </fragment>
+
 </navigation>

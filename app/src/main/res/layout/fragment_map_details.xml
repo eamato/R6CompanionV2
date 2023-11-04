@@ -7,6 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,7 +18,83 @@
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/no_image_placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/tv_map_name"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_map_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_map_image"
+            app:layout_constraintBottom_toTopOf="@+id/tv_map_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="title"
+            style="@style/R6Companion.ContentHeader1Style" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_map_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_map_name"
+            app:layout_constraintBottom_toTopOf="@+id/tv_can_be_played_in"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Content"
+            style="@style/R6Companion.ContentDefaultStyle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_can_be_played_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_map_content"
+            app:layout_constraintBottom_toTopOf="@+id/flow_map_playlists"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/can_be_played_in_"
+            style="@style/R6Companion.ContentHeader2Style" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_map_playlists"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:flow_wrapMode="chain"
+            app:flow_horizontalStyle="packed"
+            app:flow_horizontalGap="@dimen/dp_5"
+            app:flow_horizontalBias="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_can_be_played_in"
+            app:layout_constraintBottom_toTopOf="@+id/tv_blueprints" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_blueprints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flow_map_playlists"
+            app:layout_constraintBottom_toTopOf="@+id/rv_map_blueprints"
+            android:text="@string/blueprints"
+            android:visibility="gone"
+            style="@style/R6Companion.ContentHeader1Style" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_map_blueprints"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="4:3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_map_name" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/clpb_waiting"

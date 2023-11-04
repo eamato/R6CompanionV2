@@ -25,6 +25,10 @@ class CompanionMapsViewModel @Inject constructor(
         getMaps()
     }
 
+    fun refresh() {
+        getMaps()
+    }
+
     private fun getMaps() {
         viewModelScope.launch {
             _maps.value = UiState.Progress
