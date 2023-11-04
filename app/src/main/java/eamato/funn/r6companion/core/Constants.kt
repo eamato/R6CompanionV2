@@ -82,3 +82,11 @@ const val SETTINGS_ITEM_NEWS_LANGUAGE_ID = "news_language"
 const val SETTINGS_ITEM_SAME_LANGUAGE_ID = "same_language"
 const val SETTINGS_ITEM_USE_MOBILE_NETWORK_ID = "use_mobile_network"
 const val SETTINGS_ITEM_ABOUT_SCREEN_ID = "about"
+
+const val PROPERTY_NAME_TEXT_SIZE = "textSize"
+
+const val COMPANION_SCREEN_ID_OPERATORS = 1
+const val COMPANION_SCREEN_ID_WEAPONS = 2
+const val COMPANION_SCREEN_ID_MAPS = 3
+
+const val COMPANION_BUTTONS_ANIMATION_DURATION = 300L

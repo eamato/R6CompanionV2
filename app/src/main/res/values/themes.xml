@@ -162,7 +162,6 @@
         <item name="elevation">0dp</item>
         <item name="android:textColor">@color/companion_buttons_text_colors_selector</item>
         <item name="android:textSize">@dimen/sp_12</item>
-        <item name="android:stateListAnimator">@animator/companion_buttons_text_size_selector</item>
         <item name="rippleColor">?android:attr/colorAccent</item>
     </style>
 

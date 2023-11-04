@@ -165,7 +165,7 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
                     rightMargin = insets.right
                 }
 
-                ivMapImage.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                clContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     topMargin = insets.top
                     leftMargin = insets.left
                     rightMargin = insets.right

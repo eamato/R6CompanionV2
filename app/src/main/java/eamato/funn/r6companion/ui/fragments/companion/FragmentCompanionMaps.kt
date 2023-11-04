@@ -1,5 +1,6 @@
 package eamato.funn.r6companion.ui.fragments.companion
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.COMPANION_BUTTONS_ANIMATION_DURATION
+import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_MAPS
+import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_OPERATORS
+import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_WEAPONS
+import eamato.funn.r6companion.core.PROPERTY_NAME_TEXT_SIZE
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
@@ -43,10 +49,36 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
     }
 
     private fun initCompanionButtons() {
+        val transactionCallerId = arguments
+            ?.let { FragmentCompanionOperatorsArgs.fromBundle(it) }
+            ?.transactionCallerId
+            ?: -1
+
+        when (transactionCallerId) {
+            COMPANION_SCREEN_ID_OPERATORS -> {
+                binding?.buttons?.btnGoToOperators?.run {
+                    ObjectAnimator.ofFloat(this, PROPERTY_NAME_TEXT_SIZE, 15f, 12f)
+                        .apply {
+                            duration = COMPANION_BUTTONS_ANIMATION_DURATION
+                            start()
+                        }
+                }
+            }
+            COMPANION_SCREEN_ID_WEAPONS -> {
+                binding?.buttons?.btnGoToWeapons?.run {
+                    ObjectAnimator.ofFloat(this, PROPERTY_NAME_TEXT_SIZE, 15f, 12f)
+                        .apply {
+                            duration = COMPANION_BUTTONS_ANIMATION_DURATION
+                            start()
+                        }
+                }
+            }
+        }
+
         binding?.buttons?.btnGoToOperators?.setOnClickListener {
             findNavController().navigate(
                 resId = R.id.FragmentCompanionOperators,
-                args = null,
+                args = FragmentCompanionOperatorsArgs(COMPANION_SCREEN_ID_MAPS).toBundle(),
                 navOptions = navOptions {
                     popUpTo(R.id.companion_navigation) {
                         inclusive = true
@@ -58,7 +90,7 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
         binding?.buttons?.btnGoToWeapons?.setOnClickListener {
             findNavController().navigate(
                 resId = R.id.FragmentCompanionWeapons,
-                args = null,
+                args = FragmentCompanionWeaponsArgs(COMPANION_SCREEN_ID_MAPS).toBundle(),
                 navOptions = navOptions {
                     popUpTo(R.id.companion_navigation) {
                         inclusive = true
@@ -67,7 +99,14 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
             )
         }
 
-        binding?.buttons?.btnGoToMaps?.isEnabled = false
+        binding?.buttons?.btnGoToMaps?.run {
+            isEnabled = false
+            ObjectAnimator.ofFloat(this, PROPERTY_NAME_TEXT_SIZE, 12f, 15f)
+                .apply {
+                    duration = COMPANION_BUTTONS_ANIMATION_DURATION
+                    start()
+                }
+        }
     }
 
     private fun setObservables() {

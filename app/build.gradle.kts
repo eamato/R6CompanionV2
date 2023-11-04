@@ -114,7 +114,7 @@ dependencies {
 
     /* Google dependencies */
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44.2")
 
@@ -131,17 +131,15 @@ dependencies {
 
     /* Apollo dependencies */
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
-//    implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.5")
-
     /* Firebase dependencies */
     implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.4.3")
-    implementation("com.google.firebase:firebase-analytics:21.3.0")
-    implementation("com.google.firebase:firebase-config-ktx:21.4.1")
-    implementation("com.google.firebase:firebase-messaging:23.2.1")
-    implementation("com.google.firebase:firebase-inappmessaging-display:20.3.5")
-    implementation("com.google.firebase:firebase-ads:22.4.0")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")
+    implementation("com.google.firebase:firebase-crashlytics:18.5.1")
+    implementation("com.google.firebase:firebase-analytics:21.5.0")
+    implementation("com.google.firebase:firebase-config-ktx:21.5.0")
+    implementation("com.google.firebase:firebase-messaging:23.3.1")
+    implementation("com.google.firebase:firebase-inappmessaging-display:20.4.0")
+    implementation("com.google.firebase:firebase-ads:22.5.0")
+    implementation("com.google.firebase:firebase-dynamic-links-ktx:21.2.0")
 
     /* Test dependencies */
     testImplementation("junit:junit:4.13.2")
