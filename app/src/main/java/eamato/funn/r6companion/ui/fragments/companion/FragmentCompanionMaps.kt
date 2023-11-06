@@ -9,6 +9,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -22,7 +23,8 @@ import eamato.funn.r6companion.core.PROPERTY_NAME_TEXT_SIZE
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
-import eamato.funn.r6companion.core.utils.UiState
+import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
+import eamato.funn.r6companion.core.utils.logger.Message
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionMapsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionMaps
@@ -110,23 +112,9 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
     }
 
     private fun setObservables() {
-        companionMapsViewModel.maps.observe(viewLifecycleOwner) { state ->
-            if (state == null) {
-                return@observe
-            }
-
-            showHideContentLoadingProgressBar(state is UiState.Progress)
-
-            when (state) {
-                is UiState.Error -> {}
-                is UiState.Success -> {
-                    binding?.rvMaps?.adapter
-                        ?.let { adapter -> adapter as? AdapterCompanionMaps }
-                        ?.submitList(state.data)
-                }
-
-                else -> {}
-            }
+        companionMapsViewModel.maps.observe(viewLifecycleOwner) { pagingData ->
+            (binding?.rvMaps?.adapter as? AdapterCompanionMaps)
+                ?.submitData(viewLifecycleOwner.lifecycle, pagingData)
         }
     }
 
@@ -141,11 +129,31 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
 
             setMapsRecyclerViewItemDecorations()
 
+            adapterCompanionMaps.addLoadStateListener { combinedLoadStates ->
+                DefaultAppLogger.getInstance().i(Message.message {
+                    clazz = this@FragmentCompanionMaps::class.java
+                    message = "Maps load state: $combinedLoadStates"
+                })
+
+                showHideContentLoadingProgressBar(combinedLoadStates.source.refresh is LoadState.Loading)
+
+                val error = combinedLoadStates.source.append as? LoadState.Error
+                    ?: combinedLoadStates.source.prepend as? LoadState.Error
+                    ?: combinedLoadStates.source.refresh as? LoadState.Error
+                    ?: combinedLoadStates.append as? LoadState.Error
+                    ?: combinedLoadStates.prepend as? LoadState.Error
+                    ?: combinedLoadStates.refresh as? LoadState.Error
+
+                if (error != null) {
+                    // TODO on error occurred
+                }
+            }
+
             val clickListener = RecyclerViewItemClickListener(
                 this,
                 object : RecyclerViewItemClickListener.OnItemTapListener {
                     override fun onItemClicked(view: View, position: Int) {
-                        val selectedMap = adapterCompanionMaps.getItemAtPosition(position)
+                        val selectedMap = adapterCompanionMaps.getItemAtPosition(position) ?: return
 
                         findNavController().navigate(
                             R.id.FragmentMapDetails,
@@ -197,7 +205,9 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
     private fun initSwipeRefreshLayout() {
         binding?.srlRefreshMaps?.run {
             setColorSchemeResources(R.color.blue, R.color.yellow, R.color.red)
-            setOnRefreshListener { companionMapsViewModel.refresh() }
+            setOnRefreshListener {
+                (binding?.rvMaps?.adapter as? AdapterCompanionMaps)?.refresh()
+            }
         }
     }
 }

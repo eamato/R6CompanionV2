@@ -2,7 +2,9 @@ package eamato.funn.r6companion.ui.adapters.recyclerviews
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import eamato.funn.r6companion.R
@@ -12,8 +14,8 @@ import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
 import eamato.funn.r6companion.databinding.CompanionMapItemViewBinding
 import eamato.funn.r6companion.domain.entities.companion.maps.Map
 
-
-class AdapterCompanionMaps : ABaseAdapter<Map>(DIFF_ITEM_CALLBACK) {
+class AdapterCompanionMaps :
+    PagingDataAdapter<Map, AdapterCompanionMaps.ViewHolder>(DIFF_ITEM_CALLBACK) {
 
     companion object {
         val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<Map>() {
@@ -27,18 +29,34 @@ class AdapterCompanionMaps : ABaseAdapter<Map>(DIFF_ITEM_CALLBACK) {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ABaseViewHolder<Map> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(CompanionMapItemViewBinding.inflate(inflater, parent, false))
     }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    fun getItemAtPosition(position: Int): Map? {
+        return getItem(position)
+    }
+
     class ViewHolder(
         private val binding: CompanionMapItemViewBinding
-    ) : ABaseViewHolder<Map>(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private val errorDrawable = R.drawable.no_image_drawable.getDrawable(itemView.context)
 
-        override fun bind(item: Map) {
+        fun bind(item: Map?) {
+            if (item == null) {
+                binding.clpbNewsImage.show()
+                binding.ivMapImage.setImageDrawable(null)
+                binding.tvMapName.text = ""
+
+                return
+            }
+
             binding.clpbNewsImage.hide()
 
             val imageUrl = item.imageUrl

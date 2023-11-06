@@ -1,5 +1,5 @@
-query MapsDetailsMasterCollection {
-    mapsDetailsMasterCollection {
+query MapsDetailsMasterCollection($limit: Int!, $skip: Int!) {
+    mapsDetailsMasterCollection(limit: $limit, skip: $skip) {
         total
         skip
         limit

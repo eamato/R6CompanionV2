@@ -57,11 +57,13 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
                 is UiState.Error -> {}
                 is UiState.Success -> {
                     binding?.tvBlueprints?.visibility = View.VISIBLE
+                    binding?.tvCanBePlayedIn?.visibility = View.VISIBLE
                     showMapDetails(state.data)
                 }
 
                 else -> {
                     binding?.tvBlueprints?.visibility = View.GONE
+                    binding?.tvCanBePlayedIn?.visibility = View.GONE
                 }
             }
         }

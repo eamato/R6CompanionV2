@@ -79,7 +79,7 @@ class AdapterNewsArticles :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(getItem(position))
+        holder.bind(getItem(position))
     }
 
     @ItemViewType
