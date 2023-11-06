@@ -1,0 +1,41 @@
+query MapsDetailsMaster($id: String!) {
+    mapsDetailsMaster(id: $id) {
+        mapLastChangeDate
+        playlists
+        sys {
+            id
+        }
+        mapThumbnail {
+            url
+        }
+        localizedItems {
+            title
+            location
+            content
+            blueprintsGallery {
+                localizedItems {
+                    sys {
+                        id
+                    }
+                    assetWithDetailsCollection {
+                        total
+                        items {
+                            sys {
+                                id
+                            }
+                            localizedItems {
+                                sys {
+                                    id
+                                }
+                                image {
+                                    url
+                                }
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

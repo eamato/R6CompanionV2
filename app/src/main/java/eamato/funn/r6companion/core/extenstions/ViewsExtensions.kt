@@ -29,3 +29,11 @@ fun View?.applySystemInsetsIfNeeded(onInsetsFound: (Insets) -> Unit) {
         WindowInsetsCompat.CONSUMED
     }
 }
+
+fun View.setViewVisibleOrGone(visibility: Boolean) {
+    this.visibility = if (visibility) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+}

@@ -7,7 +7,14 @@
     <fragment
         android:id="@+id/FragmentCompanionOperators"
         android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionOperators"
-        android:label="@string/companion_operators_fragment_label" />
+        android:label="@string/companion_operators_fragment_label">
+
+        <argument
+            android:name="transaction_caller_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/FragmentOperatorDetails"
@@ -22,11 +29,45 @@
     <fragment
         android:id="@+id/FragmentCompanionMaps"
         android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionMaps"
-        android:label="@string/companion_maps_fragment_label" />
+        android:label="@string/companion_maps_fragment_label">
+
+        <argument
+            android:name="transaction_caller_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/FragmentCompanionWeapons"
         android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentCompanionWeapons"
-        android:label="@string/companion_weapons_fragment_label" />
+        android:label="@string/companion_weapons_fragment_label">
+
+        <argument
+            android:name="transaction_caller_id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentMapDetails"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentMapDetails">
+
+        <argument
+            android:name="mapId"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentImageView"
+        android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentImageView">
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>

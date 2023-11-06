@@ -1,0 +1,19 @@
+query MapsDetailsMasterCollection($limit: Int!, $skip: Int!) {
+    mapsDetailsMasterCollection(limit: $limit, skip: $skip) {
+        total
+        skip
+        limit
+        items {
+            mapLastChangeDate
+            sys {
+                id
+            }
+            mapThumbnail {
+                url
+            }
+            localizedItems {
+                title
+            }
+        }
+    }
+}

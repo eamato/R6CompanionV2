@@ -162,8 +162,7 @@
         <item name="elevation">0dp</item>
         <item name="android:textColor">@color/companion_buttons_text_colors_selector</item>
         <item name="android:textSize">@dimen/sp_12</item>
-        <item name="android:stateListAnimator">@animator/companion_buttons_text_size_selector</item>
-        <item name="rippleColor">?android:attr/colorAccent</item>
+        <item name="rippleColor">@android:color/transparent</item>
     </style>
 
     <style name="R6Companion.FilterOutlineButtonStyle" parent="R6Companion.OutlineButtonStyle">
@@ -206,6 +205,16 @@
     <style name="R6Companion.ContentDefaultStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">@color/news_content_default_text_color</item>
         <item name="android:textSize">@dimen/news_content_default_text_size</item>
+    </style>
+
+    <style name="R6Companion.ChipTextStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/news_content_default_text_color</item>
+        <item name="android:textSize">@dimen/news_content_default_text_size</item>
+        <item name="android:background">@drawable/chip_text_background</item>
+        <item name="android:paddingTop">@dimen/dp_3</item>
+        <item name="android:paddingBottom">@dimen/dp_3</item>
+        <item name="android:paddingStart">@dimen/dp_7</item>
+        <item name="android:paddingEnd">@dimen/dp_7</item>
     </style>
 
     <style name="R6Companion.DefaultPopupTextViewStyle" parent="Widget.MaterialComponents.TextView">
@@ -265,5 +274,16 @@
 
     <style name="R6Companion.SettingsItemIconStyle" parent="">
         <item name="tint">@color/settings_item_icon_tint_selector</item>
+    </style>
+
+    <style name="R6Companion.TextOnImageStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/sp_35</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/text_on_image_text_color</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
     </style>
 </resources>

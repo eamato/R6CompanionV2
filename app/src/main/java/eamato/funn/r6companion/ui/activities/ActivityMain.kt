@@ -2,6 +2,7 @@ package eamato.funn.r6companion.ui.activities
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,8 +17,10 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.setViewVisibleOrGone
 import eamato.funn.r6companion.databinding.ActivityMainBinding
 import eamato.funn.r6companion.ui.viewmodels.MainNavigationViewModel
 import eamato.funn.r6companion.ui.viewmodels.MainViewModel
@@ -82,6 +85,18 @@ class ActivityMain : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    fun hideNavigation() {
+        val modalOut = MaterialSharedAxis(MaterialSharedAxis.Y, false)
+        TransitionManager.beginDelayedTransition(binding.bnv, modalOut)
+        binding.bnv.setViewVisibleOrGone(false)
+    }
+
+    fun showNavigation() {
+        val modalIn = MaterialSharedAxis(MaterialSharedAxis.Y, true)
+        TransitionManager.beginDelayedTransition(binding.bnv, modalIn)
+        binding.bnv.setViewVisibleOrGone(true)
     }
 
     private fun onBottomNavigationItemClicked(destinationId: Int, navController: NavController) {

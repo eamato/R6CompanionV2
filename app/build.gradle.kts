@@ -10,6 +10,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
+    id("com.apollographql.apollo3") version "3.8.2"
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -84,6 +85,14 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    apollo {
+        generateKotlinModels.set(true)
+        packageNamesFromFilePaths()
+        service("service") {
+            packageName.set("eamato.funn.r6companion")
+        }
+    }
 }
 
 kapt {
@@ -105,7 +114,7 @@ dependencies {
 
     /* Google dependencies */
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44.2")
 
@@ -120,15 +129,17 @@ dependencies {
     implementation("com.github.bumptech.glide:okhttp3-integration:4.15.1")
     kapt("com.github.bumptech.glide:compiler:4.15.1")
 
+    /* Apollo dependencies */
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
     /* Firebase dependencies */
     implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.4.3")
-    implementation("com.google.firebase:firebase-analytics:21.3.0")
-    implementation("com.google.firebase:firebase-config-ktx:21.4.1")
-    implementation("com.google.firebase:firebase-messaging:23.2.1")
-    implementation("com.google.firebase:firebase-inappmessaging-display:20.3.5")
-    implementation("com.google.firebase:firebase-ads:22.4.0")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:21.1.0")
+    implementation("com.google.firebase:firebase-crashlytics:18.5.1")
+    implementation("com.google.firebase:firebase-analytics:21.5.0")
+    implementation("com.google.firebase:firebase-config-ktx:21.5.0")
+    implementation("com.google.firebase:firebase-messaging:23.3.1")
+    implementation("com.google.firebase:firebase-inappmessaging-display:20.4.0")
+    implementation("com.google.firebase:firebase-ads:22.5.0")
+    implementation("com.google.firebase:firebase-dynamic-links-ktx:21.2.0")
 
     /* Test dependencies */
     testImplementation("junit:junit:4.13.2")

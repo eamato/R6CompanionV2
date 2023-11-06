@@ -28,6 +28,16 @@ val NEGATIVE = floatArrayOf(
 const val NEWS_HOST = "https://nimbus.ubisoft.com/"
 const val NEWS_PATH = "api/v1/items"
 
+const val UBISOFT_GRAPH_URL = "https://cms-cache.ubisoft.com/GraphQL/content/v1/spaces/p0f8o8d25gmk"
+const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER =
+    "Authorization"
+const val UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER_VALUE =
+    "Bearer pYflq4nCMNCwz7yxsA1k7UNg1E7SQCRjI4PtDUpsOeg"
+const val UBISOFT_GRAPH_APP_NAME_HEADER = "Ubi-Appname"
+const val UBISOFT_GRAPH_APP_NAME_HEADER_VALUE = "RainbowSixSiege"
+const val UBISOFT_GRAPH_APP_ID_HEADER = "Ubi-Appid"
+const val UBISOFT_GRAPH_APP_ID_HEADER_VALUE = "685a3038-2b04-47ee-9c5a-6403381a46aa"
+
 const val NEWS_AUTHORIZATION_TOKEN_HEADER =
     "authorization: 3u0FfSBUaTSew-2NVfAOSYWevVQHWtY9q3VM8Xx9Lto"
 
@@ -72,3 +82,15 @@ const val SETTINGS_ITEM_NEWS_LANGUAGE_ID = "news_language"
 const val SETTINGS_ITEM_SAME_LANGUAGE_ID = "same_language"
 const val SETTINGS_ITEM_USE_MOBILE_NETWORK_ID = "use_mobile_network"
 const val SETTINGS_ITEM_ABOUT_SCREEN_ID = "about"
+
+const val PROPERTY_NAME_TEXT_SIZE = "textSize"
+
+const val COMPANION_SCREEN_ID_OPERATORS = 1
+const val COMPANION_SCREEN_ID_WEAPONS = 2
+const val COMPANION_SCREEN_ID_MAPS = 3
+
+const val COMPANION_BUTTONS_ANIMATION_DURATION = 300L
+
+const val MAPS_COUNT_DEFAULT_VALUE = 60
+const val MAPS_PREFETCH_DISTANCE = MAPS_COUNT_DEFAULT_VALUE / 4
+const val MAPS_MAX_PAGE_SIZE = 3 * MAPS_COUNT_DEFAULT_VALUE

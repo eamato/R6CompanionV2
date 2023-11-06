@@ -72,4 +72,7 @@
     <string name="settings_item_title_about">(RU)About</string>
 
     <string name="settings_item_subtitle_use_mobile_network_to_load_images">(RU)Enable this to allow image downloading while using mobile network</string>
+
+    <string name="blueprints">(RU)Blueprints</string>
+    <string name="can_be_played_in_">(RU)Can be played in:</string>
 </resources>

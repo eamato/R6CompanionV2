@@ -27,7 +27,6 @@ class SettingsPopupButton @JvmOverloads constructor(
 
     init {
         setSelectableForeground(true)
-        setAutoScrollTextView(true)
     }
 
     fun setIsEnabled(isEnabled: Boolean) {
@@ -38,7 +37,6 @@ class SettingsPopupButton @JvmOverloads constructor(
         }
 
         setSelectableForeground(isEnabled)
-        setAutoScrollTextView(isEnabled)
     }
 
     fun setTitle(title: UiText?) {
@@ -125,10 +123,5 @@ class SettingsPopupButton @JvmOverloads constructor(
             background = null
         }
         isClickable = isEnabled
-    }
-
-    private fun setAutoScrollTextView(isEnabled: Boolean) {
-//        binding.tvSettingsItemTitle.isSelected = isEnabled
-//        binding.tvSettingsItemSubtitle.isSelected = isEnabled
     }
 }

@@ -5,9 +5,7 @@ import eamato.funn.r6companion.data.repositories.operators.IOperatorsRepository
 import eamato.funn.r6companion.core.utils.Result
 import javax.inject.Inject
 
-class OperatorsUseCase @Inject constructor(
-    private val operatorsRepository: IOperatorsRepository
-) {
+class OperatorsUseCase @Inject constructor(private val operatorsRepository: IOperatorsRepository) {
 
     suspend operator fun <T> invoke(mapper: IUseCaseMapper<Operators.Operator, T?>): Result<List<T>> {
         val operators = operatorsRepository
