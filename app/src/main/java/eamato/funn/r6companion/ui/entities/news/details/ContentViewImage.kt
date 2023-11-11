@@ -38,5 +38,6 @@ class ContentViewImage(
 
     override fun onDestroy() {
         imageView?.setImageDrawable(null)
+        imageView = null
     }
 }

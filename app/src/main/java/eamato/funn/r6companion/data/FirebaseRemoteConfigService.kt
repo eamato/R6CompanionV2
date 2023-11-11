@@ -45,4 +45,10 @@ class FirebaseRemoteConfigService @Inject constructor(
     }
 
     fun getRemoteConfigStringValue(key: String) = firebaseRemoteConfig.getString(key)
+        .also {
+            logger.i(Message.message {
+                clazz = this@FirebaseRemoteConfigService::class.java
+                message = "getRemoteConfigStringValue with $key returned $it"
+            })
+        }
 }

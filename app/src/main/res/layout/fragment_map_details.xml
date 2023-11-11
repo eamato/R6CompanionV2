@@ -84,6 +84,7 @@
             app:layout_constraintBottom_toTopOf="@+id/rv_map_blueprints"
             android:text="@string/blueprints"
             android:visibility="gone"
+            tools:visibility="visible"
             style="@style/R6Companion.ContentHeader1Style" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -94,7 +95,7 @@
             app:layout_constraintDimensionRatio="4:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_map_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_blueprints" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/clpb_waiting"

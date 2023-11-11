@@ -90,6 +90,9 @@ android {
         generateKotlinModels.set(true)
         packageNamesFromFilePaths()
         service("service") {
+            outputDirConnection {
+                connectToKotlinSourceSet("main")
+            }
             packageName.set("eamato.funn.r6companion")
         }
     }
@@ -105,7 +108,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
