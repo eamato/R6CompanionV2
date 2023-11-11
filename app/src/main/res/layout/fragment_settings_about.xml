@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_content"
@@ -15,13 +16,14 @@
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/kjme_image"
+            app:layout_constraintBottom_toTopOf="@+id/tv_our_team"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/kjme_image"
-            app:layout_constraintBottom_toTopOf="@+id/tv_our_team"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -39,13 +41,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_our_team"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_our_team"
             app:layout_constraintBottom_toTopOf="@+id/tv_our_mission"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:orientation="horizontal"
+            tools:itemCount="6"
+            tools:listitem="@layout/our_team_row" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_our_mission"
@@ -64,39 +70,47 @@
             android:id="@+id/tv_our_mission_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_margin="@dimen/dp_5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_our_mission"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_licence"
+            app:layout_constraintBottom_toTopOf="@+id/ll_footer"
             tools:text="Mission"
             style="@style/R6Companion.ContentHeader2Style" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_licence"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_footer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_our_mission_value"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_app_version"
-            android:autoLink="all"
-            tools:text="Licence"
-            style="@style/R6Companion.ContentDefaultStyle" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_app_version"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_licence"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Version"
-            android:gravity="center"
-            style="@style/R6Companion.ContentDefaultStyle" />
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_licence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_16"
+                android:autoLink="all"
+                android:gravity="center"
+                android:layout_gravity="center"
+                tools:text="Licence"
+                style="@style/R6Companion.ContentDefaultStyle" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dp_5"
+                tools:text="Version"
+                android:gravity="center"
+                style="@style/R6Companion.ContentDefaultStyle" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

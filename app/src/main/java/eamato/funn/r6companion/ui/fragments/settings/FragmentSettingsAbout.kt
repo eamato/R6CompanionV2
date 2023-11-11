@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +45,8 @@ class FragmentSettingsAbout : ABaseFragment<FragmentSettingsAboutBinding>() {
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             val adapterOurTeam = AdapterOurTeam()
             adapter = adapterOurTeam
+
+            PagerSnapHelper().attachToRecyclerView(this)
         }
     }
 
