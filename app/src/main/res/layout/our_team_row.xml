@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_image"
+        android:layout_width="@dimen/our_team_image_width"
+        android:layout_height="@dimen/our_team_image_height"
+        android:layout_margin="@dimen/dp_16"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/no_image_drawable" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_first_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        tools:text="First Last Name" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_positions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:gravity="center_horizontal"
+        tools:text="Position" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

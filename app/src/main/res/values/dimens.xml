@@ -48,6 +48,8 @@
     <dimen name="news_content_header_2_text_size">20sp</dimen>
     <dimen name="news_content_italic_text_size">12sp</dimen>
     <dimen name="news_content_default_text_size">12sp</dimen>
+    <dimen name="our_team_image_width">75dp</dimen>
+    <dimen name="our_team_image_height">75dp</dimen>
 
     <dimen name="sp_12">12sp</dimen>
     <dimen name="sp_14">14sp</dimen>

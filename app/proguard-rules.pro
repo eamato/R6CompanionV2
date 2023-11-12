@@ -247,6 +247,40 @@
     public <init>();
 }
 
+
+# About info AboutOurMission
+-keep class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurMission {
+    <fields>;
+    <methods>;
+    <init>();
+}
+
+-keepclassmembers class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurMission {
+    public <init>();
+}
+
+# About info AboutOurTeam
+-keep class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurTeam {
+    <fields>;
+    <methods>;
+    <init>();
+}
+
+-keepclassmembers class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurTeam {
+    public <init>();
+}
+
+# About info AboutOurTeam TeamMember
+-keep class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurTeam$TeamMember {
+    <fields>;
+    <methods>;
+    <init>();
+}
+
+-keepclassmembers class eamato.funn.r6companion.data.entities.AboutInfo$AboutOurTeam$TeamMember {
+    public <init>();
+}
+
 # Retrofit
 -keep,allowobfuscation,allowshrinking interface retrofit2.Call
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
