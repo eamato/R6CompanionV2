@@ -20,9 +20,18 @@
         android:id="@+id/FragmentOperatorDetails"
         android:name="eamato.funn.r6companion.ui.fragments.companion.FragmentOperatorDetails">
 
+        <deepLink app:uri="android-app://eamato.funn.r6companion/operator/details/{operatorId}" />
+
         <argument
             android:name="operator"
-            app:argType="eamato.funn.r6companion.domain.entities.companion.operators.Operator" />
+            app:argType="eamato.funn.r6companion.domain.entities.companion.operators.Operator"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="operatorId"
+            app:argType="integer"
+            android:defaultValue="-1" />
 
     </fragment>
 

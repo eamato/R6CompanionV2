@@ -18,6 +18,18 @@
     <fragment
         android:id="@+id/FragmentRouletteResult"
         android:name="eamato.funn.r6companion.ui.fragments.roulette.FragmentRouletteResult"
-        android:label="@string/nested_navigation_roulette_result" />
+        android:label="@string/nested_navigation_roulette_result">
+
+        <argument
+            android:name="roll_candidates"
+            app:argType="eamato.funn.r6companion.domain.entities.roulette.Operator[]" />
+
+<!--        <action-->
+<!--            android:id="@+id/goToOperatorDetails"-->
+<!--            app:destination="@+id/companion_navigation" />-->
+
+    </fragment>
+
+    <include app:graph="@navigation/companion_navigation" />
 
 </navigation>
