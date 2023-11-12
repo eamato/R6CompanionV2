@@ -88,4 +88,7 @@
     <string name="our_team">Our team</string>
     <string name="our_mission">Mission</string>
     <string name="version_pattern">Version: %1$d(%2$s)</string>
+
+    <string name="winner">Winner</string>
+    <string name="show_operator_info">Show operator info</string>
 </resources>

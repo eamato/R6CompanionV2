@@ -51,6 +51,8 @@
     <color name="settings_item_icon_tint_color">#FF000000</color>
     <color name="settings_item_icon_tint_color_disabled">#33000000</color>
 
+    <color name="colorCandidateBorder">#5F5F5F</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FFFF0000</color>
