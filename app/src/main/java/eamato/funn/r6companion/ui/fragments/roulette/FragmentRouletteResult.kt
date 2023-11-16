@@ -23,7 +23,8 @@ import eamato.funn.r6companion.ui.viewmodels.roulette.RollResultViewModel
 @AndroidEntryPoint
 class FragmentRouletteResult : ABaseFragment<FragmentRouletteResultBinding>() {
 
-    override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentRouletteResultBinding::inflate
+    override val bindingInitializer: (LayoutInflater) -> ViewBinding =
+        FragmentRouletteResultBinding::inflate
 
     private val rollResultViewModel: RollResultViewModel by viewModels()
 
@@ -39,7 +40,10 @@ class FragmentRouletteResult : ABaseFragment<FragmentRouletteResultBinding>() {
                 GlideApp.with(ivWinnerImage)
                     .load(winner.imgLink)
                     .override(WINNER_OPERATOR_IMAGE_WIDTH, WINNER_OPERATOR_IMAGE_HEIGHT)
-                    .transform(ImageResizeTransformation(WINNER_OPERATOR_IMAGE_WIDTH, WINNER_OPERATOR_IMAGE_HEIGHT))
+                    .transform(ImageResizeTransformation(
+                        WINNER_OPERATOR_IMAGE_WIDTH,
+                        WINNER_OPERATOR_IMAGE_HEIGHT
+                    ))
                     .placeholder(R.drawable.transparent_300)
                     .error(R.drawable.no_image_drawable)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
