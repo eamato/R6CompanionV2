@@ -4,20 +4,49 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
+import eamato.funn.r6companion.domain.mappers.companion.CompanionOperatorUseCaseMapper
+import eamato.funn.r6companion.domain.usecases.OperatorByIdUseCase
 import eamato.funn.r6companion.ui.entities.companion.operator.OperatorDetails
 import eamato.funn.r6companion.ui.fragments.companion.FragmentOperatorDetailsArgs
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OperatorDetailsViewModel(state: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class OperatorDetailsViewModel @Inject constructor(
+    state: SavedStateHandle,
+    private val operatorByIdUseCase: OperatorByIdUseCase
+) : ViewModel() {
 
     private val _operatorDetails = MutableLiveData<List<OperatorDetails>?>(null)
     val operatorDetails: LiveData<List<OperatorDetails>?> = _operatorDetails
 
     init {
-        val operator = FragmentOperatorDetailsArgs.fromSavedStateHandle(state).operator
-        createListOfDetailsFor(operator)
+        parseArgsFromState(state)
+    }
+
+    private fun parseArgsFromState(state: SavedStateHandle) {
+        val args = FragmentOperatorDetailsArgs.fromSavedStateHandle(state)
+        val operator = args.operator
+        val operatorId = args.operatorId
+        if (operator != null) {
+            createListOfDetailsFor(operator)
+            return
+        }
+
+        if (operatorId > 0) {
+            viewModelScope.launch {
+                val operatorById = getOperatorById(operatorId)
+                if (operatorById != null) {
+                    createListOfDetailsFor(operatorById)
+                }
+            }
+        }
     }
 
     private fun createListOfDetailsFor(operator: Operator) {
@@ -152,5 +181,17 @@ class OperatorDetailsViewModel(state: SavedStateHandle) : ViewModel() {
             .run { operatorDetails.add(this) }
 
         _operatorDetails.value = operatorDetails.toList()
+    }
+
+    private suspend fun getOperatorById(operatorId: Int): Operator? {
+        return when (val result = operatorByIdUseCase(operatorId, CompanionOperatorUseCaseMapper)) {
+            is Result.Success -> {
+                result.data
+            }
+
+            is Result.Error -> {
+                null
+            }
+        }
     }
 }

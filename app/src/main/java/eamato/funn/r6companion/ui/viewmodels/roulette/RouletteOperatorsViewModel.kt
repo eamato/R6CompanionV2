@@ -118,6 +118,8 @@ class RouletteOperatorsViewModel @Inject constructor(
         )
     }
 
+    fun getAllSelectedOperators() = selectedOperators
+
     private fun selectAllOperators() {
         selectedOperators = visibleOperators.map { operator -> operator.copy() }.toList()
 

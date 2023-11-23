@@ -79,4 +79,7 @@
     <string name="our_team">(RU)Our team</string>
     <string name="our_mission">(RU)Mission</string>
     <string name="version_pattern">(RU)Version: %1$d(%2$s)</string>
+
+    <string name="winner">(RU)Winner</string>
+    <string name="show_operator_info">(RU)Show operator info</string>
 </resources>

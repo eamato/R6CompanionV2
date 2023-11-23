@@ -54,4 +54,8 @@ class OperatorsRepository @Inject constructor(
 
         return operatorsList
     }
+
+    override suspend fun getOperatorById(operatorId: Int): Operators.Operator? {
+        return getOperators().find { it.id == operatorId }
+    }
 }

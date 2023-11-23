@@ -12,6 +12,7 @@ import eamato.funn.r6companion.domain.usecases.AboutUseCase
 import eamato.funn.r6companion.domain.usecases.MapDetailsUseCase
 import eamato.funn.r6companion.domain.usecases.MapsListUseCase
 import eamato.funn.r6companion.domain.usecases.NewsUseCase
+import eamato.funn.r6companion.domain.usecases.OperatorByIdUseCase
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
 import javax.inject.Singleton
 
@@ -24,6 +25,12 @@ object UseCasesModule {
     fun provideOperatorsUseCase(
         operatorsRepository: IOperatorsRepository
     ) = OperatorsUseCase(operatorsRepository)
+
+    @Singleton
+    @Provides
+    fun provideOperatorByIdUseCase(
+        operatorsRepository: IOperatorsRepository
+    ) = OperatorByIdUseCase(operatorsRepository)
 
     @Singleton
     @Provides

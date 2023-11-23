@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
@@ -19,6 +20,7 @@ import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoratio
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.companion.operators.OperatorDetailsViewModel
 
+@AndroidEntryPoint
 class FragmentOperatorDetails : ABaseFragment<FragmentOperatorDetailsBinding>() {
 
     private val operatorDetailsViewModel: OperatorDetailsViewModel by viewModels()

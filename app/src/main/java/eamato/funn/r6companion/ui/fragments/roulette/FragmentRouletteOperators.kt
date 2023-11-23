@@ -53,10 +53,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressedCallback)
 
-        binding?.btnGoToRollResult?.setOnClickListener {
-            findNavController().navigate(R.id.goToRollResult)
-        }
-
+        binding?.btnGoToRollResult?.setOnClickListener { goToRollResult() }
         initOperatorsRecyclerView()
         setObservers()
         initSearchView()
@@ -236,5 +233,15 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         } else {
             binding?.btnGoToRollResult?.setText(R.string.roll)
         }
+    }
+
+    private fun goToRollResult() {
+        val selectedOperators = rouletteOperatorsViewModel.getAllSelectedOperators()
+        if (selectedOperators.isEmpty()) {
+            return
+        }
+
+        val args = FragmentRouletteResultArgs(selectedOperators.toTypedArray())
+        findNavController().navigate(R.id.goToRollResult, args.toBundle())
     }
 }

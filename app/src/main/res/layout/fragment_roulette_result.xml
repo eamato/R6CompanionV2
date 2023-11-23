@@ -3,15 +3,58 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_winner"
+        style="@style/R6Companion.ContentHeader2Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        android:text="@string/winner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/iv_winner_image"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_winner_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/dp_4"
+        android:background="@drawable/winner_border_background"
+        android:padding="@dimen/dp_2"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/tv_winner_name"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_winner" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_winner_name"
+        style="@style/R6Companion.ContentHeader1Style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        app:layout_constraintBottom_toTopOf="@+id/btn_show_operator_details"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_winner_image"
+        tools:text="Operator's name" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_show_operator_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_winner_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="ROLL RESULT" />
+        android:text="@string/show_operator_info"
+        style="@style/R6Companion.OutlineButtonStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
