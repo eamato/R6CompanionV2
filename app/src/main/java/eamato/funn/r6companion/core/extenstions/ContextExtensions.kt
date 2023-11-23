@@ -1,6 +1,7 @@
 package eamato.funn.r6companion.core.extenstions
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.ConnectivityManager
 import androidx.annotation.XmlRes
@@ -13,14 +14,16 @@ fun Context?.isCurrentlyConnectedToInternet(): Boolean {
     if (this == null)
         return false
 
-    return ContextCompat.getSystemService(this, ConnectivityManager::class.java)?.isCurrentConnectedToInternet() ?: false
+    return ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+        ?.isCurrentConnectedToInternet() ?: false
 }
 
 fun Context?.isCurrentlyConnectedNetworkWIFI(): Boolean {
     if (this == null)
         return false
 
-    return ContextCompat.getSystemService(this, ConnectivityManager::class.java)?.isCurrentConnectedNetworkWIFI() ?: false
+    return ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+        ?.isCurrentConnectedNetworkWIFI() ?: false
 }
 
 fun Context?.isLandscape(): Boolean {
@@ -52,3 +55,8 @@ fun Context.getDataFromXmlResource(@XmlRes xmlResId: Int, tag: String): List<Str
 
     return tagsList.toList()
 }
+
+fun Context.isPermissionGranted(permission: String) = ContextCompat.checkSelfPermission(
+    this,
+    permission
+) == PackageManager.PERMISSION_GRANTED

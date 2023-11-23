@@ -1,6 +1,8 @@
 package eamato.funn.r6companion.ui.activities
 
+import android.Manifest
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.MotionEvent
@@ -8,6 +10,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -20,7 +24,9 @@ import androidx.navigation.navOptions
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.isPermissionGranted
 import eamato.funn.r6companion.core.extenstions.setViewVisibleOrGone
+import eamato.funn.r6companion.core.notifications.R6NotificationManager
 import eamato.funn.r6companion.databinding.ActivityMainBinding
 import eamato.funn.r6companion.ui.viewmodels.MainNavigationViewModel
 import eamato.funn.r6companion.ui.viewmodels.MainViewModel
@@ -32,6 +38,14 @@ class ActivityMain : AppCompatActivity() {
 
     private val mainNavigationViewModel: MainNavigationViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
+
+    private val requestPermissionLauncher: ActivityResultLauncher<String> by lazy {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                createNotificationChannel()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +83,8 @@ class ActivityMain : AppCompatActivity() {
 
         addDestinationChangeListener(navController)
         addOnBackPressCallback(navController)
+
+        requestPushNotificationPermissionIfNeeded()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -144,5 +160,25 @@ class ActivityMain : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun requestPushNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (this.isPermissionGranted( Manifest.permission.POST_NOTIFICATIONS)) {
+                createNotificationChannel()
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        } else {
+            createNotificationChannel()
+        }
+    }
+
+    private fun createNotificationChannel() {
+        R6NotificationManager.createNotificationChannel(
+            context = this,
+            notificationChannelName = getString(R.string.notification_channel_name),
+            notificationChannelDescription = getString(R.string.notification_channel_description)
+        )
     }
 }

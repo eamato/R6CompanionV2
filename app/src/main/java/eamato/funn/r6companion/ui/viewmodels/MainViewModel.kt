@@ -27,7 +27,31 @@ class MainViewModel @Inject constructor(
 
     private fun initializeApp() {
         viewModelScope.launch {
-            appInitializer.initApp()
+            val appInitializationResult = appInitializer.initApp()
+            if (!appInitializationResult.success) {
+                logger.i(Message.message {
+                    clazz = this@MainViewModel::class.java
+                    message = "App initialization unsuccessful"
+                })
+            } else {
+                val token = appInitializationResult.notificationToken
+                if (token == null) {
+                    logger.d(
+                        Message.message {
+                            clazz = this@MainViewModel::class.java
+                            message = "Notification token is null"
+                        }
+                    )
+                } else {
+                    logger.d(
+                        Message.message {
+                            clazz = this@MainViewModel::class.java
+                            message = "Notification token = $token"
+                        }
+                    )
+                }
+            }
+
             _isLoadingSplash.value = false
 
             logger.i(Message.message {
