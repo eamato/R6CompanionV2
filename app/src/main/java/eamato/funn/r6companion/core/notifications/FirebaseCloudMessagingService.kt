@@ -12,11 +12,13 @@ class FirebaseCloudMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
         val notification = p0.notification
+        val title = p0.data["title"] ?: notification?.title
+        val body = p0.data["body"] ?: notification?.body
         R6NotificationManager.showNotification(
             context = this,
             notificationId = 1,
-            title = notification?.title,
-            content = notification?.body
+            title = title,
+            content = body
         )
     }
 
