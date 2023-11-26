@@ -59,7 +59,7 @@ object R6NotificationManager {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, FLAG_IMMUTABLE)
 
         return NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID)
-//            .setSmallIcon(R.mipmap.ic_notification)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
