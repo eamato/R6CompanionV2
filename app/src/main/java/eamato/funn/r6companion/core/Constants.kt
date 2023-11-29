@@ -103,3 +103,7 @@ const val OUR_TEAM_IMAGE_HEIGHT = 75
 
 const val WINNER_OPERATOR_IMAGE_WIDTH = 600
 const val WINNER_OPERATOR_IMAGE_HEIGHT = 600
+
+const val DEFAULT_NOTIFICATION_CHANNEL_ID = "default_notification_channel_id"
+const val NOTIFICATION_DATA_TITLE_KEY = "title"
+const val NOTIFICATION_DATA_BODY_KEY = "body"

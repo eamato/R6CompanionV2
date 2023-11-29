@@ -7,6 +7,7 @@
     <string name="our_mission_default_value" translatable="false">We strive to provide gamers with the best gaming solutions on the market. Our idea is that everyone deserves a good quality app.</string>
     <string name="first_name_last_name_pattern" translatable="false">%1$s %2$s</string>
     <string name="licence_text_pattern" translatable="false">Content used in %1$s is taken from open sources and belongs to &#169;Ubisoft, all rights reserved</string>
+    <string name="default_notification_channel_id" translatable="false">default_notification_channel_id</string>
 
     <string name="main_navigation_home">Home</string>
     <string name="main_navigation_roulette">Roulette</string>
@@ -91,4 +92,7 @@
 
     <string name="winner">Winner</string>
     <string name="show_operator_info">Show operator info</string>
+
+    <string name="notification_channel_name">R6Companion notifications</string>
+    <string name="notification_channel_description">With this channel we can communicate with you</string>
 </resources>
