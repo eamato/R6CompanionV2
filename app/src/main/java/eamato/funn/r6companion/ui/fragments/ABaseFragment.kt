@@ -8,6 +8,9 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.snackbar.Snackbar
+import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.getColor
 import eamato.funn.r6companion.ui.viewmodels.MainNavigationViewModel
 
 abstract class ABaseFragment<VB : ViewBinding> : Fragment() {
@@ -33,5 +36,27 @@ abstract class ABaseFragment<VB : ViewBinding> : Fragment() {
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    protected fun showError(error: Throwable) {
+        binding?.root?.run nonNullRootView@ {
+            error.message?.run nonNullErrorMessage@ {
+                Snackbar
+                    .make(
+                        this@nonNullRootView,
+                        this@nonNullErrorMessage,
+                        Snackbar.LENGTH_SHORT
+                    )
+                    .apply {
+                        setBackgroundTint(
+                            R.color.colorPrimary.getColor(this@nonNullRootView.context)
+                        )
+                        setTextColor(
+                            R.color.white.getColor(this@nonNullRootView.context)
+                        )
+                    }
+                    .show()
+            }
+        }
     }
 }

@@ -47,7 +47,9 @@ class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>(
             showHideContentLoadingProgressBar(it is UiState.Progress)
 
             when (it) {
-                is UiState.Error -> {}
+                is UiState.Error -> {
+                    showError(it.error)
+                }
                 is UiState.Success -> {
                     binding?.tvWeaponsPlaceholderValue?.text = it.data
                 }

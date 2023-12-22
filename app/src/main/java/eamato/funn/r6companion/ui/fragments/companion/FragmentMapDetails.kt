@@ -54,7 +54,9 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
             showHideContentLoadingProgressBar(state is UiState.Progress)
 
             when (state) {
-                is UiState.Error -> {}
+                is UiState.Error -> {
+                    showError(state.error)
+                }
                 is UiState.Success -> {
                     binding?.tvBlueprints?.visibility = View.VISIBLE
                     binding?.tvCanBePlayedIn?.visibility = View.VISIBLE

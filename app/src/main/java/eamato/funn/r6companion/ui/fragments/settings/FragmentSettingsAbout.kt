@@ -53,7 +53,9 @@ class FragmentSettingsAbout : ABaseFragment<FragmentSettingsAboutBinding>() {
     private fun setObservers() {
         aboutViewModel.aboutInfo.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is UiState.Error -> {}
+                is UiState.Error -> {
+                    showError(state.error)
+                }
                 is UiState.Success -> {
                     binding?.run {
                         val ourMissionText = state.data.ourMission.missionText
