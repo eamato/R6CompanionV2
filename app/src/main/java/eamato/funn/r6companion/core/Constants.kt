@@ -7,9 +7,9 @@ const val OPERATORS_ASSETS_FILE_NAME = "operators.json"
 const val OPERATORS_LOCAL_FILE_NAME = "operators.txt"
 
 const val FIREBASE_REMOTE_CONFIG_OPERATORS = "operators"
-const val FIREBASE_REMOTE_CONFIG_OUR_MISSION = "our_mission"
-const val FIREBASE_REMOTE_CONFIG_OUR_TEAM = "our_team"
-const val FIREBASE_REMOTE_CONFIG_COMING_SOON = "coming_soon"
+const val FIREBASE_REMOTE_CONFIG_OUR_MISSION = "our_mission_v2"
+const val FIREBASE_REMOTE_CONFIG_OUR_TEAM = "our_team_v2"
+const val FIREBASE_REMOTE_CONFIG_COMING_SOON = "coming_soon_v2"
 
 const val CONNECTION_TIME_OUT = 5 * 1000L
 const val READ_TIME_OUT = 5 * 1000L

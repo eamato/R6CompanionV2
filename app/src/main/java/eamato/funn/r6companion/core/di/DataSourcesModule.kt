@@ -16,6 +16,7 @@ import eamato.funn.r6companion.data.sources.remote.about.RemoteDataSourceFirebas
 import eamato.funn.r6companion.data.sources.remote.maps.RemoteDataSourceMaps
 import eamato.funn.r6companion.data.sources.remote.news.RemoteDataSourceNews
 import eamato.funn.r6companion.data.sources.remote.operators.RemoteDataSourceFirebaseRemoteConfig
+import eamato.funn.r6companion.data.sources.remote.weapons.RemoteDataSourceWeapons
 import javax.inject.Singleton
 
 @Module
@@ -66,5 +67,13 @@ object DataSourcesModule {
         firebaseRemoteConfigService: FirebaseRemoteConfigService
     ): eamato.funn.r6companion.data.sources.remote.about.IRemoteDataSource {
         return RemoteDataSourceFirebase(firebaseRemoteConfigService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeaponsDataSource(
+        firebaseRemoteConfigService: FirebaseRemoteConfigService
+    ): eamato.funn.r6companion.data.sources.remote.weapons.IRemoteDataSource {
+        return RemoteDataSourceWeapons(firebaseRemoteConfigService)
     }
 }

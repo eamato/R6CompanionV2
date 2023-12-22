@@ -14,6 +14,8 @@ import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.data.repositories.news.NewsRepository
 import eamato.funn.r6companion.data.repositories.operators.IOperatorsRepository
 import eamato.funn.r6companion.data.repositories.operators.OperatorsRepository
+import eamato.funn.r6companion.data.repositories.weapons.IWeaponsRepository
+import eamato.funn.r6companion.data.repositories.weapons.WeaponsRepository
 import eamato.funn.r6companion.data.sources.local.operators.ILocalDataSource
 import javax.inject.Singleton
 
@@ -53,4 +55,10 @@ object RepositoriesModule {
     fun provideAboutRepository(
         remoteDataSource: eamato.funn.r6companion.data.sources.remote.about.IRemoteDataSource
     ): IAboutRepository = AboutRepository(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideWeaponsRepository(
+        remoteDataSource: eamato.funn.r6companion.data.sources.remote.weapons.IRemoteDataSource
+    ): IWeaponsRepository = WeaponsRepository(remoteDataSource)
 }

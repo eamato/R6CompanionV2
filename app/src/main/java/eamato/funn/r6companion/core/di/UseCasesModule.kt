@@ -8,12 +8,14 @@ import eamato.funn.r6companion.data.repositories.about.IAboutRepository
 import eamato.funn.r6companion.data.repositories.maps.IMapsRepository
 import eamato.funn.r6companion.data.repositories.news.INewsRepository
 import eamato.funn.r6companion.data.repositories.operators.IOperatorsRepository
+import eamato.funn.r6companion.data.repositories.weapons.IWeaponsRepository
 import eamato.funn.r6companion.domain.usecases.AboutUseCase
 import eamato.funn.r6companion.domain.usecases.MapDetailsUseCase
 import eamato.funn.r6companion.domain.usecases.MapsListUseCase
 import eamato.funn.r6companion.domain.usecases.NewsUseCase
 import eamato.funn.r6companion.domain.usecases.OperatorByIdUseCase
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
+import eamato.funn.r6companion.domain.usecases.WeaponsUseCase
 import javax.inject.Singleton
 
 @Module
@@ -55,4 +57,10 @@ object UseCasesModule {
     fun provideAboutUseCase(
         aboutRepository: IAboutRepository
     ) = AboutUseCase(aboutRepository)
+
+    @Singleton
+    @Provides
+    fun provideWeaponsUseCase(
+        weaponsRepository: IWeaponsRepository
+    ) = WeaponsUseCase(weaponsRepository)
 }
