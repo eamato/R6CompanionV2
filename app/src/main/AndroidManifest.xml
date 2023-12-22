@@ -9,65 +9,58 @@
         android:name=".ui.R6CompanionApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:localeConfig="@xml/locale_config"
         android:fullBackupContent="@xml/backup_rules"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locale_config"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/R6Companion.Splash"
         tools:targetApi="33">
 
-        <activity android:name=".ui.activities.ActivityMain"
-            android:exported="true">
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
 
+        <activity
+            android:name=".ui.activities.ActivityMain"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false">
-
             <meta-data
                 android:name="autoStoreLocales"
                 android:value="true" />
-
         </service>
-
         <service
             android:name=".core.notifications.FirebaseCloudMessagingService"
             android:enabled="true"
             android:exported="false">
-
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
         </service>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/ad_mod_app_id" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_notification" />
-
-<!--        Does nothing-->
+            android:resource="@drawable/ic_notification" /> <!-- Does nothing -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-
     </application>
 
 </manifest>
