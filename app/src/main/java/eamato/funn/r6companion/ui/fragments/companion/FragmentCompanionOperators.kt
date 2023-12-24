@@ -240,7 +240,6 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
     }
 
     private fun disableEnableViews(isProgress: Boolean = true) {
-        binding?.svOperators?.setViewsEnabled(isProgress.not())
         binding?.btnFilterOptions?.isEnabled = isProgress.not()
     }
 
