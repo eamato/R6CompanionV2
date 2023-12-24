@@ -22,7 +22,8 @@
             app:layout_constraintBottom_toTopOf="@+id/iv_load_out_image"
             toosl:text="example example example example example example example example"
             android:gravity="center"
-            style="@style/R6Companion.OperatorDetailsSubtitleStyle" />
+            android:textColor="@color/colorDefaultText"
+            style="@style/R6Companion.ContentHeader2Style" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_load_out_image"
@@ -45,7 +46,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
             toosl:text="example"
-            style="@style/R6Companion.OperatorDetailsSubtitleStyle" />
+            android:textColor="@color/colorDefaultText"
+            style="@style/R6Companion.ContentHeader2Style" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
