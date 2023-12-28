@@ -53,10 +53,24 @@ const val NEWS_CATEGORIES_FILTER_PARAM_KEY = "categoriesFilter"
 const val NEWS_COUNT_DEFAULT_VALUE = 60
 const val ENGLISH_NEWS_LOCALE = "en-us"
 const val RUSSIAN_NEWS_LOCALE = "ru-ru"
+const val GERMAN_NEWS_LOCALE = "de-de"
+const val SPANISH_NEWS_LOCALE = "es-es"
+const val FRENCH_NEWS_LOCALE = "fr-fr"
+const val ITALIAN_NEWS_LOCALE = "it-it"
+const val POLISH_NEWS_LOCALE = "pl-pl"
+const val TURKISH_NEWS_LOCALE = "tr-tr"
+const val PORTUGAL_NEWS_LOCALE = "pt-br"
 const val DEFAULT_NEWS_LOCALE = ENGLISH_NEWS_LOCALE
 val NEWS_LOCALES = listOf(
     ENGLISH_NEWS_LOCALE,
-    RUSSIAN_NEWS_LOCALE
+    RUSSIAN_NEWS_LOCALE,
+    GERMAN_NEWS_LOCALE,
+    SPANISH_NEWS_LOCALE,
+    FRENCH_NEWS_LOCALE,
+    ITALIAN_NEWS_LOCALE,
+    POLISH_NEWS_LOCALE,
+    TURKISH_NEWS_LOCALE,
+    PORTUGAL_NEWS_LOCALE
 )
 const val NEWS_TAG_PARAM_R6_VALUE = "BR-rainbow-six GA-siege"
 

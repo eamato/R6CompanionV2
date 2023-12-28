@@ -31,7 +31,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        resourceConfigurations.addAll(listOf("en", "ru"))
+        resourceConfigurations.addAll(listOf("en", "ru", "es", "pt", "de", "fr", "it"))
     }
 
     signingConfigs {

@@ -1,0 +1,89 @@
+<resources>
+    <string name="main_navigation_home">Accueil</string>
+    <string name="main_navigation_roulette">Roulette</string>
+    <string name="main_navigation_companion">Compagnon</string>
+    <string name="main_navigation_settings">Paramètres</string>
+
+    <string name="nested_navigation_home_news_list">Actualités</string>
+    <string name="nested_navigation_home_news_details">Détails des Actualités</string>
+    <string name="nested_navigation_roulette_operators">Opérateurs</string>
+    <string name="nested_navigation_roulette_result">Résultat du Lancer</string>
+    <string name="nested_navigation_companion_root">Compagnon</string>
+    <string name="nested_navigation_companion_operator_details">Détails</string>
+    <string name="nested_navigation_settings_root">Paramètres</string>
+    <string name="nested_navigation_settings_about">À propos</string>
+
+    <string name="operator_img_description">Image de l\'Opérateur</string>
+    <string name="operator_icon_description">Icône de l\'Opérateur</string>
+    <string name="operator_side_icon_description">Icône latérale de l\'Opérateur</string>
+
+    <string name="roll">Lancer</string>
+    <string name="roll_counted_pattern">Lancer %1$d/%2$d</string>
+
+    <string name="operator_details_organization">Organisation</string>
+    <string name="operator_details_role">Rôle</string>
+    <string name="operator_details_stats">Statistiques</string>
+    <string name="operator_details_speed">Vitesse</string>
+    <string name="operator_details_armor">Armure</string>
+    <string name="operator_details_loadout">Équipement</string>
+    <string name="operator_details_primaries">Armes principales</string>
+    <string name="operator_details_secondaries">Armes secondaires</string>
+    <string name="operator_details_gadgets">Gadgets</string>
+    <string name="operator_details_ability">Capacité</string>
+    <string name="operator_details_role_defender">Défenseur</string>
+    <string name="operator_details_role_attacker">Attaquant</string>
+
+    <string name="companion_weapons_fragment_label">Armes</string>
+    <string name="companion_maps_fragment_label">Cartes</string>
+    <string name="companion_operators_fragment_label">Opérateurs</string>
+
+    <string name="companion_operators_all_filter">Tous les rôles</string>
+    <string name="companion_operators_defenders_filter">Défenseurs</string>
+    <string name="companion_operators_attackers_filter">Attaquants</string>
+    <string name="companion_operators_all_filter_description">Afficher tous les opérateurs</string>
+    <string name="companion_operators_defenders_filter_description">Afficher uniquement les opérateurs avec un rôle de défenseur</string>
+    <string name="companion_operators_attackers_filter_description">Afficher uniquement les opérateurs avec un rôle d\'attaquant</string>
+
+    <string name="news_category_all">Toutes</string>
+    <string name="news_category_esport">ESport</string>
+    <string name="news_category_game_updates">Mises à jour du jeu</string>
+    <string name="news_category_community">Communauté</string>
+    <string name="news_category_patch_notes">Notes de patch</string>
+    <string name="news_category_store">Boutique</string>
+
+    <string name="select_all">Tout sélectionner</string>
+    <string name="clear_selections">Effacer les sélections</string>
+
+    <string name="select_all_description">Sélectionne tous les opérateurs présentés dans la liste des opérateurs</string>
+    <string name="clear_selections_description">Efface toutes les sélections précédemment effectuées sur les opérateurs</string>
+
+    <string name="alphabetic_sort_ascending">Tri alphabétique croissant</string>
+    <string name="alphabetic_sort_descending">Tri alphabétique décroissant</string>
+    <string name="sort_selected">Sélectionnés en premier</string>
+
+    <string name="search_hint">Rechercher</string>
+
+    <string name="ad_label">Publicité</string>
+
+    <string name="settings_item_title_app_language">Langue de l\'application</string>
+    <string name="settings_item_title_news_locale">Langue des actualités</string>
+    <string name="settings_item_title_use_same_language">Langue unique</string>
+    <string name="settings_item_subtitle_use_same_language">Utiliser la même langue pour les actualités et l\'application</string>
+    <string name="settings_item_title_use_mobile_network_to_load_images">Utiliser le réseau mobile</string>
+    <string name="settings_item_title_about">À propos</string>
+
+    <string name="settings_item_subtitle_use_mobile_network_to_load_images">Activez ceci pour autoriser le téléchargement d\'images en utilisant le réseau mobile</string>
+
+    <string name="blueprints">Plans</string>
+    <string name="can_be_played_in_">Peut être joué dans :</string>
+
+    <string name="our_team">Notre équipe</string>
+    <string name="our_mission">Mission</string>
+    <string name="version_pattern">Version : %1$d(%2$s)</string>
+
+    <string name="winner">Gagnant</string>
+    <string name="show_operator_info">Afficher les informations sur l\'opérateur</string>
+
+    <string name="notification_channel_name">Notifications R6Companion</string>
+    <string name="notification_channel_description">Avec ce canal, nous pouvons communiquer avec vous</string>
+</resources>
