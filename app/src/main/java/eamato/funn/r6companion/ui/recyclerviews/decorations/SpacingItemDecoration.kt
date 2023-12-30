@@ -2,7 +2,6 @@ package eamato.funn.r6companion.ui.recyclerviews.decorations
 
 import android.content.Context
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.RecyclerView
