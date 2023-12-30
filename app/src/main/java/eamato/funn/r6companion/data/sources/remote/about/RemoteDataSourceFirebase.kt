@@ -58,10 +58,6 @@ class RemoteDataSourceFirebase @Inject constructor(
                 )
             }
 
-            // TODO change remote data source and delete mock
-            val mockOurTeam = "{\"positions\":[{\"image\":null,\"first_name\":\"eamato\",\"last_name\":\"eamato\",\"positions\":[\"Android dev\"]},{\"image\":null,\"first_name\":\"MusicO\",\"last_name\":\"MusicO\",\"positions\":[\"Backend\"]},{\"image\":null,\"first_name\":\"CrazyColobok\",\"last_name\":\"CrazyColobok\",\"positions\":[\"Designer\",\"Tester\",\"Copywriter\"]}]}"
-            ourTeamText = mockOurTeam
-
             return@withContext AboutInfo(
                 ourMission = ourMissionText.fromJson(AboutInfo.AboutOurMission::class.java),
                 aboutOurTeam = ourTeamText.fromJson(AboutInfo.AboutOurTeam::class.java)

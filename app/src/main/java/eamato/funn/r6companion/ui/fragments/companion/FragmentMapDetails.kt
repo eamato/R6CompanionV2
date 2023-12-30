@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -21,6 +19,7 @@ import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.utils.UiState
+import eamato.funn.r6companion.core.utils.recyclerview.RatioBasedHorizontalLinearLayoutManager
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.ChipTextViewBinding
 import eamato.funn.r6companion.databinding.FragmentMapDetailsBinding
@@ -54,7 +53,9 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
             showHideContentLoadingProgressBar(state is UiState.Progress)
 
             when (state) {
-                is UiState.Error -> {}
+                is UiState.Error -> {
+                    showError(state.error)
+                }
                 is UiState.Success -> {
                     binding?.tvBlueprints?.visibility = View.VISIBLE
                     binding?.tvCanBePlayedIn?.visibility = View.VISIBLE
@@ -93,7 +94,7 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
             rvMapBlueprints.run {
                 setHasFixedSize(true)
 
-                layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                layoutManager = RatioBasedHorizontalLinearLayoutManager(context, 7)
 
                 val adapterMapBlueprints = AdapterMapBlueprints()
                 adapter = adapterMapBlueprints

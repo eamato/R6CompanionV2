@@ -108,34 +108,7 @@
         <item name="android:indeterminateTint">@color/progress_bar_tint_color</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/dp_6</item>
-        <item name="android:layout_marginEnd">@dimen/dp_6</item>
-        <item name="android:layout_marginTop">@dimen/dp_35</item>
-        <item name="android:layout_marginBottom">@dimen/dp_35</item>
         <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="R6Companion.OperatorDetailsTitleStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/colorDefaultText</item>
-        <item name="android:textStyle">bold</item>
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">@dimen/text_size_title</item>
-    </style>
-
-    <style name="R6Companion.OperatorDetailsSubtitleStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/colorDefaultText</item>
-        <item name="android:textStyle">bold</item>
-        <item name="fontFamily">sans-serif-condensed</item>
-        <item name="android:textSize">@dimen/text_size_subtitle</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="R6Companion.OperatorDetailsTextStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/colorDefaultText</item>
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">@dimen/text_size_title</item>
     </style>
 
     <style name="R6Companion.SearchViewTheme" parent="Widget.AppCompat.SearchView">

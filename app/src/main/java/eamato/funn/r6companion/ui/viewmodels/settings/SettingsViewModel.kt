@@ -213,7 +213,7 @@ class SettingsViewModel @Inject constructor(
                     id = SETTINGS_ITEM_SAME_LANGUAGE_ID,
                     icon = R.drawable.ic_language_24,
                     title = R.string.settings_item_title_use_same_language,
-                    subTitle = null,
+                    subTitle = UiText.ResourceString(R.string.settings_item_subtitle_use_same_language),
                     isChecked = currentIsSameLocale,
                     isEnabled = true,
                     onCheckedListener = { isChecked ->

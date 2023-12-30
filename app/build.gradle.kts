@@ -26,12 +26,12 @@ android {
         minSdk = 24
         targetSdk = 34
         multiDexEnabled = true
-        versionCode = 22
-        versionName = "22"
+        versionCode = 24
+        versionName = "24"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        resourceConfigurations.addAll(listOf("en", "ru"))
+        resourceConfigurations.addAll(listOf("en", "ru", "es", "pt", "de", "fr", "it"))
     }
 
     signingConfigs {

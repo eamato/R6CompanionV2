@@ -77,7 +77,8 @@
 
     <string name="settings_item_title_app_language">Application language</string>
     <string name="settings_item_title_news_locale">News language</string>
-    <string name="settings_item_title_use_same_language">Use same language for news and app</string>
+    <string name="settings_item_title_use_same_language">Single language</string>
+    <string name="settings_item_subtitle_use_same_language">Use same language for news and app</string>
     <string name="settings_item_title_use_mobile_network_to_load_images">Use mobile network</string>
     <string name="settings_item_title_about">About</string>
 

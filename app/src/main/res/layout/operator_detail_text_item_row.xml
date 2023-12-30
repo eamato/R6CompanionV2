@@ -17,6 +17,6 @@
         tools:text="text"
         android:drawablePadding="@dimen/dp_5"
         android:gravity="center_vertical"
-        style="@style/R6Companion.OperatorDetailsTextStyle" />
+        style="@style/R6Companion.ContentHeader2Style" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

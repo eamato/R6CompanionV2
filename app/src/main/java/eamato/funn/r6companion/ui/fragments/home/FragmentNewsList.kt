@@ -110,7 +110,7 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
                     ?: combinedLoadStates.refresh as? LoadState.Error
 
                 if (error != null) {
-                    // TODO on error occurred
+                    showError(error.error)
                 }
             }
 

@@ -145,7 +145,7 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
                     ?: combinedLoadStates.refresh as? LoadState.Error
 
                 if (error != null) {
-                    // TODO on error occurred
+                    showError(error.error)
                 }
             }
 

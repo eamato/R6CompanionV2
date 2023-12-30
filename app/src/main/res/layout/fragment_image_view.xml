@@ -11,4 +11,12 @@
         android:layout_height="match_parent"
         tools:src="@drawable/no_image_placeholder" />
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/clpb_waiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:visibility="visible"
+        style="@style/R6Companion.ContentLoadingProgressBarStyle" />
+
 </FrameLayout>

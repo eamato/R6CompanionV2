@@ -30,7 +30,7 @@ fun Context?.isLandscape(): Boolean {
     if (this == null)
         return false
 
-    return this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
 
 fun Context?.isPortrait(): Boolean = isLandscape().not()

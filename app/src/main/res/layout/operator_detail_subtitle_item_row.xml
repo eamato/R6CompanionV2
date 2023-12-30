@@ -15,6 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="subtitle"
-        style="@style/R6Companion.OperatorDetailsSubtitleStyle" />
+        style="@style/R6Companion.ContentHeader2Style" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

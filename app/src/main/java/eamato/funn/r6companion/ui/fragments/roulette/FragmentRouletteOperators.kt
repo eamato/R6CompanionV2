@@ -135,7 +135,9 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
             showHideContentLoadingProgressBar(it is UiState.Progress)
 
             when (it) {
-                is UiState.Error -> {}
+                is UiState.Error -> {
+                    showError(it.error)
+                }
                 is UiState.Success -> {
                     val adapter = binding?.rvOperators?.adapter
                         ?.let { adapter -> adapter as? AdapterRouletteOperators }

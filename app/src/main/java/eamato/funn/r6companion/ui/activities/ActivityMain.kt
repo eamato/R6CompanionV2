@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionManager
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -21,11 +20,11 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.extenstions.isPermissionGranted
-import eamato.funn.r6companion.core.extenstions.setViewVisibleOrGone
+import eamato.funn.r6companion.core.extenstions.slideDownAndHide
+import eamato.funn.r6companion.core.extenstions.slideUpAndShow
 import eamato.funn.r6companion.core.notifications.R6NotificationManager
 import eamato.funn.r6companion.databinding.ActivityMainBinding
 import eamato.funn.r6companion.ui.viewmodels.MainNavigationViewModel
@@ -103,16 +102,12 @@ class ActivityMain : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    fun hideNavigation() {
-        val modalOut = MaterialSharedAxis(MaterialSharedAxis.Y, false)
-        TransitionManager.beginDelayedTransition(binding.bnv, modalOut)
-        binding.bnv.setViewVisibleOrGone(false)
+    fun hideNavigation(onTransitionEnded: (() -> Unit)? = null) {
+        binding.bnv.slideDownAndHide(onTransitionEnded)
     }
 
-    fun showNavigation() {
-        val modalIn = MaterialSharedAxis(MaterialSharedAxis.Y, true)
-        TransitionManager.beginDelayedTransition(binding.bnv, modalIn)
-        binding.bnv.setViewVisibleOrGone(true)
+    fun showNavigation(onTransitionEnded: (() -> Unit)? = null) {
+        binding.bnv.slideUpAndShow(onTransitionEnded)
     }
 
     private fun onBottomNavigationItemClicked(destinationId: Int, navController: NavController) {
