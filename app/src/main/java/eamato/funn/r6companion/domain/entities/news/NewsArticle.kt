@@ -1,7 +1,6 @@
 package eamato.funn.r6companion.domain.entities.news
 
 import android.os.Parcelable
-import eamato.funn.r6companion.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

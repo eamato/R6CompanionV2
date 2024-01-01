@@ -3,7 +3,6 @@ package eamato.funn.r6companion.core.extenstions
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 
 fun Int.getDimension(context: Context): Int {

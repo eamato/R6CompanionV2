@@ -29,7 +29,6 @@ import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
 import eamato.funn.r6companion.core.extenstions.removeAllItemDecorations
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
-import eamato.funn.r6companion.core.extenstions.setViewsEnabled
 import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
