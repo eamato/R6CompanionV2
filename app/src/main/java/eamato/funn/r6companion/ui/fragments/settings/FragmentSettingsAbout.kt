@@ -13,15 +13,19 @@ import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.BuildConfig
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_ABOUT_APP
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.databinding.FragmentSettingsAboutBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterOurTeam
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.viewmodels.settings.AboutViewModel
 
 @AndroidEntryPoint
-class FragmentSettingsAbout : ABaseFragment<FragmentSettingsAboutBinding>() {
+class FragmentSettingsAbout : ABaseFragment<FragmentSettingsAboutBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentSettingsAbout::class.java.simpleName, SCREEN_NAME_ABOUT_APP) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentSettingsAboutBinding::inflate
@@ -30,6 +34,8 @@ class FragmentSettingsAbout : ABaseFragment<FragmentSettingsAboutBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         binding?.tvLicence?.text = getString(
             R.string.licence_text_pattern,

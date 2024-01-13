@@ -9,21 +9,27 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_IMAGE_VIEW
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
 import eamato.funn.r6companion.databinding.FragmentImageViewBinding
 import eamato.funn.r6companion.ui.activities.ActivityMain
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 
-class FragmentImageView : ABaseFragment<FragmentImageViewBinding>() {
+class FragmentImageView : ABaseFragment<FragmentImageViewBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentImageView::class.java.simpleName, SCREEN_NAME_IMAGE_VIEW) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentImageViewBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         val bundle = arguments ?: return
         val imageUrl = FragmentImageViewArgs.fromBundle(bundle).imageUrl

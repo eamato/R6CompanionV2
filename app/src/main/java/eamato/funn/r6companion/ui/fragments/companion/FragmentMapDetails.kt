@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_MAP_DETAILS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
@@ -25,12 +26,15 @@ import eamato.funn.r6companion.databinding.ChipTextViewBinding
 import eamato.funn.r6companion.databinding.FragmentMapDetailsBinding
 import eamato.funn.r6companion.domain.entities.companion.maps.MapDetails
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterMapBlueprints
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.companion.maps.CompanionMapDetailsViewModel
 
 @AndroidEntryPoint
-class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
+class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentMapDetails::class.java.simpleName, SCREEN_NAME_MAP_DETAILS) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentMapDetailsBinding::inflate
@@ -39,6 +43,8 @@ class FragmentMapDetails : ABaseFragment<FragmentMapDetailsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         setObservables()
         applySystemInsetsIfNeeded()

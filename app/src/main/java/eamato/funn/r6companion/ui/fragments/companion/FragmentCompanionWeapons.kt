@@ -17,14 +17,18 @@ import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_MAPS
 import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_OPERATORS
 import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_WEAPONS
 import eamato.funn.r6companion.core.PROPERTY_NAME_TEXT_SIZE
+import eamato.funn.r6companion.core.SCREEN_NAME_COMPANION_WEAPONS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.databinding.FragmentCompanionWeaponsBinding
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.viewmodels.companion.weapons.CompanionWeaponsViewModel
 
 @AndroidEntryPoint
-class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>() {
+class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentCompanionWeapons::class.java.simpleName, SCREEN_NAME_COMPANION_WEAPONS) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding = FragmentCompanionWeaponsBinding::inflate
 
@@ -32,6 +36,8 @@ class FragmentCompanionWeapons : ABaseFragment<FragmentCompanionWeaponsBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         setObservers()
         initCompanionButtons()

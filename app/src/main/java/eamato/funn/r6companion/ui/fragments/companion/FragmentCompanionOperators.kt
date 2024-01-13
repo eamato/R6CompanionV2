@@ -23,6 +23,7 @@ import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_WEAPONS
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
 import eamato.funn.r6companion.core.PROPERTY_NAME_TEXT_SIZE
+import eamato.funn.r6companion.core.SCREEN_NAME_COMPANION_OPERATORS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDimension
 import eamato.funn.r6companion.core.extenstions.isLandscape
@@ -34,6 +35,8 @@ import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionOperatorsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionOperators
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
@@ -41,7 +44,8 @@ import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoratio
 import eamato.funn.r6companion.ui.viewmodels.companion.operators.CompanionOperatorsViewModel
 
 @AndroidEntryPoint
-class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBinding>() {
+class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentCompanionOperators::class.java.simpleName, SCREEN_NAME_COMPANION_OPERATORS) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentCompanionOperatorsBinding::inflate
@@ -57,6 +61,8 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressedCallback)
 

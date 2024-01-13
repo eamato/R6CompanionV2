@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.SCREEN_NAME_ROULETTE
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDimensionPixelSize
 import eamato.funn.r6companion.core.extenstions.isLandscape
@@ -27,6 +28,8 @@ import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentRouletteOperatorsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterRouletteOperators
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
@@ -34,7 +37,8 @@ import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoratio
 import eamato.funn.r6companion.ui.viewmodels.roulette.RouletteOperatorsViewModel
 
 @AndroidEntryPoint
-class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding>() {
+class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentRouletteOperators::class.java.simpleName, SCREEN_NAME_ROULETTE) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentRouletteOperatorsBinding::inflate
@@ -50,6 +54,8 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressedCallback)
 

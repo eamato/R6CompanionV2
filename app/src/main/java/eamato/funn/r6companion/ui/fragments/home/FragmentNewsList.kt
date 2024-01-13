@@ -18,6 +18,7 @@ import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.DEFAULT_NEWS_LOCALE
 import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.NEWS_LIST_GRID_COUNT_PORTRAIT
+import eamato.funn.r6companion.core.SCREEN_NAME_HOME
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
@@ -34,6 +35,8 @@ import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGOR
 import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_PATCH_NOTES_VALUE
 import eamato.funn.r6companion.data.entities.NewsCategory.Companion.NEWS_CATEGORIES_FILTER_PARAM_STORE_VALUE
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterNewsArticles
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.news.NewsViewModel
@@ -41,7 +44,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
+class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentNewsList::class.java.simpleName, SCREEN_NAME_HOME) {
 
     private val logger = DefaultAppLogger.getInstance()
 
@@ -56,6 +60,8 @@ class FragmentNewsList : ABaseFragment<FragmentNewsListBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         initNewsCategoryButtons()
         setObservers()
