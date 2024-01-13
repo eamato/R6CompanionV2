@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_OPERATOR_DETAILS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.replaceItemDecoration
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.databinding.FragmentOperatorDetailsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterOperatorDetails
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.entities.companion.operator.OperatorDetails.Companion.VIEW_TYPE_ABILITY_ENTITY
 import eamato.funn.r6companion.ui.entities.companion.operator.OperatorDetails.Companion.VIEW_TYPE_LOAD_OUT_ENTITY
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
@@ -21,7 +24,8 @@ import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDe
 import eamato.funn.r6companion.ui.viewmodels.companion.operators.OperatorDetailsViewModel
 
 @AndroidEntryPoint
-class FragmentOperatorDetails : ABaseFragment<FragmentOperatorDetailsBinding>() {
+class FragmentOperatorDetails : ABaseFragment<FragmentOperatorDetailsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentOperatorDetails::class.java.simpleName, SCREEN_NAME_OPERATOR_DETAILS) {
 
     private val operatorDetailsViewModel: OperatorDetailsViewModel by viewModels()
 
@@ -30,6 +34,8 @@ class FragmentOperatorDetails : ABaseFragment<FragmentOperatorDetailsBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         initOperatorDetailsRecyclerView()
         setObservers()

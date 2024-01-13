@@ -11,17 +11,21 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_ROULETTE_RESULT
 import eamato.funn.r6companion.core.WINNER_OPERATOR_IMAGE_HEIGHT
 import eamato.funn.r6companion.core.WINNER_OPERATOR_IMAGE_WIDTH
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
 import eamato.funn.r6companion.core.glide.ImageResizeTransformation
 import eamato.funn.r6companion.databinding.FragmentRouletteResultBinding
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.viewmodels.roulette.RollResultViewModel
 
 @AndroidEntryPoint
-class FragmentRouletteResult : ABaseFragment<FragmentRouletteResultBinding>() {
+class FragmentRouletteResult : ABaseFragment<FragmentRouletteResultBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentRouletteResult::class.java.simpleName, SCREEN_NAME_ROULETTE_RESULT) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentRouletteResultBinding::inflate
@@ -30,6 +34,8 @@ class FragmentRouletteResult : ABaseFragment<FragmentRouletteResultBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         setObservers()
     }

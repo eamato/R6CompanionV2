@@ -20,6 +20,7 @@ import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_MAPS
 import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_OPERATORS
 import eamato.funn.r6companion.core.COMPANION_SCREEN_ID_WEAPONS
 import eamato.funn.r6companion.core.PROPERTY_NAME_TEXT_SIZE
+import eamato.funn.r6companion.core.SCREEN_NAME_COMPANION_MAPS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.setItemDecoration
 import eamato.funn.r6companion.core.extenstions.setOnItemClickListener
@@ -28,12 +29,15 @@ import eamato.funn.r6companion.core.utils.logger.Message
 import eamato.funn.r6companion.core.utils.recyclerview.RecyclerViewItemClickListener
 import eamato.funn.r6companion.databinding.FragmentCompanionMapsBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterCompanionMaps
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.companion.maps.CompanionMapsViewModel
 
 @AndroidEntryPoint
-class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
+class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentCompanionMaps::class.java.simpleName, SCREEN_NAME_COMPANION_MAPS) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentCompanionMapsBinding::inflate
@@ -42,6 +46,8 @@ class FragmentCompanionMaps : ABaseFragment<FragmentCompanionMapsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         initCompanionButtons()
         initMapsRecyclerView()

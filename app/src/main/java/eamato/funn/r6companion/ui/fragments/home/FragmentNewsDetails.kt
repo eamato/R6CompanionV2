@@ -11,18 +11,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_NEWS_DETAILS
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
 import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.IDoAfterTerminateGlide
 import eamato.funn.r6companion.databinding.FragmentNewsDetailsBinding
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.entities.news.details.AContentViewVideo
 import eamato.funn.r6companion.ui.entities.news.details.IContentView
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.viewmodels.news.NewsArticleDetailsViewModel
 
 @AndroidEntryPoint
-class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>() {
+class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentNewsDetails::class.java.simpleName, SCREEN_NAME_NEWS_DETAILS) {
 
     private val newsArticleDetailsViewModel: NewsArticleDetailsViewModel by viewModels()
 
@@ -31,6 +35,8 @@ class FragmentNewsDetails : ABaseFragment<FragmentNewsDetailsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         setObservers()
         applySystemInsetsToListIfNeeded()

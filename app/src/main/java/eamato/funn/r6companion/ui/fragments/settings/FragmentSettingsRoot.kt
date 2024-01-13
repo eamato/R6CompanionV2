@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.SCREEN_NAME_SETTINGS
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_FRAGMENT_TAG
 import eamato.funn.r6companion.core.SETTINGS_ITEM_SCREEN_ROUTE_NAME
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
@@ -31,6 +32,8 @@ import eamato.funn.r6companion.databinding.DialogDefaultAppPopupBinding
 import eamato.funn.r6companion.databinding.FragmentSettingsRootBinding
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterPopupContent
 import eamato.funn.r6companion.ui.adapters.recyclerviews.AdapterSettingsItems
+import eamato.funn.r6companion.ui.delegates.AnalyticsLogger
+import eamato.funn.r6companion.ui.delegates.IAnalyticsLogger
 import eamato.funn.r6companion.ui.dialogs.DialogDefaultPopupManager
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem
 import eamato.funn.r6companion.ui.fragments.ABaseFragment
@@ -39,7 +42,8 @@ import eamato.funn.r6companion.ui.recyclerviews.decorations.SystemSpacingsItemDe
 import eamato.funn.r6companion.ui.viewmodels.settings.SettingsViewModel
 
 @AndroidEntryPoint
-class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
+class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>(),
+    IAnalyticsLogger by AnalyticsLogger(FragmentSettingsRoot::class.java.simpleName, SCREEN_NAME_SETTINGS) {
 
     private val settingsViewModel: SettingsViewModel by viewModels()
 
@@ -48,6 +52,8 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        registerLifecycleOwner(viewLifecycleOwner, view.context)
 
         settingsViewModel.setSelectedSettingsItem(null)
 
