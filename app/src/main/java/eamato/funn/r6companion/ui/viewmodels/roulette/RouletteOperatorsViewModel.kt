@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.storage.SavedOperatorsManager
 import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.SelectableObject
@@ -15,12 +16,14 @@ import eamato.funn.r6companion.domain.entities.roulette.Operator
 import eamato.funn.r6companion.domain.mappers.roulette.RouletteOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
 import eamato.funn.r6companion.ui.entities.PopupContentItem
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RouletteOperatorsViewModel @Inject constructor(
-    private val operatorsUseCase: OperatorsUseCase
+    private val operatorsUseCase: OperatorsUseCase,
+    private val savedOperatorsManager: SavedOperatorsManager,
 ) : ViewModel() {
 
     private val _operators = MutableLiveData<UiState<List<SelectableObject<Operator>>>>(null)
@@ -41,6 +44,12 @@ class RouletteOperatorsViewModel @Inject constructor(
 
     init {
         getOperators()
+
+        viewModelScope.launch {
+            savedOperatorsManager.savedOperators.collectLatest { savedOperator ->
+                savedOperator.id
+            }
+        }
     }
 
     fun filterOperatorsByName(nameFilter: String = "") {
@@ -119,6 +128,12 @@ class RouletteOperatorsViewModel @Inject constructor(
     }
 
     fun getAllSelectedOperators() = selectedOperators
+
+    fun saveOperator() {
+        viewModelScope.launch {
+            savedOperatorsManager.saveOperator()
+        }
+    }
 
     private fun selectAllOperators() {
         selectedOperators = visibleOperators.map { operator -> operator.copy() }.toList()

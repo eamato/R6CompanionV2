@@ -11,6 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
     id("com.apollographql.apollo3") version "3.8.2"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -113,6 +114,23 @@ kapt {
     correctErrorTypes = true
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+
+    generateProtoTasks {
+        all().forEach { generateProtoTask ->
+            generateProtoTask.builtins {
+                create("java") {
+                    option("lite")
+                }
+//                id("kotlin")
+            }
+        }
+    }
+}
+
 dependencies {
 
     /* AndroidX dependencies */
@@ -123,6 +141,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
     implementation("androidx.appcompat:appcompat-resources:1.6.1")
     implementation("androidx.profileinstaller:profileinstaller:1.3.1")
@@ -132,6 +151,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("com.google.protobuf:protobuf-javalite:3.21.11")
 
     /* Retrofit dependencies */
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -149,7 +169,7 @@ dependencies {
 
     /* Firebase dependencies */
     implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.6.0")
+    implementation("com.google.firebase:firebase-crashlytics:18.6.1")
     implementation("com.google.firebase:firebase-analytics:21.5.0")
     implementation("com.google.firebase:firebase-config-ktx:21.6.0")
     implementation("com.google.firebase:firebase-messaging:23.4.0")
@@ -165,3 +185,19 @@ dependencies {
     /* Debug */
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 }
+
+//protobuf {
+//    protoc {
+//        artifact = "com.google.protobuf:protoc:21.7"
+//    }
+//
+//    generateProtoTasks {
+//        all().each { task ->
+//            task.builtins {
+//                java {
+//                    option 'lite'
+//                }
+//            }
+//        }
+//    }
+//}
