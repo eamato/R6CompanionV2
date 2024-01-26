@@ -28,6 +28,12 @@ data class Operators(
         @SerializedName("wide_img_link")
         val wideImgLink: String?
     ) {
+
+        companion object {
+            const val ROLE_DEFENDER = "DEFENDER"
+            const val ROLE_ATTACKER = "ATTACKER"
+        }
+
         data class Equipment(
             @SerializedName("devices")
             val devices: List<Device?>?,

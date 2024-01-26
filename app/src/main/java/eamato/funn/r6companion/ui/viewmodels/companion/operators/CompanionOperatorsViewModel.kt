@@ -10,6 +10,7 @@ import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.UiText
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.domain.mappers.companion.CompanionOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
@@ -22,16 +23,12 @@ class CompanionOperatorsViewModel @Inject constructor(
     private val operatorsUseCase: OperatorsUseCase
 ) : ViewModel() {
 
-    enum class ERoleFilter {
-        ALL, DEFENDERS, ATTACKERS
-    }
-
     private val _operators = MutableLiveData<UiState<List<Operator>>>(null)
     val operators: LiveData<UiState<List<Operator>>> = _operators
 
     private var immutableOperators = emptyList<Operator>()
     private var nameFilter = ""
-    private var roleFilter = ERoleFilter.ALL
+    private var roleFilter = EOperatorRoles.UNDEFINED
 
     init {
         getOperators()
@@ -49,23 +46,23 @@ class CompanionOperatorsViewModel @Inject constructor(
         return listOf(
             PopupContentItem(
                 icon = R.drawable.ic_all_operators_24,
-                title = UiText.ResourceString(R.string.companion_operators_all_filter),
+                title = UiText.ResourceString(R.string.operators_all_filter),
                 subTitle = null
-            ) { filterOperatorsByRole(ERoleFilter.ALL) },
+            ) { filterOperatorsByRole(EOperatorRoles.UNDEFINED) },
             PopupContentItem(
                 icon = R.drawable.ic_attackers_24,
-                title = UiText.ResourceString(R.string.companion_operators_attackers_filter),
+                title = UiText.ResourceString(R.string.operators_attackers_filter),
                 subTitle = null
-            ) { filterOperatorsByRole(ERoleFilter.ATTACKERS) },
+            ) { filterOperatorsByRole(EOperatorRoles.ATTACKERS) },
             PopupContentItem(
                 icon = R.drawable.ic_defenders_24,
-                title = UiText.ResourceString(R.string.companion_operators_defenders_filter),
+                title = UiText.ResourceString(R.string.operators_defenders_filter),
                 subTitle = null
-            ) { filterOperatorsByRole(ERoleFilter.DEFENDERS) },
+            ) { filterOperatorsByRole(EOperatorRoles.DEFENDERS) },
         )
     }
 
-    private fun filterOperatorsByRole(role: ERoleFilter) {
+    private fun filterOperatorsByRole(role: EOperatorRoles) {
         roleFilter = role
         _operators.value = UiState.Progress
         _operators.value = UiState.Success(applyFilters().toList(), ScrollToTopAdditionalEvent)
@@ -74,7 +71,7 @@ class CompanionOperatorsViewModel @Inject constructor(
     private fun applyFilters(): List<Operator> {
         var result = immutableOperators
 
-        if (nameFilter.isEmpty() && roleFilter == ERoleFilter.ALL) {
+        if (nameFilter.isEmpty() && roleFilter == EOperatorRoles.UNDEFINED) {
             return result
         }
 
@@ -82,14 +79,8 @@ class CompanionOperatorsViewModel @Inject constructor(
             result = result.filter { operator -> operator.name.contains(nameFilter, true) }
         }
 
-        if (roleFilter != ERoleFilter.ALL) {
-            val role = when (roleFilter) {
-                ERoleFilter.DEFENDERS -> Operator.ROLE_DEFENDER
-                ERoleFilter.ATTACKERS -> Operator.ROLE_ATTACKER
-                else -> null
-            } ?: return result.map { operator -> operator.copy() }
-
-            result = result.filter { operator -> operator.role == role }
+        if (roleFilter != EOperatorRoles.UNDEFINED) {
+            result = result.filter { operator -> operator.role == roleFilter }
         }
 
         return result.map { operator -> operator.copy() }
@@ -104,6 +95,7 @@ class CompanionOperatorsViewModel @Inject constructor(
                     _operators.value = UiState.Success(result.data)
                     immutableOperators = result.data.map { it.copy() }.toList()
                 }
+
                 is Result.Error -> {
                     _operators.value = UiState.Error(result.error)
                     immutableOperators = emptyList()

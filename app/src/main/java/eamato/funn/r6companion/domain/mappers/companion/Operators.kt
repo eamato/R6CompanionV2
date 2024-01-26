@@ -1,6 +1,7 @@
 package eamato.funn.r6companion.domain.mappers.companion
 
 import eamato.funn.r6companion.data.entities.Operators
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.domain.usecases.IUseCaseMapper
 
@@ -19,7 +20,13 @@ private fun Operators.Operator.toDomainOperator(): Operator? {
     val wideImgLink = this.wideImgLink ?: return null
     val armorRating = this.armorRating ?: return null
     val speedRating = this.speedRating ?: return null
-    val role = this.role ?: return null
+    val role = this.role?.let {
+        when (it) {
+            Operators.Operator.ROLE_ATTACKER -> EOperatorRoles.ATTACKERS
+            Operators.Operator.ROLE_DEFENDER -> EOperatorRoles.DEFENDERS
+            else -> EOperatorRoles.UNDEFINED
+        }
+    } ?: EOperatorRoles.UNDEFINED
 
     val squad = this.squad?.let { squad ->
         val squadIconLink = squad.iconLink ?: return@let null

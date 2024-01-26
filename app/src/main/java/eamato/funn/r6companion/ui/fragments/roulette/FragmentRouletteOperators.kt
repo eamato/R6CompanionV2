@@ -38,7 +38,10 @@ import eamato.funn.r6companion.ui.viewmodels.roulette.RouletteOperatorsViewModel
 
 @AndroidEntryPoint
 class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding>(),
-    IAnalyticsLogger by AnalyticsLogger(FragmentRouletteOperators::class.java.simpleName, SCREEN_NAME_ROULETTE) {
+    IAnalyticsLogger by AnalyticsLogger(
+        FragmentRouletteOperators::class.java.simpleName,
+        SCREEN_NAME_ROULETTE
+    ) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentRouletteOperatorsBinding::inflate
@@ -71,6 +74,8 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
     private fun initOperatorsRecyclerView() {
         binding?.rvOperators?.run {
             setHasFixedSize(true)
+
+            itemAnimator = null
 
             layoutManager = createOperatorsRecyclerViewLayoutManager()
 
@@ -144,6 +149,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
                 is UiState.Error -> {
                     showError(it.error)
                 }
+
                 is UiState.Success -> {
                     val adapter = binding?.rvOperators?.adapter
                         ?.let { adapter -> adapter as? AdapterRouletteOperators }
@@ -155,6 +161,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
                                 binding?.rvOperators?.scrollToPosition(0)
                             }
                         }
+
                         else -> adapter.submitList(it.data)
                     }
 

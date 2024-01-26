@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
 import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.UiText
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 import eamato.funn.r6companion.domain.mappers.companion.CompanionOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorByIdUseCase
@@ -78,13 +79,15 @@ class OperatorDetailsViewModel @Inject constructor(
         operator.role
             .let {
                 val role = when (it) {
-                    Operator.ROLE_DEFENDER -> UiText.ResourceString(
+                    EOperatorRoles.DEFENDERS -> UiText.ResourceString(
                         R.string.operator_details_role_defender
                     )
-                    Operator.ROLE_ATTACKER -> UiText.ResourceString(
+
+                    EOperatorRoles.ATTACKERS -> UiText.ResourceString(
                         R.string.operator_details_role_attacker
                     )
-                    else -> UiText.SimpleString(it)
+
+                    else -> UiText.SimpleString("")
                 }
                 OperatorDetails.OperatorDetailsText(role)
             }

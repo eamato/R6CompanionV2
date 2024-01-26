@@ -1,6 +1,7 @@
 package eamato.funn.r6companion.domain.entities.companion.operators
 
 import android.os.Parcelable
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -12,15 +13,10 @@ data class Operator(
     val wideImgLink: String,
     val armorRating: Int,
     val speedRating: Int,
-    val role: String,
+    val role: EOperatorRoles,
     val squad: Squad,
     val equipment: Equipment,
 ) : Parcelable {
-
-    companion object {
-        const val ROLE_DEFENDER = "DEFENDER"
-        const val ROLE_ATTACKER = "ATTACKER"
-    }
 
     @Parcelize
     data class Squad(

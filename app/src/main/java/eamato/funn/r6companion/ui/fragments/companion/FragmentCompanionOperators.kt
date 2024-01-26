@@ -45,7 +45,10 @@ import eamato.funn.r6companion.ui.viewmodels.companion.operators.CompanionOperat
 
 @AndroidEntryPoint
 class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBinding>(),
-    IAnalyticsLogger by AnalyticsLogger(FragmentCompanionOperators::class.java.simpleName, SCREEN_NAME_COMPANION_OPERATORS) {
+    IAnalyticsLogger by AnalyticsLogger(
+        FragmentCompanionOperators::class.java.simpleName,
+        SCREEN_NAME_COMPANION_OPERATORS
+    ) {
 
     override val bindingInitializer: (LayoutInflater) -> ViewBinding =
         FragmentCompanionOperatorsBinding::inflate
@@ -90,6 +93,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
                         }
                 }
             }
+
             COMPANION_SCREEN_ID_MAPS -> {
                 binding?.buttons?.btnGoToMaps?.run {
                     ObjectAnimator.ofFloat(this, PROPERTY_NAME_TEXT_SIZE, 15f, 12f)
@@ -138,6 +142,8 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
     private fun initOperatorsRecyclerView() {
         binding?.rvOperators?.run {
             setHasFixedSize(true)
+
+            itemAnimator = null
 
             layoutManager = createOperatorsRecyclerViewLayoutManager()
 
@@ -215,6 +221,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
                 is UiState.Error -> {
                     showError(it.error)
                 }
+
                 is UiState.Success -> {
                     val adapter = binding?.rvOperators?.adapter
                         ?.let { adapter -> adapter as? AdapterCompanionOperators }
@@ -226,6 +233,7 @@ class FragmentCompanionOperators : ABaseFragment<FragmentCompanionOperatorsBindi
                                 binding?.rvOperators?.scrollToPosition(0)
                             }
                         }
+
                         else -> adapter.submitList(it.data)
                     }
                 }
