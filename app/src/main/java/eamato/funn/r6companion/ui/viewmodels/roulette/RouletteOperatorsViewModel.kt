@@ -116,21 +116,26 @@ class RouletteOperatorsViewModel @Inject constructor(
                 icon = R.drawable.ic_baseline_check_24,
                 title = UiText.ResourceString(R.string.sort_selected),
                 subTitle = null
-            ) { sortSelected() },
+            ) { sortSelected() }
+        )
+    }
+
+    fun createFilterPopupContentItems(): List<PopupContentItem> {
+        return listOf(
             PopupContentItem(
                 icon = R.drawable.ic_all_operators_24,
                 title = UiText.ResourceString(R.string.operators_all_filter),
-                subTitle = null,
+                subTitle = null
             ) { filterByRole(EOperatorRoles.UNDEFINED) },
             PopupContentItem(
                 icon = R.drawable.ic_attackers_24,
                 title = UiText.ResourceString(R.string.operators_attackers_filter),
-                subTitle = null,
+                subTitle = null
             ) { filterByRole(EOperatorRoles.ATTACKERS) },
             PopupContentItem(
                 icon = R.drawable.ic_defenders_24,
                 title = UiText.ResourceString(R.string.operators_defenders_filter),
-                subTitle = null,
+                subTitle = null
             ) { filterByRole(EOperatorRoles.DEFENDERS) },
         )
     }

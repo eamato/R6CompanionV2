@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_LANDSCAPE
 import eamato.funn.r6companion.core.OPERATORS_LIST_GRID_COUNT_PORTRAIT
 import eamato.funn.r6companion.core.SCREEN_NAME_ROULETTE
 import eamato.funn.r6companion.core.extenstions.applySystemInsetsIfNeeded
+import eamato.funn.r6companion.core.extenstions.clearFocusAndHideKeyboard
 import eamato.funn.r6companion.core.extenstions.getDimensionPixelSize
 import eamato.funn.r6companion.core.extenstions.isLandscape
 import eamato.funn.r6companion.core.extenstions.onTrueInvoke
@@ -68,6 +70,7 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         initSearchView()
         initSelectionOptions()
         initSortingOptions()
+        initFilterOptions()
         applySystemInsetsIfNeeded()
     }
 
@@ -174,17 +177,27 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
     }
 
     private fun initSearchView() {
-        binding?.svOperators?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(queryText: String?): Boolean {
-                rouletteOperatorsViewModel.filterOperatorsByName(queryText ?: "")
-                return true
-            }
+        binding?.svOperators?.run {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(queryText: String?): Boolean {
+                    rouletteOperatorsViewModel.filterOperatorsByName(queryText ?: "")
 
-            override fun onQueryTextChange(queryText: String?): Boolean {
-                rouletteOperatorsViewModel.filterOperatorsByName(queryText ?: "")
-                return true
+                    clearFocusAndHideKeyboard()
+                    return true
+                }
+
+                override fun onQueryTextChange(queryText: String?): Boolean {
+                    rouletteOperatorsViewModel.filterOperatorsByName(queryText ?: "")
+                    return true
+                }
+            })
+
+            setOnQueryTextFocusChangeListener { _, hasFocus ->
+                binding?.btnFilterOptions?.isVisible = !hasFocus
+                binding?.btnSortingOptions?.isVisible = !hasFocus
+                binding?.btnSelectionOptions?.isVisible = !hasFocus
             }
-        })
+        }
     }
 
     private fun initSelectionOptions() {
@@ -203,6 +216,16 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
                 .show(
                     childFragmentManager,
                     rouletteOperatorsViewModel.createSortingPopupContentItems()
+                )
+        }
+    }
+
+    private fun initFilterOptions() {
+        binding?.btnFilterOptions?.setOnClickListener {
+            DialogDefaultPopupManager.create(it.context)
+                .show(
+                    childFragmentManager,
+                    rouletteOperatorsViewModel.createFilterPopupContentItems()
                 )
         }
     }

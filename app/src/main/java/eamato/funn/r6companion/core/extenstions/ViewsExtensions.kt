@@ -1,13 +1,17 @@
 package eamato.funn.r6companion.core.extenstions
 
+import android.graphics.Rect
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.google.android.material.transition.platform.MaterialSharedAxis
 
 fun View.setViewsEnabled(isEnabled: Boolean) {
@@ -85,4 +89,33 @@ fun ViewGroup.slideDownAndHide(onTransitionEnded: (() -> Unit)? = null) {
     }
     TransitionManager.beginDelayedTransition(this, modalOut)
     setViewVisibleOrGone(false)
+}
+
+fun View?.clearFocusAndHideKeyboard() {
+    if (this == null) {
+        return
+    }
+
+    clearFocus()
+    ContextCompat.getSystemService(context, InputMethodManager::class.java)?.hideKeyboard(this)
+}
+
+fun View.findViewByLocation(x: Int, y: Int): View? {
+    return findViewTraversal(x, y)
+}
+
+fun View.findViewTraversal(x: Int, y: Int): View? {
+    if (this is ViewGroup) {
+        for (i in childCount - 1 downTo 0) {
+            val child = getChildAt(i)
+            if (child.visibility == View.VISIBLE) {
+                val rect = Rect()
+                child.getHitRect(rect)
+                if (rect.contains(x, y)) {
+                    return child.findViewTraversal(x - rect.left, y - rect.top)
+                }
+            }
+        }
+    }
+    return this.takeIf { isVisible }
 }
