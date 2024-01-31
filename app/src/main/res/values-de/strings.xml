@@ -37,12 +37,12 @@
     <string name="companion_maps_fragment_label">Karten</string>
     <string name="companion_operators_fragment_label">Operatoren</string>
 
-    <string name="companion_operators_all_filter">Alle Rollen</string>
-    <string name="companion_operators_defenders_filter">Verteidiger</string>
-    <string name="companion_operators_attackers_filter">Angreifer</string>
-    <string name="companion_operators_all_filter_description">Alle Operatoren anzeigen</string>
-    <string name="companion_operators_defenders_filter_description">Nur Operatoren mit Verteidigerrolle anzeigen</string>
-    <string name="companion_operators_attackers_filter_description">Nur Operatoren mit Angreiferrolle anzeigen</string>
+    <string name="operators_all_filter">Alle Rollen</string>
+    <string name="operators_defenders_filter">Verteidiger</string>
+    <string name="operators_attackers_filter">Angreifer</string>
+    <string name="operators_all_filter_description">Alle Operatoren anzeigen</string>
+    <string name="operators_defenders_filter_description">Nur Operatoren mit Verteidigerrolle anzeigen</string>
+    <string name="operators_attackers_filter_description">Nur Operatoren mit Angreiferrolle anzeigen</string>
 
     <string name="news_category_all">Alle</string>
     <string name="news_category_esport">ESport</string>

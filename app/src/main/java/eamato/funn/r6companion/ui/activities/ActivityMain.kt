@@ -6,13 +6,13 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
@@ -22,6 +22,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import dagger.hilt.android.AndroidEntryPoint
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.core.extenstions.clearFocusAndHideKeyboard
+import eamato.funn.r6companion.core.extenstions.findViewByLocation
 import eamato.funn.r6companion.core.extenstions.isPermissionGranted
 import eamato.funn.r6companion.core.extenstions.slideDownAndHide
 import eamato.funn.r6companion.core.extenstions.slideUpAndShow
@@ -90,12 +92,22 @@ class ActivityMain : AppCompatActivity() {
         if (ev?.action == MotionEvent.ACTION_DOWN) {
             val v: View? = currentFocus
             if (v is EditText) {
+                val viewUnderTouch = window
+                    .decorView
+                    .rootView
+                    .findViewByLocation(ev.rawX.toInt(), ev.rawY.toInt())
+                    ?.let { it as? AppCompatImageView }
+
+                if (viewUnderTouch != null) {
+                    return super.dispatchTouchEvent(ev)
+                }
+
                 val outRect = Rect()
                 v.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                    val res = super.dispatchTouchEvent(ev)
+                    v.clearFocusAndHideKeyboard()
+                    return res
                 }
             }
         }

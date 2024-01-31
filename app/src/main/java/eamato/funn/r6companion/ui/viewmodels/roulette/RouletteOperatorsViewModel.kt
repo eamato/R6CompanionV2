@@ -11,6 +11,7 @@ import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.SelectableObject
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.UiText
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import eamato.funn.r6companion.domain.entities.roulette.Operator
 import eamato.funn.r6companion.domain.mappers.roulette.RouletteOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
@@ -31,6 +32,7 @@ class RouletteOperatorsViewModel @Inject constructor(
     private var immutableOperators = emptyList<Operator>()
 
     private var nameFilter = ""
+    private var roleFilter = EOperatorRoles.UNDEFINED
 
     val selectedOperatorsCount
         get() = selectedOperators.size
@@ -118,6 +120,26 @@ class RouletteOperatorsViewModel @Inject constructor(
         )
     }
 
+    fun createFilterPopupContentItems(): List<PopupContentItem> {
+        return listOf(
+            PopupContentItem(
+                icon = R.drawable.ic_all_operators_24,
+                title = UiText.ResourceString(R.string.operators_all_filter),
+                subTitle = null
+            ) { filterByRole(EOperatorRoles.UNDEFINED) },
+            PopupContentItem(
+                icon = R.drawable.ic_attackers_24,
+                title = UiText.ResourceString(R.string.operators_attackers_filter),
+                subTitle = null
+            ) { filterByRole(EOperatorRoles.ATTACKERS) },
+            PopupContentItem(
+                icon = R.drawable.ic_defenders_24,
+                title = UiText.ResourceString(R.string.operators_defenders_filter),
+                subTitle = null
+            ) { filterByRole(EOperatorRoles.DEFENDERS) },
+        )
+    }
+
     fun getAllSelectedOperators() = selectedOperators
 
     private fun selectAllOperators() {
@@ -188,14 +210,45 @@ class RouletteOperatorsViewModel @Inject constructor(
         )
     }
 
+    private fun filterByRole(role: EOperatorRoles) {
+        _operators.value = UiState.Progress
+
+        roleFilter = role
+
+        applyFilters()
+
+        val filteredOperators = visibleOperators
+            .map { operator ->
+                SelectableObject(
+                    data = operator,
+                    isSelected = selectedOperators.contains(operator)
+                )
+            }
+            .toList()
+
+        _operators.value = UiState.Success(filteredOperators, ScrollToTopAdditionalEvent)
+    }
+
     private fun applyFilters() {
-        if (nameFilter.isEmpty()) {
+        if (nameFilter.isEmpty() && roleFilter == EOperatorRoles.UNDEFINED) {
             visibleOperators = immutableOperators.map { operator -> operator.copy() }.toList()
+
+            return
         }
 
-        visibleOperators =  visibleOperators
-            .filter { operator -> operator.name.contains(nameFilter, true) }
-            .map { operator -> operator.copy() }
+        visibleOperators = if (roleFilter != EOperatorRoles.UNDEFINED) {
+            immutableOperators
+                .filter { operator -> operator.role == roleFilter }
+                .map { operator -> operator.copy() }
+        } else {
+            immutableOperators.map { operator -> operator.copy() }
+        }
+
+        if (nameFilter.isNotEmpty()) {
+            visibleOperators = visibleOperators
+                .filter { operator -> operator.name.contains(nameFilter, true) }
+                .map { operator -> operator.copy() }
+        }
     }
 
     private fun getOperators() {
@@ -222,6 +275,7 @@ class RouletteOperatorsViewModel @Inject constructor(
                             .toList()
                     )
                 }
+
                 is Result.Error -> {
                     _operators.value = UiState.Error(result.error)
                 }

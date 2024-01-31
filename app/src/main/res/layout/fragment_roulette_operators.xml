@@ -30,9 +30,21 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_sorting_options"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_filter_options"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:theme="@style/R6Companion.SearchViewTheme" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/btn_filter_options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_sorting_options"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/ic_filter_24"
+                    android:padding="@dimen/dp_8"
+                    android:layout_margin="@dimen/dp_2"
+                    android:background="?android:selectableItemBackground" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_sorting_options"

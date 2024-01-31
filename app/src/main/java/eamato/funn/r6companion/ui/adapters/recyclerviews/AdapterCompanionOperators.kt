@@ -13,6 +13,7 @@ import eamato.funn.r6companion.core.extenstions.getDrawable
 import eamato.funn.r6companion.core.glide.GlideApp
 import eamato.funn.r6companion.core.glide.ImageResizeTransformation
 import eamato.funn.r6companion.databinding.CompanionOperatorItemViewBinding
+import eamato.funn.r6companion.domain.entities.EOperatorRoles
 import eamato.funn.r6companion.domain.entities.companion.operators.Operator
 
 class AdapterCompanionOperators : ABaseAdapter<Operator>(DIFF_ITEM_CALLBACK) {
@@ -56,12 +57,12 @@ class AdapterCompanionOperators : ABaseAdapter<Operator>(DIFF_ITEM_CALLBACK) {
                 .into(binding.ivOperatorImage)
 
             when (item.role) {
-                Operator.ROLE_ATTACKER -> {
+                EOperatorRoles.ATTACKERS -> {
                     binding.ivOperatorSideIcon.visibility = View.VISIBLE
                     binding.ivOperatorSideIcon.setImageResource(R.drawable.ic_attack_role)
                 }
 
-                Operator.ROLE_DEFENDER -> {
+                EOperatorRoles.DEFENDERS -> {
                     binding.ivOperatorSideIcon.visibility = View.VISIBLE
                     binding.ivOperatorSideIcon.setImageResource(R.drawable.ic_defend_role)
                 }

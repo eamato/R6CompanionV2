@@ -26,8 +26,8 @@ android {
         minSdk = 24
         targetSdk = 34
         multiDexEnabled = true
-        versionCode = 26
-        versionName = "26"
+        versionCode = 27
+        versionName = "27"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -149,7 +149,7 @@ dependencies {
 
     /* Firebase dependencies */
     implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.6.0")
+    implementation("com.google.firebase:firebase-crashlytics:18.6.1")
     implementation("com.google.firebase:firebase-analytics:21.5.0")
     implementation("com.google.firebase:firebase-config-ktx:21.6.0")
     implementation("com.google.firebase:firebase-messaging:23.4.0")
