@@ -16,7 +16,7 @@ import eamato.funn.r6companion.domain.entities.roulette.Operator
 import eamato.funn.r6companion.domain.mappers.roulette.RouletteOperatorUseCaseMapper
 import eamato.funn.r6companion.domain.usecases.OperatorsUseCase
 import eamato.funn.r6companion.ui.entities.PopupContentItem
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,12 +44,6 @@ class RouletteOperatorsViewModel @Inject constructor(
 
     init {
         getOperators()
-
-        viewModelScope.launch {
-            savedOperatorsManager.savedOperators.collectLatest { savedOperator ->
-                savedOperator.id
-            }
-        }
     }
 
     fun filterOperatorsByName(nameFilter: String = "") {
@@ -103,7 +97,22 @@ class RouletteOperatorsViewModel @Inject constructor(
                 icon = R.drawable.ic_clear_24dp,
                 title = UiText.ResourceString(R.string.clear_selections),
                 subTitle = null
-            ) { clearSelected() }
+            ) { clearSelected() },
+            PopupContentItem(
+                icon = R.drawable.ic_select_all_24dp,
+                title = UiText.SimpleString("save"),
+                subTitle = null
+            ) { saveSelectedOperators() },
+            PopupContentItem(
+                icon = R.drawable.ic_select_all_24dp,
+                title = UiText.SimpleString("restore"),
+                subTitle = null
+            ) { getSavedOperators() },
+            PopupContentItem(
+                icon = R.drawable.ic_select_all_24dp,
+                title = UiText.SimpleString("delete"),
+                subTitle = null
+            ) { clearSavedOperators() }
         )
     }
 
@@ -129,9 +138,49 @@ class RouletteOperatorsViewModel @Inject constructor(
 
     fun getAllSelectedOperators() = selectedOperators
 
-    fun saveOperator() {
+    private fun saveSelectedOperators() {
+        if (selectedOperators.isEmpty()) {
+            return
+        }
+
+        viewModelScope.launch { savedOperatorsManager.saveOperators(selectedOperators) }
+    }
+
+    private fun getSavedOperators() {
         viewModelScope.launch {
-            savedOperatorsManager.saveOperator()
+            savedOperatorsManager
+                .savedOperators
+                .firstOrNull()
+                ?.savedOperatorsList
+                ?.run {
+                    if (this.isEmpty()) {
+                        return@launch
+                    }
+
+                    selectedOperators = visibleOperators
+                        .filter { operator ->
+                            any { savedOperator -> savedOperator.id == operator.id }
+                        }
+                        .map { operator -> operator.copy() }
+                        .toList()
+
+                    _operators.value = UiState.Success(
+                        visibleOperators
+                            .map { operator ->
+                                SelectableObject(
+                                    data = operator,
+                                    isSelected = selectedOperators.contains(operator)
+                                )
+                            }
+                            .toList()
+                    )
+                }
+        }
+    }
+
+    private fun clearSavedOperators() {
+        viewModelScope.launch {
+            savedOperatorsManager.clearSavedOperators()
         }
     }
 

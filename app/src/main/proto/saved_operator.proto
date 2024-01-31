@@ -3,12 +3,13 @@ syntax = "proto3";
 option java_package = "eamato.funn.r6companion";
 option java_multiple_files = true;
 
+message SavedOperators {
+  repeated SavedOperator saved_operators = 1;
+}
+
 message SavedOperator {
   int32 id = 1;
   string name = 2;
   string icon_link = 3;
   string image_link = 4;
-  string wide_image_link = 5;
-  int32 armor_rating = 6;
-  int32 speed_rating = 7;
 }

@@ -66,8 +66,6 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
         initSelectionOptions()
         initSortingOptions()
         applySystemInsetsIfNeeded()
-
-        rouletteOperatorsViewModel.saveOperator()
     }
 
     private fun initOperatorsRecyclerView() {
