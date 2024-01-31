@@ -47,12 +47,12 @@
     <string name="companion_maps_fragment_label">Maps</string>
     <string name="companion_operators_fragment_label">Operators</string>
 
-    <string name="companion_operators_all_filter">All roles</string>
-    <string name="companion_operators_defenders_filter">Defenders</string>
-    <string name="companion_operators_attackers_filter">Attackers</string>
-    <string name="companion_operators_all_filter_description">Show all operators</string>
-    <string name="companion_operators_defenders_filter_description">Show only operators with defender role</string>
-    <string name="companion_operators_attackers_filter_description">Show only operators with attacker role</string>
+    <string name="operators_all_filter">All roles</string>
+    <string name="operators_defenders_filter">Defenders</string>
+    <string name="operators_attackers_filter">Attackers</string>
+    <string name="operators_all_filter_description">Show all operators</string>
+    <string name="operators_defenders_filter_description">Show only operators with defender role</string>
+    <string name="operators_attackers_filter_description">Show only operators with attacker role</string>
 
     <string name="news_category_all">All</string>
     <string name="news_category_esport">ESport</string>

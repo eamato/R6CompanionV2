@@ -37,12 +37,12 @@
     <string name="companion_maps_fragment_label">Карты</string>
     <string name="companion_operators_fragment_label">Операторы</string>
 
-    <string name="companion_operators_all_filter">Все роли</string>
-    <string name="companion_operators_defenders_filter">Защитники</string>
-    <string name="companion_operators_attackers_filter">Атакующие</string>
-    <string name="companion_operators_all_filter_description">Показать всех оперативников</string>
-    <string name="companion_operators_defenders_filter_description">Показать только оперативников с ролью защитника</string>
-    <string name="companion_operators_attackers_filter_description">Показать только оперативников с ролью атакующего</string>
+    <string name="operators_all_filter">Все роли</string>
+    <string name="operators_defenders_filter">Защитники</string>
+    <string name="operators_attackers_filter">Атакующие</string>
+    <string name="operators_all_filter_description">Показать всех оперативников</string>
+    <string name="operators_defenders_filter_description">Показать только оперативников с ролью защитника</string>
+    <string name="operators_attackers_filter_description">Показать только оперативников с ролью атакующего</string>
 
     <string name="news_category_all">Все</string>
     <string name="news_category_esport">Киберспорт</string>
