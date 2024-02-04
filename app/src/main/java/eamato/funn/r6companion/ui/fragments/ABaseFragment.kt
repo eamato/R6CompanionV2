@@ -59,4 +59,20 @@ abstract class ABaseFragment<VB : ViewBinding> : Fragment() {
             }
         }
     }
+
+    protected fun showMessage(message: String?) {
+        if (message == null) {
+            return
+        }
+
+        binding?.root?.run nonNullRootView@ {
+            Snackbar
+                .make(this@nonNullRootView, message, Snackbar.LENGTH_SHORT)
+                .apply {
+                    setBackgroundTint(R.color.colorPrimary.getColor(this@nonNullRootView.context))
+                    setTextColor(R.color.white.getColor(this@nonNullRootView.context))
+                }
+                .show()
+        }
+    }
 }

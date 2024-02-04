@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eamato.funn.r6companion.R
+import eamato.funn.r6companion.SavedOperator
 import eamato.funn.r6companion.core.storage.SavedOperatorsManager
+import eamato.funn.r6companion.core.utils.DialogContent
 import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.SelectableObject
@@ -29,6 +31,12 @@ class RouletteOperatorsViewModel @Inject constructor(
 
     private val _operators = MutableLiveData<UiState<List<SelectableObject<Operator>>>>(null)
     val operators: LiveData<UiState<List<SelectableObject<Operator>>>> = _operators
+
+    private val _savingOperatorsResult = MutableLiveData<UiState<UiText>?>(null)
+    val savingOperatorsResult: LiveData<UiState<UiText>?> = _savingOperatorsResult
+
+    private val _showAlertDialog = MutableLiveData<DialogContent?>(null)
+    val showAlertDialog: LiveData<DialogContent?> = _showAlertDialog
 
     private var visibleOperators = emptyList<Operator>()
     private var selectedOperators = emptyList<Operator>()
@@ -96,23 +104,33 @@ class RouletteOperatorsViewModel @Inject constructor(
                 subTitle = null
             ) { selectAllOperators() },
             PopupContentItem(
+                icon = R.drawable.ic_select_attackers_24dp,
+                title = UiText.ResourceString(R.string.select_attackers),
+                subTitle = null
+            ) { selectAttackerOperators() },
+            PopupContentItem(
+                icon = R.drawable.ic_select_defenders_24dp,
+                title = UiText.ResourceString(R.string.select_defenders),
+                subTitle = null
+            ) { selectDefenderOperators() },
+            PopupContentItem(
                 icon = R.drawable.ic_clear_24dp,
                 title = UiText.ResourceString(R.string.clear_selections),
                 subTitle = null
             ) { clearSelected() },
             PopupContentItem(
-                icon = R.drawable.ic_select_all_24dp,
-                title = UiText.SimpleString("save"),
+                icon = R.drawable.ic_save_selected_24dp,
+                title = UiText.ResourceString(R.string.save_selected),
                 subTitle = null
-            ) { saveSelectedOperators() },
+            ) { tryToSaveSelectedOperators() },
             PopupContentItem(
-                icon = R.drawable.ic_select_all_24dp,
-                title = UiText.SimpleString("restore"),
+                icon = R.drawable.ic_restore_saved_24dp,
+                title = UiText.ResourceString(R.string.restore_saved),
                 subTitle = null
-            ) { getSavedOperators() },
+            ) { restoreSavedOperators() },
             PopupContentItem(
-                icon = R.drawable.ic_select_all_24dp,
-                title = UiText.SimpleString("delete"),
+                icon = R.drawable.ic_clear_saved_24dp,
+                title = UiText.ResourceString(R.string.remove_saved),
                 subTitle = null
             ) { clearSavedOperators() }
         )
@@ -160,50 +178,97 @@ class RouletteOperatorsViewModel @Inject constructor(
 
     fun getAllSelectedOperators() = selectedOperators
 
-    private fun saveSelectedOperators() {
+    private fun tryToSaveSelectedOperators() {
+        _savingOperatorsResult.value = UiState.Progress
+
         if (selectedOperators.isEmpty()) {
+            _savingOperatorsResult.value = null
             return
         }
 
-        viewModelScope.launch { savedOperatorsManager.saveOperators(selectedOperators) }
+        viewModelScope.launch {
+            val savedOperators = getSavedOperators()
+            if (savedOperators.isNotEmpty()) {
+                _savingOperatorsResult.value = null
+
+                _showAlertDialog.value = DialogContent.Builder
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle(UiText.ResourceString(R.string.attention))
+                    .setMessage(UiText.ResourceString(R.string.save_confirmation_message))
+                    .setPositiveButton(UiText.ResourceString(R.string.yes)) {
+                        viewModelScope.launch {
+                            _savingOperatorsResult.value = UiState.Progress
+
+                            saveSelectedOperators()
+                            _savingOperatorsResult.value =
+                                UiState.Success(UiText.ResourceString(R.string.saved_success_message))
+                        }
+                    }
+                    .setNegativeButton(UiText.ResourceString(R.string.no))
+                    .build()
+                return@launch
+            }
+
+            saveSelectedOperators()
+            _savingOperatorsResult.value =
+                UiState.Success(UiText.ResourceString(R.string.saved_success_message))
+        }
     }
 
-    private fun getSavedOperators() {
+    private suspend fun saveSelectedOperators() {
+        savedOperatorsManager.saveOperators(selectedOperators)
+    }
+
+    private suspend fun getSavedOperators(): List<SavedOperator> {
+        return savedOperatorsManager
+            .savedOperators
+            .firstOrNull()
+            ?.savedOperatorsList
+            ?: emptyList()
+    }
+
+    private fun restoreSavedOperators() {
+        _savingOperatorsResult.value = UiState.Progress
+
         viewModelScope.launch {
-            savedOperatorsManager
-                .savedOperators
-                .firstOrNull()
-                ?.savedOperatorsList
-                ?.run {
-                    if (this.isEmpty()) {
-                        return@launch
+            val savedOperators = getSavedOperators()
+            if (savedOperators.isEmpty()) {
+                _savingOperatorsResult.value = null
+                return@launch
+            }
+
+            selectedOperators = visibleOperators
+                .filter { operator ->
+                    savedOperators.any { savedOperator ->
+                        savedOperator.id == operator.id
                     }
-
-                    selectedOperators = visibleOperators
-                        .filter { operator ->
-                            any { savedOperator -> savedOperator.id == operator.id }
-                        }
-                        .map { operator -> operator.copy() }
-                        .toList()
-
-                    _operators.value = UiState.Success(
-                        visibleOperators
-                            .map { operator ->
-                                SelectableObject(
-                                    data = operator,
-                                    isSelected = selectedOperators.contains(operator)
-                                )
-                            }
-                            .toList()
-                    )
                 }
+                .map { operator -> operator.copy() }
+                .toList()
+
+            exposeSelectedOperatorsToUI()
+
+            _savingOperatorsResult.value =
+                UiState.Success(UiText.ResourceString(R.string.restored_success_message))
         }
     }
 
     private fun clearSavedOperators() {
-        viewModelScope.launch {
-            savedOperatorsManager.clearSavedOperators()
-        }
+        _showAlertDialog.value = DialogContent.Builder
+            .setIcon(R.mipmap.ic_launcher)
+            .setTitle(UiText.ResourceString(R.string.attention))
+            .setMessage(UiText.ResourceString(R.string.delete_saved_confirmation_message))
+            .setPositiveButton(UiText.ResourceString(R.string.yes)) {
+                viewModelScope.launch {
+                    _savingOperatorsResult.value = UiState.Progress
+
+                    savedOperatorsManager.clearSavedOperators()
+                    _savingOperatorsResult.value =
+                        UiState.Success(UiText.ResourceString(R.string.deleted_success_message))
+                }
+            }
+            .setNegativeButton(UiText.ResourceString(R.string.no))
+            .build()
     }
 
     private fun selectAllOperators() {
@@ -212,6 +277,37 @@ class RouletteOperatorsViewModel @Inject constructor(
         _operators.value = UiState.Success(
             visibleOperators
                 .map { operator -> SelectableObject(data = operator, isSelected = true) }
+                .toList()
+        )
+    }
+
+    private fun selectAttackerOperators() {
+        selectedOperators = immutableOperators
+            .filter { operator -> operator.role == EOperatorRoles.ATTACKERS }
+            .map { operator -> operator.copy() }
+            .toList()
+
+        exposeSelectedOperatorsToUI()
+    }
+
+    private fun selectDefenderOperators() {
+        selectedOperators = immutableOperators
+            .filter { operator -> operator.role == EOperatorRoles.DEFENDERS }
+            .map { operator -> operator.copy() }
+            .toList()
+
+        exposeSelectedOperatorsToUI()
+    }
+
+    private fun exposeSelectedOperatorsToUI() {
+        _operators.value = UiState.Success(
+            visibleOperators
+                .map { operator ->
+                    SelectableObject(
+                        data = operator,
+                        isSelected = selectedOperators.contains(operator)
+                    )
+                }
                 .toList()
         )
     }

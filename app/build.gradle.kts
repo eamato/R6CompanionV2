@@ -125,7 +125,6 @@ protobuf {
                 create("java") {
                     option("lite")
                 }
-//                id("kotlin")
             }
         }
     }
@@ -185,19 +184,3 @@ dependencies {
     /* Debug */
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 }
-
-//protobuf {
-//    protoc {
-//        artifact = "com.google.protobuf:protoc:21.7"
-//    }
-//
-//    generateProtoTasks {
-//        all().each { task ->
-//            task.builtins {
-//                java {
-//                    option 'lite'
-//                }
-//            }
-//        }
-//    }
-//}

@@ -52,6 +52,11 @@
     <string name="news_category_store">Shop</string>
 
     <string name="select_all">Alle auswählen</string>
+    <string name="select_attackers">Angreifer auswählen</string>
+    <string name="select_defenders">Verteidiger auswählen</string>
+    <string name="save_selected">Auswahl speichern</string>
+    <string name="restore_saved">Auswahl laden</string>
+    <string name="remove_saved">Gespeicherte Auswahl entfernen</string>
     <string name="clear_selections">Auswahl aufheben</string>
 
     <string name="select_all_description">Alle Operatoren auswählen, die in der Operatorenliste präsentiert sind</string>
@@ -86,4 +91,14 @@
 
     <string name="notification_channel_name">R6Companion-Benachrichtigungen</string>
     <string name="notification_channel_description">Mit diesem Kanal können wir mit Ihnen kommunizieren</string>
+
+    <string name="saved_success_message">Gespeichert</string>
+    <string name="restored_success_message">Wiederhergestellt</string>
+    <string name="deleted_success_message">Gelöscht</string>
+
+    <string name="attention">Achtung</string>
+    <string name="save_confirmation_message">Das Speichern der Operatoren führt dazu, dass alle zuvor gespeicherten Daten gelöscht werden. Möchten Sie fortfahren?</string>
+    <string name="delete_saved_confirmation_message">Möchten Sie die gespeicherte Auswahl wirklich löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

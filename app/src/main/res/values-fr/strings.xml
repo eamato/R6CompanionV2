@@ -52,6 +52,11 @@
     <string name="news_category_store">Boutique</string>
 
     <string name="select_all">Tout sélectionner</string>
+    <string name="select_attackers">Sélectionner les attaquants</string>
+    <string name="select_defenders">Sélectionner les défenseurs</string>
+    <string name="save_selected">Sauvegarder la sélection</string>
+    <string name="restore_saved">Charger la sélection</string>
+    <string name="remove_saved">Supprimer la sélection enregistrée</string>
     <string name="clear_selections">Effacer les sélections</string>
 
     <string name="select_all_description">Sélectionne tous les opérateurs présentés dans la liste des opérateurs</string>
@@ -86,4 +91,14 @@
 
     <string name="notification_channel_name">Notifications R6Companion</string>
     <string name="notification_channel_description">Avec ce canal, nous pouvons communiquer avec vous</string>
+
+    <string name="saved_success_message">Enregistré</string>
+    <string name="restored_success_message">Restauré</string>
+    <string name="deleted_success_message">Supprimé</string>
+
+    <string name="attention">Attention</string>
+    <string name="save_confirmation_message">La sauvegarde des opérateurs entraînera l\'effacement de toutes les données précédemment sauvegardées. Souhaitez-vous continuer?</string>
+    <string name="delete_saved_confirmation_message">Êtes-vous sûr de vouloir supprimer la sélection sauvegardée ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 </resources>

@@ -22,7 +22,7 @@ class SavedOperatorsManager @Inject constructor(private val context: Context) {
 
     suspend fun saveOperators(selectedOperators: List<Operator>) {
         context.dataStore.updateData { preferences ->
-            val savedOperatorsBuilder = preferences.toBuilder()
+            val savedOperatorsBuilder = preferences.toBuilder().apply { clearSavedOperators() }
 
             selectedOperators.forEachIndexed { index, operator ->
                 val savedOperatorBuilder = SavedOperator.newBuilder()

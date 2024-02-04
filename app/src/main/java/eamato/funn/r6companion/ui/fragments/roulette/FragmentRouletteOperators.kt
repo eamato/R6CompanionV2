@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -173,6 +174,54 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
                 else -> {}
             }
+        }
+
+        rouletteOperatorsViewModel.savingOperatorsResult.observe(viewLifecycleOwner) {
+            showHideContentLoadingProgressBar(it is UiState.Progress)
+
+            if (it == null) {
+                return@observe
+            }
+
+            when (it) {
+                is UiState.Error -> {
+                    showError(it.error)
+                }
+
+                is UiState.Success -> {
+                    context?.run { showMessage(it.data.asString(this)) }
+                }
+
+                else -> {}
+            }
+        }
+
+        rouletteOperatorsViewModel.showAlertDialog.observe(viewLifecycleOwner) { dialogContent ->
+            val context = context
+            if (dialogContent == null || context == null || !isAdded) {
+                return@observe
+            }
+
+            AlertDialog.Builder(context)
+                .also { dialogContent.getIcon()?.run { it.setIcon(this) } }
+                .also { dialogContent.getTitle(context)?.run { it.setTitle(this) } }
+                .also { dialogContent.getMessage(context)?.run { it.setMessage(this) } }
+                .also {
+                    val (text, clickListener) = dialogContent.getPositive(context)
+                    if (text != null) {
+                        it.setPositiveButton(text) { _, _ ->
+                            clickListener?.invoke()
+                        }
+                    }
+                }
+                .also {
+                    val (text, clickListener) = dialogContent.getNegative(context)
+                    if (text != null) {
+                        it.setNegativeButton(text) { _, _ -> clickListener?.invoke() }
+                    }
+                }
+                .create()
+                .show()
         }
     }
 
