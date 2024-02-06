@@ -12,6 +12,7 @@ import eamato.funn.r6companion.core.utils.DialogContent
 import eamato.funn.r6companion.core.utils.Result
 import eamato.funn.r6companion.core.utils.ScrollToTopAdditionalEvent
 import eamato.funn.r6companion.core.utils.SelectableObject
+import eamato.funn.r6companion.core.utils.SingleLiveEvent
 import eamato.funn.r6companion.core.utils.UiState
 import eamato.funn.r6companion.core.utils.UiText
 import eamato.funn.r6companion.domain.entities.EOperatorRoles
@@ -32,11 +33,14 @@ class RouletteOperatorsViewModel @Inject constructor(
     private val _operators = MutableLiveData<UiState<List<SelectableObject<Operator>>>>(null)
     val operators: LiveData<UiState<List<SelectableObject<Operator>>>> = _operators
 
-    private val _savingOperatorsResult = MutableLiveData<UiState<UiText>?>(null)
+    private val _savingOperatorsResult = SingleLiveEvent<UiState<UiText>?>()
     val savingOperatorsResult: LiveData<UiState<UiText>?> = _savingOperatorsResult
 
-    private val _showAlertDialog = MutableLiveData<DialogContent?>(null)
+    private val _showAlertDialog = SingleLiveEvent<DialogContent?>()
     val showAlertDialog: LiveData<DialogContent?> = _showAlertDialog
+
+    private val _creatingSelectionMenuItemsState = SingleLiveEvent<UiState<Unit>>()
+    val creatingSelectionMenuItemsState: LiveData<UiState<Unit>> = _creatingSelectionMenuItemsState
 
     private var visibleOperators = emptyList<Operator>()
     private var selectedOperators = emptyList<Operator>()
@@ -96,8 +100,10 @@ class RouletteOperatorsViewModel @Inject constructor(
         _operators.value = UiState.Success(changedData)
     }
 
-    fun createSelectionPopupContentItems(): List<PopupContentItem> {
-        return listOf(
+    suspend fun createSelectionPopupContentItems(): List<PopupContentItem> {
+        _creatingSelectionMenuItemsState.value = UiState.Progress
+
+        val selectionMenuItems = listOf(
             PopupContentItem(
                 icon = R.drawable.ic_select_all_24dp,
                 title = UiText.ResourceString(R.string.select_all),
@@ -121,19 +127,26 @@ class RouletteOperatorsViewModel @Inject constructor(
             PopupContentItem(
                 icon = R.drawable.ic_save_selected_24dp,
                 title = UiText.ResourceString(R.string.save_selected),
-                subTitle = null
+                subTitle = null,
+                isEnabled = selectedOperators.isNotEmpty()
             ) { tryToSaveSelectedOperators() },
             PopupContentItem(
                 icon = R.drawable.ic_restore_saved_24dp,
                 title = UiText.ResourceString(R.string.restore_saved),
-                subTitle = null
+                subTitle = null,
+                isEnabled = getSavedOperators().isNotEmpty()
             ) { restoreSavedOperators() },
             PopupContentItem(
                 icon = R.drawable.ic_clear_saved_24dp,
                 title = UiText.ResourceString(R.string.remove_saved),
-                subTitle = null
+                subTitle = null,
+                isEnabled = getSavedOperators().isNotEmpty()
             ) { clearSavedOperators() }
         )
+
+        _creatingSelectionMenuItemsState.value = UiState.Success(Unit)
+
+        return selectionMenuItems
     }
 
     fun createSortingPopupContentItems(): List<PopupContentItem> {

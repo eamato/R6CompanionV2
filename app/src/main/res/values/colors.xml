@@ -59,4 +59,5 @@
     <color name="green">#FF00FF00</color>
     <color name="blue">#FF0000FF</color>
     <color name="yellow">#FFFFFF00</color>
+    <color name="white_semi_transparent">#80FFFFFF</color>
 </resources>
