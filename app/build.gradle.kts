@@ -11,12 +11,12 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
     id("com.apollographql.apollo3") version "3.8.2"
+    id("com.google.protobuf") version "0.9.4"
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties().apply { load(FileInputStream(keystorePropertiesFile)) }
 
-@Suppress("UnstableApiUsage")
 android {
     namespace = "eamato.funn.r6companion"
     compileSdk = 34
@@ -113,6 +113,22 @@ kapt {
     correctErrorTypes = true
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+
+    generateProtoTasks {
+        all().forEach { generateProtoTask ->
+            generateProtoTask.builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
 
     /* AndroidX dependencies */
@@ -123,6 +139,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
     implementation("androidx.appcompat:appcompat-resources:1.6.1")
     implementation("androidx.profileinstaller:profileinstaller:1.3.1")
@@ -132,6 +149,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("com.google.protobuf:protobuf-javalite:3.21.11")
 
     /* Retrofit dependencies */
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -142,6 +160,7 @@ dependencies {
     implementation("com.github.bumptech.glide:annotations:4.15.1")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation("com.github.bumptech.glide:okhttp3-integration:4.15.1")
+    //noinspection KaptUsageInsteadOfKsp
     kapt("com.github.bumptech.glide:compiler:4.15.1")
 
     /* Apollo dependencies */

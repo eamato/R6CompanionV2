@@ -38,25 +38,32 @@ abstract class ABaseFragment<VB : ViewBinding> : Fragment() {
         super.onDestroyView()
     }
 
-    protected fun showError(error: Throwable) {
-        binding?.root?.run nonNullRootView@ {
-            error.message?.run nonNullErrorMessage@ {
-                Snackbar
-                    .make(
-                        this@nonNullRootView,
-                        this@nonNullErrorMessage,
-                        Snackbar.LENGTH_SHORT
-                    )
-                    .apply {
-                        setBackgroundTint(
-                            R.color.colorPrimary.getColor(this@nonNullRootView.context)
-                        )
-                        setTextColor(
-                            R.color.white.getColor(this@nonNullRootView.context)
-                        )
-                    }
-                    .show()
-            }
+    protected fun showError(error: Throwable, anchorView: View? = null) {
+        val view = binding?.root ?: return
+        val message = error.message ?: return
+
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+        .apply {
+            setBackgroundTint(R.color.colorPrimary.getColor(view.context))
+            setTextColor(R.color.white.getColor(view.context))
+            anchorView?.run { setAnchorView(this) }
         }
+        .show()
+    }
+
+    protected fun showMessage(message: String?, anchorView: View? = null) {
+        if (message == null) {
+            return
+        }
+
+        val view = binding?.root ?: return
+        Snackbar
+            .make(view, message, Snackbar.LENGTH_SHORT)
+            .apply {
+                setBackgroundTint(R.color.colorPrimary.getColor(view.context))
+                setTextColor(R.color.white.getColor(view.context))
+                anchorView?.run { setAnchorView(this) }
+            }
+            .show()
     }
 }

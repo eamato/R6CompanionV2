@@ -53,7 +53,8 @@
                     android:src="@drawable/ic_filter_24"
                     android:padding="@dimen/dp_8"
                     android:layout_margin="@dimen/dp_2"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    style="@style/R6Companion.MenuItemIconStyle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

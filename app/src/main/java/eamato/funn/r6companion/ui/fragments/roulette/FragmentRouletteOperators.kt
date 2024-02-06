@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -37,6 +39,7 @@ import eamato.funn.r6companion.ui.fragments.ABaseFragment
 import eamato.funn.r6companion.ui.recyclerviews.decorations.BorderItemDecoration
 import eamato.funn.r6companion.ui.recyclerviews.decorations.SpacingItemDecoration
 import eamato.funn.r6companion.ui.viewmodels.roulette.RouletteOperatorsViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding>(),
@@ -174,6 +177,62 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
                 else -> {}
             }
         }
+
+        rouletteOperatorsViewModel.savingOperatorsResult.observe(viewLifecycleOwner) {
+            showHideContentLoadingProgressBar(it is UiState.Progress)
+
+            if (it == null) {
+                return@observe
+            }
+
+            when (it) {
+                is UiState.Error -> {
+                    showError(it.error)
+                }
+
+                is UiState.Success -> {
+                    context?.run {
+                        showMessage(it.data.asString(this), binding?.btnGoToRollResult)
+                    }
+                }
+
+                else -> {}
+            }
+        }
+
+        rouletteOperatorsViewModel.showAlertDialog.observe(viewLifecycleOwner) { dialogContent ->
+            val context = context
+            if (dialogContent == null || context == null || !isAdded) {
+                return@observe
+            }
+
+            AlertDialog.Builder(context)
+                .also { dialogContent.getIcon()?.run { it.setIcon(this) } }
+                .also { dialogContent.getTitle(context)?.run { it.setTitle(this) } }
+                .also { dialogContent.getMessage(context)?.run { it.setMessage(this) } }
+                .also {
+                    val (text, clickListener) = dialogContent.getPositive(context)
+                    if (text != null) {
+                        it.setPositiveButton(text) { _, _ ->
+                            clickListener?.invoke()
+                        }
+                    }
+                }
+                .also {
+                    val (text, clickListener) = dialogContent.getNegative(context)
+                    if (text != null) {
+                        it.setNegativeButton(text) { _, _ -> clickListener?.invoke() }
+                    }
+                }
+                .create()
+                .show()
+        }
+
+        rouletteOperatorsViewModel.creatingSelectionMenuItemsState.observe(viewLifecycleOwner) {
+            showHideContentLoadingProgressBar(it is UiState.Progress)
+
+            binding?.btnSelectionOptions?.isEnabled = it !is UiState.Progress
+        }
     }
 
     private fun initSearchView() {
@@ -202,11 +261,10 @@ class FragmentRouletteOperators : ABaseFragment<FragmentRouletteOperatorsBinding
 
     private fun initSelectionOptions() {
         binding?.btnSelectionOptions?.setOnClickListener {
-            DialogDefaultPopupManager.create(it.context)
-                .show(
-                    childFragmentManager,
-                    rouletteOperatorsViewModel.createSelectionPopupContentItems()
-                )
+            viewLifecycleOwner.lifecycleScope.launch {
+                val popupItems = rouletteOperatorsViewModel.createSelectionPopupContentItems()
+                DialogDefaultPopupManager.create(it.context).show(childFragmentManager, popupItems)
+            }
         }
     }
 

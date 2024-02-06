@@ -52,6 +52,11 @@
     <string name="news_category_store">Магазин</string>
 
     <string name="select_all">Выбрать всех</string>
+    <string name="select_attackers">Выбрать оперативников атаки</string>
+    <string name="select_defenders">Выбрать оперативников защиты</string>
+    <string name="save_selected">Сохранить выбор</string>
+    <string name="restore_saved">Загрузить выбор</string>
+    <string name="remove_saved">Удалить сохраненный выбор</string>
     <string name="clear_selections">Очистить выбор</string>
 
     <string name="select_all_description">Выбрать всех оперативников, представленных в списке оперативников</string>
@@ -86,4 +91,14 @@
 
     <string name="notification_channel_name">Уведомления R6Companion</string>
     <string name="notification_channel_description">С помощью этого канала мы можем связаться с вами</string>
+
+    <string name="saved_success_message">Сохранено</string>
+    <string name="restored_success_message">Восстановлено</string>
+    <string name="deleted_success_message">Удалено</string>
+
+    <string name="attention">Внимание</string>
+    <string name="save_confirmation_message">Сохранение операторов приведет к удалению любых ранее сохраненных данных. Хотите продолжить?</string>
+    <string name="delete_saved_confirmation_message">Вы уверены, что хотите удалить сохраненный выбор?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

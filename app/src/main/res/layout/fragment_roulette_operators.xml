@@ -44,7 +44,8 @@
                     android:src="@drawable/ic_filter_24"
                     android:padding="@dimen/dp_8"
                     android:layout_margin="@dimen/dp_2"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    style="@style/R6Companion.MenuItemIconStyle" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_sorting_options"
@@ -57,7 +58,8 @@
                     android:padding="@dimen/dp_8"
                     android:layout_margin="@dimen/dp_2"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    style="@style/R6Companion.MenuItemIconStyle" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_selection_options"
@@ -69,7 +71,8 @@
                     android:src="@drawable/ic_more_24dp"
                     android:padding="@dimen/dp_8"
                     android:layout_margin="@dimen/dp_2"
-                    android:background="?android:selectableItemBackground" />
+                    android:background="?android:selectableItemBackground"
+                    style="@style/R6Companion.MenuItemIconStyle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

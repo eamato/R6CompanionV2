@@ -21,6 +21,7 @@ import eamato.funn.r6companion.core.UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_AUTHORIZATION_TOKEN_HEADER_VALUE
 import eamato.funn.r6companion.core.UBISOFT_GRAPH_URL
 import eamato.funn.r6companion.core.storage.PreferenceManager
+import eamato.funn.r6companion.core.storage.SavedOperatorsManager
 import eamato.funn.r6companion.data.FirebaseRemoteConfigService
 import eamato.funn.r6companion.data.network.NewsRetrofitService
 import eamato.funn.r6companion.data.network.RetrofitService
@@ -34,6 +35,10 @@ object AppModule {
     @Singleton
     @Provides
     fun providePreferenceManager(@ApplicationContext context: Context) = PreferenceManager(context)
+
+    @Singleton
+    @Provides
+    fun provideSavedOperatorsManager(@ApplicationContext context: Context) = SavedOperatorsManager(context)
 
     @Singleton
     @Provides

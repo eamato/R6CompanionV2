@@ -42,6 +42,8 @@
         <item name="android:textViewStyle">@style/R6Companion.DefaultTextViewStyle</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="sideSheetDialogTheme">@style/ThemeOverlay.App.SideSheetDialog</item>
+
+        <item name="alertDialogTheme">@style/R6Companion.AlertDialogTheme</item>
     </style>
 
     <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
@@ -249,6 +251,10 @@
         <item name="tint">@color/settings_item_icon_tint_selector</item>
     </style>
 
+    <style name="R6Companion.MenuItemIconStyle" parent="">
+        <item name="tint">@color/menu_item_icon_tint_selector</item>
+    </style>
+
     <style name="R6Companion.TextOnImageStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:maxLines">2</item>
         <item name="android:gravity">center</item>
@@ -258,5 +264,15 @@
         <item name="android:textColor">@color/text_on_image_text_color</item>
         <item name="strokeColor">@color/white</item>
         <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="R6Companion.AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="dialogCornerRadius">@dimen/dp_8</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="buttonBarButtonStyle">@style/R6Companion.AlertDialogButtonStyle</item>
+    </style>
+
+    <style name="R6Companion.AlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

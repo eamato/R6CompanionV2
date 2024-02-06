@@ -62,6 +62,11 @@
     <string name="news_category_store">Store</string>
 
     <string name="select_all">Select all</string>
+    <string name="select_attackers">Select attackers</string>
+    <string name="select_defenders">Select defenders</string>
+    <string name="save_selected">Save selection</string>
+    <string name="restore_saved">Load selection</string>
+    <string name="remove_saved">Remove saved selection</string>
     <string name="clear_selections">Clear selections</string>
 
     <string name="select_all_description">Selects all operators that are presented in operators list</string>
@@ -96,4 +101,15 @@
 
     <string name="notification_channel_name">R6Companion notifications</string>
     <string name="notification_channel_description">With this channel we can communicate with you</string>
+
+    <string name="saved_success_message">Saved</string>
+    <string name="restored_success_message">Restored</string>
+    <string name="deleted_success_message">Deleted</string>
+
+    <string name="attention">Attention</string>
+    <string name="save_confirmation_message">Saving the operators will result in erasing any previous saved data. Do you wish to proceed?</string>
+    <string name="delete_saved_confirmation_message">Are you sure you want to delete saved selection?</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
