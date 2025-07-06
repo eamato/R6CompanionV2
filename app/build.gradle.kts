@@ -10,7 +10,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
-    id("com.apollographql.apollo3") version "3.8.2"
+    id("com.apollographql.apollo3") version "3.8.6"
     id("com.google.protobuf") version "0.9.4"
 }
 
@@ -19,19 +19,22 @@ val keystoreProperties = Properties().apply { load(FileInputStream(keystorePrope
 
 android {
     namespace = "eamato.funn.r6companion"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "eamato.funn.r6companion"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         multiDexEnabled = true
-        versionCode = 27
-        versionName = "27"
+        versionCode = 28
+        versionName = "28"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        resourceConfigurations.addAll(listOf("en", "ru", "es", "pt", "de", "fr", "it"))
+    androidResources {
+        @Suppress("UnstableApiUsage") // TODO remove when becomes stable
+        localeFilters += listOf("en", "ru", "es", "pt", "de", "fr", "it")
     }
 
     signingConfigs {
@@ -132,24 +135,25 @@ protobuf {
 dependencies {
 
     /* AndroidX dependencies */
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.paging:paging-runtime-ktx:3.3.6")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.datastore:datastore:1.0.0")
-    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
-    implementation("androidx.appcompat:appcompat-resources:1.6.1")
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
+    implementation("androidx.datastore:datastore:1.1.7")
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     /* Google dependencies */
+    implementation("com.google.android.gms:play-services-ads:24.4.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.44.2")
-    implementation("com.google.protobuf:protobuf-javalite:3.21.11")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("com.google.protobuf:protobuf-javalite:3.25.5")
 
     /* Retrofit dependencies */
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -164,22 +168,21 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.15.1")
 
     /* Apollo dependencies */
-    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.6")
 
     /* Firebase dependencies */
-    implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.6.1")
-    implementation("com.google.firebase:firebase-analytics:21.5.0")
-    implementation("com.google.firebase:firebase-config-ktx:21.6.0")
-    implementation("com.google.firebase:firebase-messaging:23.4.0")
-    implementation("com.google.firebase:firebase-inappmessaging-display:20.4.0")
-    implementation("com.google.firebase:firebase-ads:22.6.0")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx:21.2.0")
+    implementation("com.google.firebase:firebase-crashlytics:19.4.4")
+    implementation("com.google.firebase:firebase-config-ktx:22.1.2")
+    implementation("com.google.firebase:firebase-messaging:24.1.2")
+    implementation("com.google.firebase:firebase-inappmessaging-display:21.0.2")
+    implementation("com.google.firebase:firebase-dynamic-links-ktx:22.1.0")
+    implementation("com.google.firebase:firebase-analytics-ktx:22.5.0")
+
 
     /* Test dependencies */
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
     /* Debug */
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")

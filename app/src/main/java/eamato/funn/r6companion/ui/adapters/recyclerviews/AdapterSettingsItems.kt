@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import eamato.funn.r6companion.core.utils.SelectableObject
 import eamato.funn.r6companion.databinding.SettingsItemPopupItemRowBinding
 import eamato.funn.r6companion.databinding.SettingsItemScreenItemRowBinding
@@ -13,7 +14,7 @@ import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_TYPE_SCREEN
 import eamato.funn.r6companion.ui.entities.settings.SettingsItem.Companion.VIEW_TYPE_SWITCH
 
-class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_ITEM_CALLBACK) {
+class AdapterSettingsItems(private val onItemClicked: (SelectableObject<SettingsItem>) -> Unit) : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_ITEM_CALLBACK) {
 
     companion object {
         val DIFF_ITEM_CALLBACK = object : DiffUtil.ItemCallback<SelectableObject<SettingsItem>>() {
@@ -34,17 +35,27 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
 
                 if (oldItem.data is SettingsItem.SettingsItemPopup &&
                     newItem.data is SettingsItem.SettingsItemPopup) {
-                    return oldItem == newItem
+                    return oldItem.data.isEnabled == newItem.data.isEnabled &&
+                            oldItem.data.title == newItem.data.title &&
+                            oldItem.data.subTitle == newItem.data.subTitle &&
+                            oldItem.data.icon == newItem.data.icon
                 }
 
                 if (oldItem.data is SettingsItem.SettingsItemSwitch &&
                     newItem.data is SettingsItem.SettingsItemSwitch) {
-                    return oldItem == newItem
+                    return oldItem.data.isEnabled == newItem.data.isEnabled &&
+                            oldItem.data.isChecked == newItem.data.isChecked &&
+                            oldItem.data.title == newItem.data.title &&
+                            oldItem.data.subTitle == newItem.data.subTitle &&
+                            oldItem.data.icon == newItem.data.icon
                 }
 
                 if (oldItem.data is SettingsItem.SettingsItemScreen &&
                     newItem.data is SettingsItem.SettingsItemScreen) {
-                    return oldItem == newItem
+                    return oldItem.data.isEnabled == newItem.data.isEnabled &&
+                            oldItem.data.title == newItem.data.title &&
+                            oldItem.data.subTitle == newItem.data.subTitle &&
+                            oldItem.data.icon == newItem.data.icon
                 }
 
                 return false
@@ -56,15 +67,18 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_POPUP -> ViewHolder.SettingsItemPopupViewHolder(
-                SettingsItemPopupItemRowBinding.inflate(inflater, parent, false)
+                SettingsItemPopupItemRowBinding.inflate(inflater, parent, false),
+                onItemClicked
             )
 
             VIEW_TYPE_SWITCH -> ViewHolder.SettingsItemSwitchViewHolder(
-                SettingsItemSwitchItemRowBinding.inflate(inflater, parent, false)
+                SettingsItemSwitchItemRowBinding.inflate(inflater, parent, false),
+                onItemClicked
             )
 
             VIEW_TYPE_SCREEN -> ViewHolder.SettingsItemScreenViewHolder(
-                SettingsItemScreenItemRowBinding.inflate(inflater, parent, false)
+                SettingsItemScreenItemRowBinding.inflate(inflater, parent, false),
+                onItemClicked
             )
 
             else -> throw Exception("Unknown viewType found ${this.javaClass.name}")
@@ -80,7 +94,8 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
     ) : ABaseViewHolder<SelectableObject<SettingsItem>>(itemView) {
 
         class SettingsItemPopupViewHolder(
-            private val binding: SettingsItemPopupItemRowBinding
+            private val binding: SettingsItemPopupItemRowBinding,
+            private val onItemClicked: (SelectableObject<SettingsItem>) -> Unit
         ) : ViewHolder(binding.root) {
 
             override fun bind(item: SelectableObject<SettingsItem>) {
@@ -90,6 +105,7 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
 
                 itemView.isSelected = item.isSelected
                 binding.settingsPopupItem.run {
+                    setOnClickListener { onItemClicked(item) }
                     setIsEnabled(item.data.isEnabled)
                     setTitle(item.data.title)
                     setSubtitle(item.data.subTitle)
@@ -99,7 +115,8 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
         }
 
         class SettingsItemSwitchViewHolder(
-            private val binding: SettingsItemSwitchItemRowBinding
+            private val binding: SettingsItemSwitchItemRowBinding,
+            private val onItemClicked: (SelectableObject<SettingsItem>) -> Unit
         ) : ViewHolder(binding.root) {
 
             override fun bind(item: SelectableObject<SettingsItem>) {
@@ -108,6 +125,7 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
                 }
 
                 binding.settingsSwitchItem.run {
+                    setOnClickListener { onItemClicked(item) }
                     setIsEnabled(item.data.isEnabled)
                     setIsChecked(item.data.isChecked)
                     setTitle(item.data.title)
@@ -121,7 +139,8 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
         }
 
         class SettingsItemScreenViewHolder(
-            private val binding: SettingsItemScreenItemRowBinding
+            private val binding: SettingsItemScreenItemRowBinding,
+            private val onItemClicked: (SelectableObject<SettingsItem>) -> Unit
         ) : ViewHolder(binding.root) {
 
             override fun bind(item: SelectableObject<SettingsItem>) {
@@ -131,6 +150,7 @@ class AdapterSettingsItems : ABaseAdapter<SelectableObject<SettingsItem>>(DIFF_I
 
                 itemView.isSelected = item.isSelected
                 binding.settingsScreenItem.run {
+                    setOnClickListener { onItemClicked(item) }
                     setIsEnabled(item.data.isEnabled)
                     setTitle(item.data.title)
                     setSubtitle(item.data.subTitle)

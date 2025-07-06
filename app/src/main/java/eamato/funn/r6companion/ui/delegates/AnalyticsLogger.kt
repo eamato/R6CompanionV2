@@ -1,11 +1,11 @@
 package eamato.funn.r6companion.ui.delegates
 
 import android.content.Context
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.logEvent
 import eamato.funn.r6companion.core.utils.logger.DefaultAppLogger
 import eamato.funn.r6companion.core.utils.logger.Message
 
@@ -38,10 +38,11 @@ class AnalyticsLogger(
                     message = "Screen view event: Name = $screenName, Class = $className"
                 })
 
-                firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-                    param(FirebaseAnalytics.Param.SCREEN_CLASS, className)
-                }
+                val params = bundleOf(
+                    Pair(FirebaseAnalytics.Param.SCREEN_NAME, screenName),
+                    Pair(FirebaseAnalytics.Param.SCREEN_CLASS, className)
+                )
+                firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
             }
             else -> Unit
         }

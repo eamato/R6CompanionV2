@@ -94,7 +94,11 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>(),
             val linearLayoutManager = LinearLayoutManager(context)
             layoutManager = linearLayoutManager
 
-            val adapterSettingsItems = AdapterSettingsItems()
+            val adapterSettingsItems = AdapterSettingsItems { item ->
+                item
+                    .takeIf { isSettingsItemSelectable(it) }
+                    ?.run { onSettingsItemSelected(data) }
+            }
             adapter = adapterSettingsItems
 
             val spacingDecoration = SpacingItemDecoration
@@ -102,19 +106,6 @@ class FragmentSettingsRoot : ABaseFragment<FragmentSettingsRootBinding>(),
                 .setSpacingRes(R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2, R.dimen.dp_2)
                 .create(context)
             setItemDecoration(spacingDecoration)
-
-            val clickListener = RecyclerViewItemClickListener(
-                this,
-                object : RecyclerViewItemClickListener.OnItemTapListener {
-                    override fun onItemClicked(view: View, position: Int) {
-                        adapterSettingsItems.getItemAtPosition(position)
-                            .takeIf { isSettingsItemSelectable(it) }
-                            ?.run { onSettingsItemSelected(data) }
-                    }
-                }
-            )
-
-            setOnItemClickListener(clickListener)
         }
     }
 
